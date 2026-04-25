@@ -1,7 +1,32 @@
+# Node
+node_modules/
+frontend/node_modules/
+frontend/.vite/
+frontend/dist/
+
+# Python
 venv/
 env/
-.env
-db.sqlite3
+ENV/
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Django
+*.sqlite3
+db.sqlite3
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Claude local settings
+.claude/settings.local.json
