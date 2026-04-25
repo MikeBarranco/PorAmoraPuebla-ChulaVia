@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-xl_!_0e3u81sfcf6kria71$4(x))8f7@heniqib%mv(arn^)l%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -88,7 +88,7 @@ if os.environ.get('DB_HOST'):
             'USER': os.environ.get('DB_USER'),
             'PASSWORD': os.environ.get('DB_PASSWORD'),
             'HOST': os.environ.get('DB_HOST'),
-            'PORT': '6543',
+            'PORT': os.environ.get('DB_PORT', '5432'),
         }
     }
 else:
