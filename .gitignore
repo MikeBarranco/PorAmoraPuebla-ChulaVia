@@ -1,25 +1,7 @@
-# Entornos virtuales
 venv/
 env/
-ENV/
-
-# Variables de entorno y secretos
 .env
-.env.local
-
-# Archivos de base de datos
 db.sqlite3
-*.sqlite3
-
-# Archivos compilados de Python
 __pycache__/
-*.py[cod]
-*$py.class
-
-# Archivos de sistema operativo
+*.pyc
 .DS_Store
-Thumbs.db
-
-# Otros archivos temporales
-*.log
-test_db.py

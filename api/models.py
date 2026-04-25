@@ -53,8 +53,8 @@ class Ruta(models.Model):
     origen = models.ForeignKey(Comunidad, on_delete=models.CASCADE, related_name='rutas_origen')
     destino = models.ForeignKey(Comunidad, on_delete=models.CASCADE, related_name='rutas_destino')
     precio = models.DecimalField(max_digits=8, decimal_places=2)
-    horarios = models.JSONField(default=list)  # ["07:00", "12:00", "17:00"]
-    dias = models.JSONField(default=list)       # ["lunes", "miercoles", "viernes"]
+    horarios = models.JSONField(default=list)
+    dias = models.JSONField(default=list)
     activa = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     
@@ -84,6 +84,6 @@ class Solicitud(models.Model):
 class Calificacion(models.Model):
     ruta = models.ForeignKey(Ruta, on_delete=models.CASCADE, related_name='calificaciones')
     solicitud = models.ForeignKey(Solicitud, on_delete=models.CASCADE)
-    puntuacion = models.IntegerField()  # 1-5
+    puntuacion = models.IntegerField()
     comentario = models.TextField(blank=True)
     fecha = models.DateTimeField(auto_now_add=True)

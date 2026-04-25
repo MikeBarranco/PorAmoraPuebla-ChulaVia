@@ -9,7 +9,7 @@ class ComunidadSerializer(serializers.ModelSerializer):
 class TransportistaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transportista
-        exclude = ['ine_ultimos_4']  # no exponer datos sensibles
+        exclude = ['ine_ultimos_4']
 
 class RutaSerializer(serializers.ModelSerializer):
     transportista = TransportistaSerializer(read_only=True)
@@ -23,4 +23,4 @@ class RutaSerializer(serializers.ModelSerializer):
 class SolicitudSerializer(serializers.ModelSerializer):
     class Meta:
         model = Solicitud
-        fields = '__all__'
+        fields = '__all__' 
