@@ -1,1 +1,1 @@
-web: gunicorn backend.wsgi -b 0.0.0.0:$PORT --log-file -
+web: python manage.py migrate && python manage.py shell < seed.py && gunicorn backend.wsgi -b 0.0.0.0:$PORT --log-file -
