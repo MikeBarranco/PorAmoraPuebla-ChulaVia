@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "PowerShell(winget --version 2>$null)",
+      "PowerShell(if \\($?\\) { \"winget OK\" } else { \"winget not found\" })",
+      "PowerShell($file = \"C:\\\\Users\\\\angel\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-angel-OneDrive-Escritorio-Paginas-WEB-PorAmoraPuebla-ChulaVia\\\\7a8ce76d-e417-45ea-99a1-6497727c4622\\\\tasks\\\\b6jrcsy1c.output\"; \\(Get-Content $file -ErrorAction SilentlyContinue | Select-Object -Last 15\\) -join \"`n\")"
+    ]
+  }
+}
