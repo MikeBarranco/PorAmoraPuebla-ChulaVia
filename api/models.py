@@ -89,3 +89,25 @@ class Calificacion(models.Model):
     puntuacion = models.IntegerField()
     comentario = models.TextField(blank=True)
     fecha = models.DateTimeField(auto_now_add=True)
+
+class WhatsAppConversation(models.Model):
+    PASO_CHOICES = [
+        ('inicio', 'Inicio / Menú'),
+        ('buscando_origen', 'Buscando Origen'),
+        ('buscando_destino', 'Buscando Destino'),
+        ('eligiendo_ruta', 'Eligiendo Ruta'),
+        ('confirmando_fecha', 'Confirmando Fecha'),
+    ]
+    
+    wa_id = models.CharField(max_length=50, unique=True, help_text="ID de WhatsApp o Teléfono")
+    paso = models.CharField(max_length=30, choices=PASO_CHOICES, default='inicio')
+    
+    # Datos temporales de la búsqueda
+    origen_temp = models.CharField(max_length=200, blank=True, null=True)
+    destino_temp = models.CharField(max_length=200, blank=True, null=True)
+    ruta_id_temp = models.IntegerField(blank=True, null=True)
+    
+    ultima_interaccion = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.wa_id} - {self.paso}"
