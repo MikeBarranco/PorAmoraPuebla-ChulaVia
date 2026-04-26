@@ -25,7 +25,16 @@
       "Bash(git push *)",
       "Bash(git stash *)",
       "mcp__Claude_Preview__preview_start",
-      "Bash(npx vite *)"
+      "Bash(npx vite *)",
+      "Bash(git ls-tree *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(f'Total: {len\\(d\\)} comunidades'\\); regions={}; [regions.update\\({x[\\\\\"region\\\\\"]:regions.get\\(x[\\\\\"region\\\\\"],0\\)+1}\\) for x in d]; print\\('Regiones:', json.dumps\\(regions, ensure_ascii=False, indent=2\\)\\)\")",
+      "Bash(grep -v \"^commit\\\\|^Author\\\\|^Date\\\\|^$\\\\|^    \")",
+      "Bash(python3 -c ' *)",
+      "Bash(git show *)",
+      "Bash(ls -la frontend/public/zonas/)",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(s,list\\(d[s].keys\\(\\)\\)\\) for s in d]\")",
+      "Bash(python -c \"import json; d=json.load\\(open\\('src/data/traducciones.json'\\)\\); print\\(d['navegacion']['soy_transportista']\\)\")",
+      "Bash(grep -v \"//\")"
     ]
   }
 }

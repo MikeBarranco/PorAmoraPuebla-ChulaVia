@@ -32,4 +32,6 @@ export const api = {
     form.append('foto', file)
     return fetch(BASE + '/api/subir-foto-transportista/', { method: 'POST', body: form }).then(r => r.json())
   },
+  completarSolicitud: (id) =>
+    fetch(BASE + `/api/solicitudes/${id}/completar/`, { method: 'POST' }).then(r => r.json()),
 }

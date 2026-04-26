@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useLang } from '../context/LangContext.jsx'
 
 const CONVERSACIONES = {
   es: [
@@ -37,25 +38,38 @@ const IDIOMAS = [
 ]
 
 export default function WhatsAppDemo() {
-  const [idioma, setIdioma]   = useState('es')
-  const [visible, setVisible] = useState([CONVERSACIONES.es[0]])
+  const { lang } = useLang()
+  const [visible, setVisible] = useState([CONVERSACIONES[lang]?.[0] ?? CONVERSACIONES.es[0]])
   const [step, setStep]       = useState(0)
   const [typing, setTyping]   = useState(false)
   const chatRef               = useRef(null)
+  const prevLang              = useRef(lang)
 
   useEffect(() => {
     if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight
   }, [visible, typing])
 
-  function cambiarIdioma(id) {
-    setIdioma(id)
-    setVisible([CONVERSACIONES[id][0]])
+  useEffect(() => {
+    if (prevLang.current !== lang) {
+      prevLang.current = lang
+      const id = CONVERSACIONES[lang] ? lang : 'es'
+      setVisible([CONVERSACIONES[id][0]])
+      setStep(0)
+      setTyping(false)
+    }
+  }, [lang])
+
+
+  const idiomaActivo = CONVERSACIONES[lang] ? lang : 'es'
+
+  function reiniciar() {
+    setVisible([CONVERSACIONES[idiomaActivo][0]])
     setStep(0)
     setTyping(false)
   }
 
   function advance() {
-    const pasos = CONVERSACIONES[idioma]
+    const pasos = CONVERSACIONES[idiomaActivo]
     const nextUser = pasos[step + 1]
     if (!nextUser) return
     setVisible(v => [...v, nextUser])
@@ -68,36 +82,29 @@ export default function WhatsAppDemo() {
     }, 900)
   }
 
-  const pasos    = CONVERSACIONES[idioma]
+  const pasos    = CONVERSACIONES[idiomaActivo]
   const nextUser = pasos[step + 1]
   const finished = !nextUser
+  const idiomaLabel = IDIOMAS.find(i => i.id === idiomaActivo)?.label ?? 'Español'
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
 
-      {/* Selector de idioma */}
-      <div style={{ display: 'flex', gap: 8 }}>
-        {IDIOMAS.map(({ id, label, flag }) => (
-          <button
-            key={id}
-            onClick={() => cambiarIdioma(id)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 6,
-              padding: '6px 14px', borderRadius: 20,
-              border: `2px solid ${idioma === id ? '#1B3A6B' : '#dde3f0'}`,
-              backgroundColor: idioma === id ? '#1B3A6B' : '#fff',
-              color: idioma === id ? '#fff' : '#4b5563',
-              fontSize: 12, fontWeight: 600, cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-            <span>{flag}</span> {label}
-          </button>
-        ))}
+      {/* Idioma activo badge */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#6b7280' }}>
+        <span>Mostrando en:</span>
+        <span style={{
+          padding: '3px 12px', borderRadius: 20,
+          backgroundColor: '#1B3A6B', color: '#F4C430',
+          fontWeight: 700, fontSize: 11,
+        }}>
+          {idiomaLabel}
+        </span>
+        <span style={{ color: '#9ca3af', fontSize: 11 }}>· cambia el idioma en la barra superior</span>
       </div>
 
       {/* Nota de traducción */}
-      {idioma !== 'es' && (
+      {idiomaActivo !== 'es' && (
         <p style={{ margin: 0, fontSize: 10, color: '#9ca3af', textAlign: 'center', maxWidth: 300 }}>
           Traducción aproximada · En proceso de validación con el Instituto Poblano de los Pueblos Indígenas
         </p>
@@ -189,7 +196,7 @@ export default function WhatsAppDemo() {
 
       {finished && (
         <button
-          onClick={() => cambiarIdioma(idioma)}
+          onClick={reiniciar}
           style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1B3A6B', fontSize: 13, fontWeight: 600, textDecoration: 'underline' }}
         >
           Ver demo otra vez

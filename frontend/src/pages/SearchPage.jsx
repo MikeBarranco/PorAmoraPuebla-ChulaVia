@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Search, MapPin, Clock, Star, Shield, ChevronDown, X, CheckCircle, MessageCircle, Users, Timer, ChevronUp } from 'lucide-react'
 import { comunidades, rutas } from '../data/comunidades'
 import { api } from '../data/api'
+import { useT } from '../context/LangContext.jsx'
+import TripSimulator from '../components/TripSimulator'
 
 const BLUE   = '#1B3A6B'
 const YELLOW = '#F4C430'
@@ -53,6 +55,7 @@ function Select({ value, onChange, options, placeholder }) {
 
 function RouteCard({ ruta, onBook }) {
   const [showResenas, setShowResenas] = useState(false)
+  const t = useT()
   return (
     <div style={{
       backgroundColor: '#fff', border: '1.5px solid #e8edf5',
@@ -81,7 +84,7 @@ function RouteCard({ ruta, onBook }) {
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
         <Badge color={BLUE}>{ruta.tipo}</Badge>
         <Badge color={GREEN}>{ruta.capacidad} lugares</Badge>
-        {ruta.verificado && <Badge color={GREEN}>Verificado</Badge>}
+        {ruta.verificado && <Badge color={GREEN}>{t('general','verificado')}</Badge>}
         {ruta.eta && (
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: 4,
@@ -89,14 +92,14 @@ function RouteCard({ ruta, onBook }) {
             fontSize: 11, fontWeight: 600,
             backgroundColor: '#fef9c3', color: '#854d0e',
           }}>
-            <Timer size={11} /> ETA {ruta.eta}
+            <Timer size={11} /> {t('resultados','tiempo_estimado')} {ruta.eta}
           </span>
         )}
       </div>
 
       <div style={{ marginBottom: 16 }}>
         <p style={{ margin: '0 0 8px', fontSize: 12, fontWeight: 600, color: GRAY, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          Horarios
+          {t('resultados','horarios')}
         </p>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {ruta.horarios.map(h => (
@@ -114,7 +117,7 @@ function RouteCard({ ruta, onBook }) {
 
       <div style={{ marginBottom: 16 }}>
         <p style={{ margin: '0 0 8px', fontSize: 12, fontWeight: 600, color: GRAY, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          Dias de servicio
+          {t('resultados','dias_de_servicio')}
         </p>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {['Lun','Mar','Mie','Jue','Vie','Sab','Dom'].map(d => (
@@ -163,7 +166,7 @@ function RouteCard({ ruta, onBook }) {
           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-1px)' }}
           onMouseLeave={e => { e.currentTarget.style.backgroundColor = YELLOW; e.currentTarget.style.transform = 'translateY(0)' }}
         >
-          <MessageCircle size={15} /> Reservar
+          <MessageCircle size={15} /> {t('resultados','reservar_viaje')}
         </button>
       </div>
 
@@ -197,11 +200,13 @@ function makeFolio() {
 }
 
 function BookingModal({ ruta, onClose }) {
+  const t = useT()
   const [phone, setPhone] = useState('')
   const [date,  setDate]  = useState('')
   const [pax,   setPax]   = useState(1)
   const [done,  setDone]  = useState(false)
   const [folio, setFolio] = useState('')
+  const [simulando, setSimulando] = useState(false)
 
   function confirm() {
     if (!phone || !date) return
@@ -220,6 +225,7 @@ function BookingModal({ ruta, onClose }) {
   }
 
   return (
+    <>
     <div
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
       style={{
@@ -253,20 +259,20 @@ function BookingModal({ ruta, onClose }) {
               <CheckCircle size={32} color={GREEN} />
             </div>
             <h2 style={{ margin: '0 0 10px', fontSize: 20, fontWeight: 800, color: BLUE }}>
-              Reservacion confirmada
+              {t('busqueda','modal_exito')}
             </h2>
             <div style={{
               display: 'inline-block', backgroundColor: '#1B3A6B', color: '#F4C430',
               padding: '4px 14px', borderRadius: 8, fontSize: 13, fontWeight: 700,
               letterSpacing: '0.08em', marginBottom: 14,
             }}>
-              Folio: {folio}
+              {t('busqueda','modal_folio')}: {folio}
             </div>
             <p style={{ margin: '0 0 6px', fontSize: 14, color: GRAY }}>
               {ruta.origen} → {ruta.destino}
             </p>
             <p style={{ margin: '0 0 24px', fontSize: 14, color: GRAY }}>
-              Te contactamos por WhatsApp al <strong style={{ color: BLUE }}>{phone}</strong>
+              {t('busqueda','modal_contacto')} <strong style={{ color: BLUE }}>{phone}</strong>
             </p>
             <div style={{ backgroundColor: '#f4f6fb', borderRadius: 12, padding: 16, marginBottom: 24, textAlign: 'left' }}>
               <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: BLUE }}>Resumen</p>
@@ -277,6 +283,18 @@ function BookingModal({ ruta, onClose }) {
               <p style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 700, color: BLUE }}>Total: ${ruta.precio * pax}</p>
               <p style={{ margin: 0, fontSize: 12, color: GRAY }}>Muestra este folio al transportista el día del viaje.</p>
             </div>
+            <button
+              onClick={() => setSimulando(true)}
+              style={{
+                width: '100%', backgroundColor: '#F4C430', color: BLUE,
+                padding: 12, borderRadius: 10, border: 'none',
+                fontWeight: 700, fontSize: 15, cursor: 'pointer',
+                marginBottom: 10,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              }}
+            >
+              🎬 Simular el viaje en tiempo real
+            </button>
             <button onClick={onClose} style={{
               width: '100%', backgroundColor: BLUE, color: '#fff',
               padding: 12, borderRadius: 10, border: 'none',
@@ -287,7 +305,7 @@ function BookingModal({ ruta, onClose }) {
           </div>
         ) : (
           <>
-            <h2 style={{ margin: '0 0 6px', fontSize: 20, fontWeight: 800, color: BLUE }}>Reservar viaje</h2>
+            <h2 style={{ margin: '0 0 6px', fontSize: 20, fontWeight: 800, color: BLUE }}>{t('busqueda','modal_titulo')}</h2>
             <p style={{ margin: '0 0 24px', fontSize: 14, color: GRAY }}>
               {ruta.origen} → {ruta.destino} &nbsp;·&nbsp; ${ruta.precio} por persona
             </p>
@@ -295,7 +313,7 @@ function BookingModal({ ruta, onClose }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
                 <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: BLUE, marginBottom: 6 }}>
-                  Numero de WhatsApp *
+                  {t('busqueda','modal_tel')} *
                 </label>
                 <input type="tel" value={phone} onChange={e => setPhone(e.target.value)}
                   placeholder="Ej. 2221234567"
@@ -364,17 +382,27 @@ function BookingModal({ ruta, onClose }) {
                   cursor: phone && date ? 'pointer' : 'not-allowed',
                   transition: 'all 0.2s',
                 }}>
-                Confirmar por WhatsApp
+                {t('busqueda','modal_btn')}
               </button>
             </div>
           </>
         )}
       </div>
     </div>
+
+    {simulando && (
+      <TripSimulator
+        ruta={ruta}
+        solicitudId={null}
+        onClose={() => setSimulando(false)}
+      />
+    )}
+    </>
   )
 }
 
 export default function SearchPage() {
+  const t = useT()
   const [origen,   setOrigen]   = useState('')
   const [destino,  setDestino]  = useState('')
   const [searched, setSearched] = useState(false)
@@ -419,12 +447,12 @@ export default function SearchPage() {
             boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
           }}>
             <div style={{ flex: 1, minWidth: 180 }}>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Desde</label>
-              <Select value={origen} onChange={setOrigen} options={opciones} placeholder="Comunidad de origen" />
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('busqueda','origen')}</label>
+              <Select value={origen} onChange={setOrigen} options={opciones} placeholder={t('busqueda','de_donde_sales')} />
             </div>
             <div style={{ flex: 1, minWidth: 180 }}>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Hasta</label>
-              <Select value={destino} onChange={setDestino} options={opciones} placeholder="Comunidad de destino" />
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('busqueda','destino')}</label>
+              <Select value={destino} onChange={setDestino} options={opciones} placeholder={t('busqueda','a_donde_vas')} />
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <button onClick={buscar} disabled={!origen && !destino}
@@ -439,7 +467,7 @@ export default function SearchPage() {
                 onMouseEnter={e => { if (origen || destino) e.currentTarget.style.backgroundColor = '#e8b800' }}
                 onMouseLeave={e => { if (origen || destino) e.currentTarget.style.backgroundColor = YELLOW }}
               >
-                <Search size={17} /> Buscar
+                <Search size={17} /> {t('busqueda','buscar')}
               </button>
               {searched && (
                 <button onClick={limpiar} aria-label="Limpiar busqueda"
@@ -508,9 +536,9 @@ export default function SearchPage() {
             <div style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: 'rgba(27,58,107,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
               <MapPin size={28} color={BLUE} style={{ opacity: 0.4 }} />
             </div>
-            <h3 style={{ margin: '0 0 8px', fontSize: 17, fontWeight: 700, color: BLUE }}>No encontramos rutas disponibles</h3>
+            <h3 style={{ margin: '0 0 8px', fontSize: 17, fontWeight: 700, color: BLUE }}>{t('busqueda','sin_resultados')}</h3>
             <p style={{ margin: '0 0 24px', fontSize: 14, color: GRAY, maxWidth: 360, marginInline: 'auto' }}>
-              Aun no hay transportistas para esta ruta. Registramos tu solicitud para que la vean.
+              {t('busqueda','intenta')}
             </p>
             <button onClick={limpiar} style={{ backgroundColor: BLUE, color: '#fff', padding: '11px 24px', borderRadius: 10, border: 'none', fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>
               Buscar otra ruta

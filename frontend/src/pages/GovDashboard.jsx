@@ -6,6 +6,7 @@ import {
 import { MapPin, Shield, Route, Users, AlertTriangle, TrendingUp, Download } from 'lucide-react'
 import { comunidades, rutas } from '../data/comunidades'
 import { api } from '../data/api'
+import { useT } from '../context/LangContext.jsx'
 
 const BLUE   = '#1B3A6B'
 const YELLOW = '#F4C430'
@@ -70,9 +71,9 @@ const rutasData = rutas.map(r => ({
   calificacion: r.calificacion,
 })).sort((a, b) => b.viajes - a.viajes)
 
-const coberturaPie = [
-  { name: 'Con transporte',  value: conCobertura.length,  color: GREEN },
-  { name: 'Sin transporte',  value: sinCobertura.length,  color: RED   },
+const coberturaPie = (t) => [
+  { name: t('gobierno','con_transporte'), value: conCobertura.length, color: GREEN },
+  { name: t('gobierno','sin_transporte'), value: sinCobertura.length, color: RED   },
 ]
 
 const CUSTOM_TOOLTIP = ({ active, payload, label }) => {
@@ -88,6 +89,7 @@ const CUSTOM_TOOLTIP = ({ active, payload, label }) => {
 }
 
 export default function GovDashboard() {
+  const t = useT()
   const [tab, setTab]         = useState('resumen')
   const [resumen, setResumen] = useState(null)
 
@@ -98,9 +100,9 @@ export default function GovDashboard() {
   }, [])
 
   const tabs = [
-    { id: 'resumen',      label: 'Resumen general' },
-    { id: 'cobertura',    label: 'Cobertura' },
-    { id: 'transportistas', label: 'Transportistas' },
+    { id: 'resumen',        label: t('gobierno','tab_resumen') },
+    { id: 'cobertura',      label: t('gobierno','tab_cobertura') },
+    { id: 'transportistas', label: t('gobierno','tab_transportistas') },
   ]
 
   return (
@@ -168,12 +170,12 @@ export default function GovDashboard() {
 
             {/* KPIs */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px,1fr))', gap: 16 }}>
-              <KpiCard icon={MapPin}        value={resumen?.total_comunidades      ?? comunidades.length}   label="Comunidades registradas"    sub={`${sinCobertura.length} sin cobertura`} color={BLUE}   />
-              <KpiCard icon={Shield}        value={resumen?.total_transportistas  ?? 5}                    label="Transportistas activos"     sub="Verificados por ChulaVia"               color={GREEN}  />
-              <KpiCard icon={Route}         value={resumen?.total_rutas           ?? rutas.length}         label="Rutas activas"              sub="Region Mixteca"                         color={BLUE}   />
-              <KpiCard icon={TrendingUp}    value={resumen?.total_solicitudes     ?? 34}                   label="Solicitudes registradas"    sub="Demanda documentada"                    color={GREEN}  />
-              <KpiCard icon={AlertTriangle} value={sinCobertura.length}                                    label="Comunidades sin cobertura"  sub="Demanda sin satisfacer"                 color={RED}    />
-              <KpiCard icon={Users}         value={resumen?.viajes_completados    ?? 0}                    label="Viajes completados"         sub="Acumulado 2026"                         color={YELLOW} />
+              <KpiCard icon={MapPin}        value={resumen?.total_comunidades      ?? comunidades.length}   label={t('gobierno','kpi_comunidades')}    sub={`${sinCobertura.length} ${t('gobierno','kpi_sin_cobertura').toLowerCase()}`} color={BLUE}   />
+              <KpiCard icon={Shield}        value={resumen?.total_transportistas  ?? 5}                    label={t('gobierno','kpi_transportistas')} sub="Verificados por ChulaVia"               color={GREEN}  />
+              <KpiCard icon={Route}         value={resumen?.total_rutas           ?? rutas.length}         label={t('gobierno','kpi_rutas')}          sub={t('gobierno','subtitulo')}              color={BLUE}   />
+              <KpiCard icon={TrendingUp}    value={resumen?.total_solicitudes     ?? 34}                   label={t('gobierno','kpi_solicitudes')}    sub="Demanda documentada"                    color={GREEN}  />
+              <KpiCard icon={AlertTriangle} value={sinCobertura.length}                                    label={t('gobierno','kpi_sin_cobertura')}  sub="Demanda sin satisfacer"                 color={RED}    />
+              <KpiCard icon={Users}         value={resumen?.viajes_completados    ?? 0}                    label={t('gobierno','kpi_viajes')}         sub="Acumulado 2026"                         color={YELLOW} />
             </div>
 
             {/* Graficas fila 1 */}
@@ -199,12 +201,12 @@ export default function GovDashboard() {
                 <ResponsiveContainer width="100%" height={220}>
                   <PieChart>
                     <Pie
-                      data={coberturaPie}
+                      data={coberturaPie(t)}
                       cx="50%" cy="50%"
                       innerRadius={60} outerRadius={90}
                       paddingAngle={3} dataKey="value"
                     >
-                      {coberturaPie.map((entry, i) => (
+                      {coberturaPie(t).map((entry, i) => (
                         <Cell key={i} fill={entry.color} />
                       ))}
                     </Pie>
@@ -227,8 +229,8 @@ export default function GovDashboard() {
                   <AlertTriangle size={18} color={RED} />
                 </div>
                 <div>
-                  <h2 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: BLUE }}>Comunidades con mayor deficit de movilidad</h2>
-                  <p style={{ margin: 0, fontSize: 12, color: GRAY }}>Solicitudes registradas sin ruta disponible &mdash; oportunidades de inversion en infraestructura</p>
+                  <h2 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: BLUE }}>{t('gobierno','deficit_titulo')}</h2>
+                  <p style={{ margin: 0, fontSize: 12, color: GRAY }}>{t('gobierno','deficit_desc')}</p>
                 </div>
               </div>
 
@@ -316,10 +318,10 @@ export default function GovDashboard() {
         {tab === 'transportistas' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px,1fr))', gap: 16 }}>
-              <KpiCard icon={Users}  value="5"     label="Transportistas registrados" color={BLUE}  />
-              <KpiCard icon={Shield} value="4"     label="Transportistas verificados" sub="80% del total" color={GREEN} />
-              <KpiCard icon={Route}  value="234"   label="Viajes acumulados"          color={BLUE}  />
-              <KpiCard icon={TrendingUp} value="4.6" label="Calificacion promedio"    sub="Sobre 5.0"     color={GREEN} />
+              <KpiCard icon={Users}  value="5"   label={t('gobierno','kpi_transportistas')} color={BLUE}  />
+              <KpiCard icon={Shield} value="4"   label={t('gobierno','kpi_transportistas')} sub="80% del total" color={GREEN} />
+              <KpiCard icon={Route}  value="234" label={t('gobierno','viajes_acum')}         color={BLUE}  />
+              <KpiCard icon={TrendingUp} value="4.6" label={t('gobierno','cal_promedio')}    sub="/ 5.0" color={GREEN} />
             </div>
 
             {/* Tipos de vehiculo */}
