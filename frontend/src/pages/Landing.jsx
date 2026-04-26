@@ -1,440 +1,382 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Search, Star, Shield, BarChart2, MessageCircle, ArrowRight, Users, Route, TrendingUp } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { MapPin, Search, Shield, BarChart2, MessageCircle, ArrowRight, Users, Route } from 'lucide-react'
 
-const stats = [
-  { value: '15', label: 'comunidades conectadas', icon: MapPin },
-  { value: '5', label: 'transportistas verificados', icon: Shield },
-  { value: '234', label: 'viajes realizados', icon: Route },
-]
+/* ── Keyframes ── */
+const CSS = `
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dot-blink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+@keyframes tile-drift {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(120px, 120px); }
+}
+@keyframes gradient-text {
+  0%,100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+`
 
-const steps = [
-  {
-    number: '01',
-    icon: Search,
-    title: 'Busca tu ruta',
-    desc: 'Escribe de donde sales y a donde vas. Encontramos los transportistas disponibles en tu zona.',
-  },
-  {
-    number: '02',
-    icon: Star,
-    title: 'Elige tu transporte',
-    desc: 'Ve horarios, precios y calificaciones de transportistas verificados por tu comunidad.',
-  },
-  {
-    number: '03',
-    icon: MessageCircle,
-    title: 'Confirma por WhatsApp',
-    desc: 'Sin app que instalar. Recibe tu confirmacion directo en WhatsApp, funciona con cualquier telefono.',
-  },
-]
-
-const reasons = [
-  {
-    icon: Shield,
-    title: 'Transportistas verificados',
-    desc: 'INE confirmado, placa registrada y calificaciones reales de tu comunidad.',
-  },
-  {
-    icon: MessageCircle,
-    title: 'Funciona con WhatsApp',
-    desc: 'Sin smartphone caro ni internet rapido. Solo WhatsApp, que ya tienes.',
-  },
-  {
-    icon: BarChart2,
-    title: 'Datos para el gobierno',
-    desc: 'Generamos la primera base de datos de movilidad rural de Puebla para informar politica publica.',
-  },
-  {
-    icon: Users,
-    title: 'Hecho para tu comunidad',
-    desc: 'Disenado para zonas rurales de alta marginacion donde el transporte formal no llega.',
-  },
-]
-
-export default function Landing() {
+/* ── Talavera decorative corner (una sola pieza, esquina) ── */
+function TalavераCorner() {
   return (
-    <main>
-      {/* Hero */}
-      <section
-        style={{
-          background: 'linear-gradient(135deg, #1B3A6B 0%, #0f2347 60%, #1a3560 100%)',
-          color: '#FAFAFA',
-          padding: '80px 24px 100px',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            top: '-80px',
-            right: '-80px',
-            width: '400px',
-            height: '400px',
-            borderRadius: '50%',
-            backgroundColor: 'rgba(193,68,14,0.08)',
-            pointerEvents: 'none',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '-60px',
-            left: '-60px',
-            width: '300px',
-            height: '300px',
-            borderRadius: '50%',
-            backgroundColor: 'rgba(42,96,73,0.12)',
-            pointerEvents: 'none',
-          }}
-        />
+    <svg
+      width="420" height="420"
+      viewBox="0 0 120 120"
+      fill="none"
+      style={{
+        position: 'absolute',
+        bottom: -40,
+        right: -40,
+        opacity: 0.08,
+        pointerEvents: 'none',
+      }}
+      aria-hidden="true"
+    >
+      {/* Talavera flower tile */}
+      <ellipse cx="60" cy="22" rx="11" ry="20" fill="white"/>
+      <ellipse cx="60" cy="98" rx="11" ry="20" fill="white"/>
+      <ellipse cx="22" cy="60" rx="20" ry="11" fill="white"/>
+      <ellipse cx="98" cy="60" rx="20" ry="11" fill="white"/>
+      <circle  cx="60" cy="60" r="13" fill="white"/>
+      <rect x="60" y="4" width="14" height="14" transform="rotate(45 60 11)" fill="white"/>
+      <rect x="60" y="95" width="14" height="14" transform="rotate(45 60 109)" fill="white"/>
+      <rect x="4" y="60" width="14" height="14" transform="rotate(45 11 60)" fill="white"/>
+      <rect x="95" y="60" width="14" height="14" transform="rotate(45 109 60)" fill="white"/>
+      <rect x="8" y="8" width="104" height="104" rx="6" stroke="white" strokeWidth="1.5" fill="none"/>
+      <rect x="18" y="18" width="84" height="84" rx="4" stroke="white" strokeWidth="0.8" fill="none"/>
+    </svg>
+  )
+}
 
-        <div style={{ maxWidth: '72rem', margin: '0 auto', position: 'relative' }}>
-          <div style={{ maxWidth: '680px' }}>
-            <span
-              style={{
-                display: 'inline-block',
-                backgroundColor: 'rgba(193,68,14,0.25)',
-                color: '#f47a52',
-                border: '1px solid rgba(193,68,14,0.4)',
-                borderRadius: '100px',
-                padding: '4px 14px',
-                fontSize: '13px',
-                fontWeight: '600',
-                letterSpacing: '0.04em',
-                marginBottom: '24px',
-                textTransform: 'uppercase',
-              }}
-            >
-              Movilidad rural en Puebla
+/* ── Scroll fade hook ── */
+function useFade() {
+  const ref = useRef(null)
+  const [on, setOn] = useState(false)
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setOn(true) }, { threshold: 0.1 })
+    if (ref.current) obs.observe(ref.current)
+    return () => obs.disconnect()
+  }, [])
+  return [ref, on]
+}
+
+/* ── Counter ── */
+function Counter({ to, suffix = '' }) {
+  const [n, setN] = useState(0)
+  const ref = useRef(null)
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return
+      let cur = 0
+      const id = setInterval(() => {
+        cur += Math.ceil(to / 45)
+        if (cur >= to) { setN(to); clearInterval(id) } else setN(cur)
+      }, 28)
+    }, { threshold: 0.5 })
+    if (ref.current) obs.observe(ref.current)
+    return () => obs.disconnect()
+  }, [to])
+  return <span ref={ref}>{n}{suffix}</span>
+}
+
+/* ── Data ── */
+const STATS = [
+  { to: 15,  suffix: '',  label: 'Comunidades conectadas',  icon: MapPin  },
+  { to: 5,   suffix: '',  label: 'Transportistas verificados', icon: Shield },
+  { to: 234, suffix: '+', label: 'Viajes realizados',        icon: Route   },
+]
+
+const STEPS = [
+  { n: '01', icon: Search,        title: 'Busca tu ruta',         desc: 'Escribe de donde sales y a donde vas. Encontramos los transportistas disponibles cerca de ti.' },
+  { n: '02', icon: Shield,        title: 'Elige con confianza',   desc: 'Ve horarios, precios y calificaciones de transportistas verificados por tu propia comunidad.' },
+  { n: '03', icon: MessageCircle, title: 'Confirma por WhatsApp', desc: 'Sin app que instalar. Solo WhatsApp. Funciona con cualquier telefono y conexion basica.' },
+]
+
+const REASONS = [
+  { icon: Shield,        title: 'Transportistas verificados', desc: 'INE confirmado, placa registrada y calificaciones reales de pasajeros.' },
+  { icon: MessageCircle, title: 'Solo necesitas WhatsApp',    desc: 'Funciona con 2G. Sin smartphone caro ni internet rapido.' },
+  { icon: BarChart2,     title: 'Datos para el gobierno',     desc: 'Primera base de datos de movilidad rural de Puebla.' },
+  { icon: Users,         title: 'Hecho para comunidades',     desc: 'Para zonas donde el transporte formal no llega.' },
+]
+
+/* ── Component ── */
+export default function Landing() {
+  const [statsRef, statsOn] = useFade()
+  const [stepsRef, stepsOn] = useFade()
+  const [whyRef,   whyOn]   = useFade()
+
+  return (
+    <main style={{ fontFamily: "'Inter', sans-serif" }}>
+      <style>{CSS}</style>
+
+      {/* ══ HERO ══ */}
+      <section style={{
+        position: 'relative',
+        overflow: 'hidden',
+        backgroundColor: '#1B3A6B',
+        color: '#FAFAFA',
+        padding: '100px 24px 120px',
+      }}>
+        <TalavераCorner />
+
+        {/* Segundo adorno arriba-izquierda, muy sutil */}
+        <div style={{
+          position: 'absolute', top: -60, left: -60,
+          width: 280, height: 280, borderRadius: '50%',
+          border: '1px solid rgba(255,255,255,0.06)',
+          pointerEvents: 'none',
+        }} />
+        <div style={{
+          position: 'absolute', top: -20, left: -20,
+          width: 180, height: 180, borderRadius: '50%',
+          border: '1px solid rgba(255,255,255,0.04)',
+          pointerEvents: 'none',
+        }} />
+
+        <div style={{ maxWidth: '72rem', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+
+          {/* Badge */}
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            backgroundColor: 'rgba(244,196,48,0.15)',
+            border: '1px solid rgba(244,196,48,0.3)',
+            borderRadius: 100, padding: '5px 16px',
+            fontSize: 12, fontWeight: 600,
+            letterSpacing: '0.06em', textTransform: 'uppercase',
+            color: '#F4C430', marginBottom: 28,
+            animation: 'fadeUp 0.6s ease both',
+          }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: '#F4C430', animation: 'dot-blink 2s ease infinite' }} />
+            Hackathon Por Amor a Puebla 2026
+          </div>
+
+          {/* Headline */}
+          <h1 style={{
+            fontSize: 'clamp(2.6rem, 5.5vw, 4rem)',
+            fontWeight: 800, lineHeight: 1.08,
+            margin: '0 0 22px', letterSpacing: '-0.03em',
+            maxWidth: 680,
+            animation: 'fadeUp 0.7s ease 0.1s both',
+          }}>
+            Conecta tu comunidad.{' '}
+            <span style={{ color: '#F4C430' }}>
+              Muevete con confianza.
             </span>
+          </h1>
 
-            <h1
+          {/* Subheadline */}
+          <p style={{
+            fontSize: '1.1rem', lineHeight: 1.72,
+            color: 'rgba(255,255,255,0.72)',
+            margin: '0 0 48px', maxWidth: 500,
+            animation: 'fadeUp 0.7s ease 0.2s both',
+          }}>
+            La primera plataforma de transporte intercomunitario rural de Puebla.
+            Conectamos pasajeros con transportistas verificados donde el transporte
+            formal no llega.
+          </p>
+
+          {/* CTAs */}
+          <div style={{
+            display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center',
+            animation: 'fadeUp 0.7s ease 0.3s both',
+          }}>
+            <Link to="/buscar"
               style={{
-                fontSize: 'clamp(2.2rem, 5vw, 3.5rem)',
-                fontWeight: '800',
-                lineHeight: '1.1',
-                margin: '0 0 24px',
-                letterSpacing: '-0.02em',
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                backgroundColor: '#F4C430', color: '#1B3A6B',
+                padding: '14px 28px', borderRadius: 10,
+                fontWeight: 700, fontSize: 15, textDecoration: 'none',
+                boxShadow: '0 4px 20px rgba(244,196,48,0.35)',
+                transition: 'all 0.2s ease',
               }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(244,196,48,0.45)' }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F4C430'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(244,196,48,0.35)' }}
             >
-              Conecta tu comunidad.{' '}
-              <span style={{ color: '#C1440E' }}>Muevete con confianza.</span>
-            </h1>
+              <Search size={17} /> Buscar transporte
+            </Link>
 
-            <p
+            <Link to="/mapa"
               style={{
-                fontSize: '1.15rem',
-                lineHeight: '1.65',
-                color: 'rgba(250,250,250,0.78)',
-                margin: '0 0 40px',
-                maxWidth: '560px',
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                color: 'rgba(255,255,255,0.88)', padding: '14px 26px', borderRadius: 10,
+                fontWeight: 600, fontSize: 15, textDecoration: 'none',
+                border: '1.5px solid rgba(255,255,255,0.25)',
+                backgroundColor: 'rgba(255,255,255,0.06)',
+                transition: 'all 0.2s ease',
               }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.12)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.4)' }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)' }}
             >
-              La primera plataforma de transporte intercomunitario rural de Puebla.
-              Conectamos pasajeros con transportistas verificados en comunidades donde
-              el transporte formal no llega.
-            </p>
-
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <Link
-                to="/buscar"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  backgroundColor: '#C1440E',
-                  color: '#FAFAFA',
-                  padding: '14px 28px',
-                  borderRadius: '10px',
-                  fontWeight: '700',
-                  fontSize: '15px',
-                  textDecoration: 'none',
-                  boxShadow: '0 4px 16px rgba(193,68,14,0.4)',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.backgroundColor = '#a83a0c'
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(193,68,14,0.45)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.backgroundColor = '#C1440E'
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(193,68,14,0.4)'
-                }}
-              >
-                <Search size={18} />
-                Buscar transporte
-              </Link>
-
-              <Link
-                to="/mapa"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  color: '#FAFAFA',
-                  padding: '14px 28px',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  fontSize: '15px',
-                  textDecoration: 'none',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.18)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'
-                }}
-              >
-                <MapPin size={18} />
-                Ver mapa de rutas
-              </Link>
-            </div>
+              <MapPin size={17} /> Ver mapa de rutas
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
+      {/* ══ STATS ══ */}
       <section style={{ backgroundColor: '#FAFAFA', padding: '0 24px' }}>
         <div
+          ref={statsRef}
           style={{
-            maxWidth: '72rem',
-            margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1px',
-            backgroundColor: '#e5e7eb',
-            borderRadius: '16px',
-            overflow: 'hidden',
-            transform: 'translateY(-40px)',
-            boxShadow: '0 8px 32px rgba(27,58,107,0.12)',
+            maxWidth: '72rem', margin: '0 auto',
+            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+            transform: 'translateY(-44px)',
+            borderRadius: 18, overflow: 'hidden',
+            boxShadow: '0 12px 40px rgba(27,58,107,0.13)',
+            border: '1px solid #e8edf5',
+            opacity: statsOn ? 1 : 0,
+            transition: 'opacity 0.7s ease',
           }}
         >
-          {stats.map(({ value, label, icon: Icon }) => (
-            <div
-              key={label}
-              style={{
-                backgroundColor: '#FAFAFA',
-                padding: '32px 28px',
-                textAlign: 'center',
-              }}
-            >
-              <Icon size={24} color="#C1440E" style={{ margin: '0 auto 12px' }} aria-hidden="true" />
-              <div
-                style={{
-                  fontSize: '2.6rem',
-                  fontWeight: '800',
-                  color: '#1B3A6B',
-                  lineHeight: '1',
-                  marginBottom: '6px',
-                }}
-              >
-                {value}
+          {STATS.map(({ to, suffix, label, icon: Icon }, i) => (
+            <div key={label} style={{
+              backgroundColor: '#fff', padding: '36px 24px', textAlign: 'center',
+              borderRight: i < 2 ? '1px solid #f0f2f5' : 'none',
+            }}>
+              <div style={{
+                width: 48, height: 48, borderRadius: 12,
+                backgroundColor: '#1B3A6B',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 16px',
+              }}>
+                <Icon size={21} color="#F4C430" aria-hidden="true" />
               </div>
-              <div style={{ fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>
-                {label}
+              <div style={{ fontSize: '2.8rem', fontWeight: 800, color: '#1B3A6B', lineHeight: 1, marginBottom: 8 }}>
+                <Counter to={to} suffix={suffix} />
               </div>
+              <div style={{ fontSize: 13, color: '#6b7280', fontWeight: 500 }}>{label}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Como funciona */}
-      <section style={{ padding: '32px 24px 80px', backgroundColor: '#FAFAFA' }}>
+      {/* ══ COMO FUNCIONA ══ */}
+      <section ref={stepsRef} style={{ padding: '8px 24px 96px', backgroundColor: '#FAFAFA' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-            <h2
-              style={{
-                fontSize: 'clamp(1.6rem, 3vw, 2.2rem)',
-                fontWeight: '800',
-                color: '#1B3A6B',
-                margin: '0 0 12px',
-                letterSpacing: '-0.02em',
-              }}
-            >
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
               Como funciona ChulaVia
             </h2>
-            <p style={{ color: '#6b7280', fontSize: '16px', maxWidth: '480px', margin: '0 auto' }}>
-              Simple, rapido y accesible desde cualquier telefono con WhatsApp.
+            <p style={{ color: '#6b7280', fontSize: 16, maxWidth: 420, margin: '0 auto', lineHeight: 1.65 }}>
+              Simple, rapido y accesible desde cualquier telefono.
             </p>
           </div>
 
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: '24px',
-            }}
-          >
-            {steps.map(({ number, icon: Icon, title, desc }) => (
-              <div
-                key={number}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 24 }}>
+            {STEPS.map(({ n, icon: Icon, title, desc }, i) => (
+              <div key={n}
                 style={{
-                  backgroundColor: '#fff',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '16px',
-                  padding: '32px 28px',
-                  position: 'relative',
-                  transition: 'box-shadow 0.2s ease, transform 0.2s ease',
+                  backgroundColor: '#fff', border: '1px solid #e8edf5',
+                  borderRadius: 18, padding: '36px 28px',
+                  position: 'relative', overflow: 'hidden',
+                  opacity: stepsOn ? 1 : 0,
+                  transform: stepsOn ? 'translateY(0)' : 'translateY(28px)',
+                  transition: `opacity 0.5s ease ${i * 0.12}s, transform 0.5s ease ${i * 0.12}s`,
+                  cursor: 'default',
                 }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(27,58,107,0.1)'
-                  e.currentTarget.style.transform = 'translateY(-4px)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.boxShadow = 'none'
-                  e.currentTarget.style.transform = 'translateY(0)'
-                }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 12px 36px rgba(27,58,107,0.1)'; e.currentTarget.style.transform = 'translateY(-4px)' }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
               >
-                <span
-                  style={{
-                    position: 'absolute',
-                    top: '20px',
-                    right: '24px',
-                    fontSize: '3rem',
-                    fontWeight: '900',
-                    color: 'rgba(27,58,107,0.06)',
-                    lineHeight: '1',
-                    userSelect: 'none',
-                  }}
-                >
-                  {number}
+                {/* número de fondo */}
+                <span style={{
+                  position: 'absolute', top: 12, right: 20,
+                  fontSize: '3.8rem', fontWeight: 900, lineHeight: 1,
+                  color: 'rgba(27,58,107,0.05)', userSelect: 'none',
+                }}>
+                  {n}
                 </span>
-                <div
-                  style={{
-                    width: '48px',
-                    height: '48px',
-                    borderRadius: '12px',
-                    backgroundColor: 'rgba(193,68,14,0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '20px',
-                  }}
-                >
-                  <Icon size={22} color="#C1440E" aria-hidden="true" />
+
+                {/* ícono */}
+                <div style={{
+                  width: 52, height: 52, borderRadius: 14,
+                  backgroundColor: '#1B3A6B',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 22,
+                }}>
+                  <Icon size={24} color="#F4C430" aria-hidden="true" />
                 </div>
-                <h3
-                  style={{
-                    fontSize: '18px',
-                    fontWeight: '700',
-                    color: '#1B3A6B',
-                    margin: '0 0 10px',
-                  }}
-                >
-                  {title}
-                </h3>
-                <p style={{ fontSize: '14px', color: '#6b7280', lineHeight: '1.6', margin: 0 }}>
-                  {desc}
-                </p>
+
+                <h3 style={{ fontSize: 17, fontWeight: 700, color: '#1B3A6B', margin: '0 0 10px' }}>{title}</h3>
+                <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.68, margin: 0 }}>{desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Por que ChulaVia */}
+      {/* ══ POR QUE ══ */}
       <section
+        ref={whyRef}
         style={{
-          padding: '80px 24px',
-          backgroundColor: '#f8f9fb',
-          borderTop: '1px solid #e5e7eb',
+          padding: '96px 24px',
+          backgroundColor: '#f4f6fb',
+          borderTop: '1px solid #dde3f0',
         }}
       >
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '64px',
-              alignItems: 'center',
-            }}
-          >
-            <div>
-              <h2
-                style={{
-                  fontSize: 'clamp(1.6rem, 3vw, 2.2rem)',
-                  fontWeight: '800',
-                  color: '#1B3A6B',
-                  margin: '0 0 16px',
-                  letterSpacing: '-0.02em',
-                }}
-              >
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
+
+            <div style={{
+              opacity: whyOn ? 1 : 0,
+              transform: whyOn ? 'translateX(0)' : 'translateX(-24px)',
+              transition: 'all 0.7s ease',
+            }}>
+              <h2 style={{ fontSize: 'clamp(1.7rem,3vw,2.3rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 20px', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
                 Porque moverse en Puebla es un derecho, no un privilegio
               </h2>
-              <p
-                style={{
-                  color: '#6b7280',
-                  fontSize: '15px',
-                  lineHeight: '1.7',
-                  margin: '0 0 32px',
-                }}
-              >
-                El 90% del transporte en comunidades de alta marginacion en Mexico es informal.
-                Sin rutas fijas, sin seguro, sin datos. ChulaVia digitaliza ese transporte,
-                lo hace visible y lo hace seguro.
+              <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.78, margin: '0 0 12px' }}>
+                El <strong style={{ color: '#1B3A6B' }}>90% del transporte</strong> en comunidades de alta marginacion es informal.
+                Sin rutas fijas, sin seguro, sin datos.
               </p>
-              <Link
-                to="/mapa"
+              <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.78, margin: '0 0 36px' }}>
+                ChulaVia digitaliza ese transporte y genera por primera vez datos de movilidad rural
+                para el gobierno de Puebla.
+              </p>
+              <Link to="/mapa"
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  color: '#C1440E',
-                  fontWeight: '600',
-                  fontSize: '15px',
-                  textDecoration: 'none',
-                  transition: 'gap 0.2s ease',
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  color: '#1B3A6B', fontWeight: 700, fontSize: 15,
+                  textDecoration: 'none', borderBottom: '2px solid #1B3A6B',
+                  paddingBottom: 2, transition: 'gap 0.2s ease',
                 }}
-                onMouseEnter={e => e.currentTarget.style.gap = '12px'}
+                onMouseEnter={e => e.currentTarget.style.gap = '14px'}
                 onMouseLeave={e => e.currentTarget.style.gap = '8px'}
               >
                 Ver el mapa de comunidades <ArrowRight size={16} />
               </Link>
             </div>
 
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '16px',
-              }}
-            >
-              {reasons.map(({ icon: Icon, title, desc }) => (
-                <div
-                  key={title}
+            <div style={{
+              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14,
+              opacity: whyOn ? 1 : 0,
+              transform: whyOn ? 'translateX(0)' : 'translateX(24px)',
+              transition: 'all 0.7s ease 0.15s',
+            }}>
+              {REASONS.map(({ icon: Icon, title, desc }) => (
+                <div key={title}
                   style={{
-                    backgroundColor: '#fff',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '14px',
-                    padding: '22px 20px',
+                    backgroundColor: '#fff', border: '1px solid #e0e7f0',
+                    borderRadius: 16, padding: '24px 20px',
+                    transition: 'box-shadow 0.2s ease, transform 0.2s ease',
                   }}
+                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 28px rgba(27,58,107,0.09)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
+                  onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
                 >
-                  <div
-                    style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '10px',
-                      backgroundColor: 'rgba(27,58,107,0.08)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: '14px',
-                    }}
-                  >
-                    <Icon size={18} color="#1B3A6B" aria-hidden="true" />
+                  <div style={{
+                    width: 42, height: 42, borderRadius: 11,
+                    backgroundColor: '#1B3A6B',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14,
+                  }}>
+                    <Icon size={18} color="#F4C430" aria-hidden="true" />
                   </div>
-                  <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#1B3A6B', margin: '0 0 6px' }}>
-                    {title}
-                  </h3>
-                  <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: '1.55', margin: 0 }}>
-                    {desc}
-                  </p>
+                  <h3 style={{ fontSize: 13, fontWeight: 700, color: '#1B3A6B', margin: '0 0 7px' }}>{title}</h3>
+                  <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6, margin: 0 }}>{desc}</p>
                 </div>
               ))}
             </div>
@@ -442,82 +384,74 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* CTA final */}
-      <section
-        style={{
-          padding: '80px 24px',
-          background: 'linear-gradient(135deg, #1B3A6B 0%, #0f2347 100%)',
-          textAlign: 'center',
-          color: '#FAFAFA',
-        }}
-      >
-        <div style={{ maxWidth: '560px', margin: '0 auto' }}>
-          <TrendingUp size={36} color="#C1440E" style={{ margin: '0 auto 20px' }} aria-hidden="true" />
-          <h2
-            style={{
-              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-              fontWeight: '800',
-              margin: '0 0 16px',
-              letterSpacing: '-0.02em',
-            }}
-          >
+      {/* ══ CTA FINAL ══ */}
+      <section style={{
+        padding: '100px 24px',
+        backgroundColor: '#1B3A6B',
+        textAlign: 'center', color: '#FAFAFA',
+        position: 'relative', overflow: 'hidden',
+      }}>
+        {/* Talavera corner decorativo en la sección CTA también */}
+        <div style={{ position: 'absolute', top: -60, left: -60, pointerEvents: 'none' }}>
+          <svg width="300" height="300" viewBox="0 0 120 120" fill="none" aria-hidden="true" style={{ opacity: 0.07 }}>
+            <ellipse cx="60" cy="22" rx="11" ry="20" fill="white"/>
+            <ellipse cx="60" cy="98" rx="11" ry="20" fill="white"/>
+            <ellipse cx="22" cy="60" rx="20" ry="11" fill="white"/>
+            <ellipse cx="98" cy="60" rx="20" ry="11" fill="white"/>
+            <circle  cx="60" cy="60" r="13" fill="white"/>
+            <rect x="8" y="8" width="104" height="104" rx="6" stroke="white" strokeWidth="1.5" fill="none"/>
+          </svg>
+        </div>
+
+        <div style={{ maxWidth: 520, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{
+            width: 64, height: 64, borderRadius: 18,
+            backgroundColor: '#F4C430',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            margin: '0 auto 28px',
+          }}>
+            <Users size={28} color="#1B3A6B" aria-hidden="true" />
+          </div>
+
+          <h2 style={{ fontSize: 'clamp(1.7rem,3vw,2.3rem)', fontWeight: 800, margin: '0 0 16px', letterSpacing: '-0.02em' }}>
             Eres transportista? Registrate gratis
           </h2>
-          <p
-            style={{
-              color: 'rgba(250,250,250,0.72)',
-              fontSize: '15px',
-              lineHeight: '1.65',
-              margin: '0 0 36px',
-            }}
-          >
+          <p style={{ color: 'rgba(255,255,255,0.68)', fontSize: 16, lineHeight: 1.72, margin: '0 0 40px' }}>
             Llega a mas pasajeros, optimiza tus rutas y forma parte de la primera
             red de transporte rural digital de Puebla.
           </p>
-          <Link
-            to="/unirse"
+          <Link to="/unirse"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              backgroundColor: '#C1440E',
-              color: '#FAFAFA',
-              padding: '14px 32px',
-              borderRadius: '10px',
-              fontWeight: '700',
-              fontSize: '15px',
-              textDecoration: 'none',
-              boxShadow: '0 4px 16px rgba(193,68,14,0.4)',
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              backgroundColor: '#F4C430', color: '#1B3A6B',
+              padding: '15px 32px', borderRadius: 10,
+              fontWeight: 700, fontSize: 16, textDecoration: 'none',
+              boxShadow: '0 4px 20px rgba(244,196,48,0.35)',
               transition: 'all 0.2s ease',
             }}
-            onMouseEnter={e => {
-              e.currentTarget.style.backgroundColor = '#a83a0c'
-              e.currentTarget.style.transform = 'translateY(-2px)'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.backgroundColor = '#C1440E'
-              e.currentTarget.style.transform = 'translateY(0)'
-            }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(244,196,48,0.45)' }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F4C430'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(244,196,48,0.35)' }}
           >
-            Registrarme como transportista <ArrowRight size={16} />
+            Registrarme como transportista <ArrowRight size={17} />
           </Link>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer
-        style={{
-          backgroundColor: '#0f2347',
-          color: 'rgba(250,250,250,0.5)',
-          padding: '32px 24px',
-          textAlign: 'center',
-          fontSize: '13px',
-        }}
-      >
-        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
-          <img src="/logo.png" alt="ChulaVia" style={{ height: '32px', marginBottom: '12px', opacity: 0.7 }} />
-          <p style={{ margin: '0 0 4px' }}>ChulaVia &mdash; Plataforma de movilidad rural intercomunitaria</p>
-          <p style={{ margin: 0 }}>Hackathon Por Amor a Puebla 2026 &bull; Eje Movilidad</p>
+      {/* ══ FOOTER ══ */}
+      <footer style={{
+        backgroundColor: '#fff',
+        borderTop: '1px solid #e8edf5',
+        padding: '40px 24px',
+        textAlign: 'center',
+      }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <img src="/logo.png" alt="ChulaVia" style={{ height: 52, width: 'auto' }} />
+          <p style={{ margin: 0, color: '#4b5563', fontSize: 14, fontWeight: 500 }}>
+            Plataforma de movilidad rural intercomunitaria de Puebla
+          </p>
+          <p style={{ margin: 0, color: '#9ca3af', fontSize: 12 }}>
+            Hackathon Por Amor a Puebla 2026 &bull; Eje Movilidad Rural
+          </p>
         </div>
       </footer>
     </main>
