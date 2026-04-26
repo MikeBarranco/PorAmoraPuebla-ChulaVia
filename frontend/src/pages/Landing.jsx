@@ -543,7 +543,7 @@ export default function Landing() {
 
           <div className="cv-team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24, marginBottom: 40 }}>
             {[
-              { nombre: 'Miguel Barranco', rol: 'Frontend & UX', tech: 'React · Leaflet · Vite', iniciales: 'MB' },
+              { nombre: 'Miguel Barranco', rol: 'Frontend & UX', tech: 'React · Leaflet · Vite', iniciales: 'MB'},
               { nombre: 'Isabel', rol: 'Backend & API', tech: 'Django · Railway · Supabase', iniciales: 'IS' },
               { nombre: 'Monica', rol: 'Investigacion & Datos', tech: 'INEGI · CONAPO · Canva', iniciales: 'MO' },
               { nombre: 'Sumayra', rol: 'Pitch & Estrategia', tech: 'PED 2024-2030 · Impacto Social', iniciales: 'SU' },
