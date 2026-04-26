@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { MapPin, AlertCircle, CheckCircle, X, Navigation } from 'lucide-react'
 import { comunidades, rutas } from '../data/comunidades'
+import { useT } from '../context/LangContext.jsx'
 
 /* leaflet se importa dinamicamente para evitar errores de SSR */
 let L = null
@@ -28,6 +29,7 @@ function createIcon(color) {
 }
 
 export default function MapPage() {
+  const t = useT()
   const mapRef   = useRef(null)
   const mapObj   = useRef(null)
   const [selected, setSelected] = useState(null)
@@ -157,11 +159,11 @@ export default function MapPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#374151' }}>
             <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: GREEN, display: 'inline-block' }} />
-            Con transporte ({conCobertura})
+            {t('mapa','con_cobertura')} ({conCobertura})
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#374151' }}>
             <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: RED, display: 'inline-block' }} />
-            Sin transporte ({sinCobertura})
+            {t('mapa','sin_cobertura')} ({sinCobertura})
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#374151' }}>
             <span style={{ width: 24, height: 2, borderTop: `2px dashed ${BLUE}`, display: 'inline-block', opacity: 0.6 }} />
@@ -228,7 +230,7 @@ export default function MapPage() {
                 : <AlertCircle size={18} color={RED} />}
               <div>
                 <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: selected.tieneTransporte ? GREEN : RED }}>
-                  {selected.tieneTransporte ? 'Con transporte formal' : 'Sin transporte formal'}
+                  {selected.tieneTransporte ? t('mapa','con_cobertura') : t('mapa','sin_cobertura')}
                 </p>
                 <p style={{ margin: '2px 0 0', fontSize: 12, color: '#6b7280' }}>
                   {selected.tieneTransporte

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { MapPin, Search, Shield, BarChart2, MessageCircle, ArrowRight, Users, Route } from 'lucide-react'
 import WhatsAppDemo from '../components/WhatsAppDemo'
+import { useT } from '../context/LangContext.jsx'
 
 /* ── Keyframes ── */
 const CSS = `
@@ -206,6 +207,7 @@ function SprintAccordion() {
 
 /* ── Component ── */
 export default function Landing() {
+  const t = useT()
   const [statsRef, statsOn] = useFade()
   const [stepsRef, stepsOn] = useFade()
   const [whyRef,   whyOn]   = useFade()
@@ -290,7 +292,7 @@ export default function Landing() {
               onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-2px)' }}
               onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F4C430'; e.currentTarget.style.transform = 'translateY(0)' }}
             >
-              <Search size={17} /> Buscar transporte
+              <Search size={17} /> {t('hero_landing','buscar_transporte_ahora')}
             </Link>
 
             <a
@@ -328,7 +330,7 @@ export default function Landing() {
               onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.12)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.4)' }}
               onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)' }}
             >
-              <MapPin size={17} /> Ver mapa de rutas
+              <MapPin size={17} /> {t('navegacion','ver_mapa')}
             </Link>
           </div>
         </div>
@@ -618,7 +620,7 @@ export default function Landing() {
             <Users size={28} color="#1B3A6B" aria-hidden="true" />
           </div>
           <h2 style={{ fontSize: 'clamp(1.7rem,3vw,2.3rem)', fontWeight: 800, margin: '0 0 16px', letterSpacing: '-0.02em' }}>
-            ¿Eres Transportista? Regístrate gratis
+            {t('navegacion','soy_transportista')} · {t('general','gratis')}
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.68)', fontSize: 16, lineHeight: 1.72, margin: '0 0 40px' }}>
             Llega a mas pasajeros, optimiza tus rutas y forma parte de la primera
