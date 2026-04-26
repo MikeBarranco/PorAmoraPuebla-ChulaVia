@@ -317,7 +317,7 @@ export default function Landing() {
       <hr className="gradient-divider" />
 
       {/* ══ COMO FUNCIONA ══ */}
-      <section ref={stepsRef} style={{ padding: '72px 24px 96px', backgroundColor: '#FAFAFA' }}>
+      <section ref={stepsRef} className="cv-flowers-bg" style={{ padding: '72px 24px 96px', backgroundColor: '#FAFAFA' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
@@ -357,7 +357,7 @@ export default function Landing() {
       <hr className="gradient-divider" />
 
       {/* ══ POR QUE ══ */}
-      <section ref={whyRef} style={{ padding: '96px 24px', backgroundColor: '#f0f3fa' }}>
+      <section ref={whyRef} className="cv-flowers-bg" style={{ padding: '96px 24px', backgroundColor: '#f0f3fa' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div className="cv-why-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
             <div style={{ opacity: whyOn ? 1 : 0, transform: whyOn ? 'translateX(0)' : 'translateX(-24px)', transition: 'all 0.7s ease' }}>
