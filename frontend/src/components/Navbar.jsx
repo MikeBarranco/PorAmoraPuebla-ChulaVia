@@ -159,7 +159,7 @@ export default function Navbar() {
               }}
             >
               <UserPlus size={15} aria-hidden="true" strokeWidth={2} />
-              <span>Soy transportista</span>
+              <span>¿Eres Transportista?</span>
             </Link>
           </li>
         </ul>

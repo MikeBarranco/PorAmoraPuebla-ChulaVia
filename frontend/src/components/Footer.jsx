@@ -1,5 +1,20 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Search, LayoutDashboard, UserPlus, MessageCircle, Heart } from 'lucide-react'
+import { MapPin, Search, LayoutDashboard, UserPlus, MessageCircle, Heart, Mail } from 'lucide-react'
+
+function IconInstagram() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+    </svg>
+  )
+}
+function IconFacebook() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+    </svg>
+  )
+}
 
 export default function Footer() {
   return (
@@ -27,7 +42,7 @@ export default function Footer() {
               <img src="/logo.png" alt="ChulaVia" style={{ height: 44, width: 'auto' }} />
             </Link>
             <p style={{ margin: '0 0 6px', fontSize: 13, lineHeight: 1.6, maxWidth: 220, color: 'rgba(255,255,255,0.6)' }}>
-              Movilidad rural intercomunitaria de Puebla.
+              La ciudad que todos podemos recorrer.
             </p>
             <span style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -46,7 +61,7 @@ export default function Footer() {
               { to: '/buscar',   icon: Search,          label: 'Buscar transporte' },
               { to: '/mapa',     icon: MapPin,           label: 'Mapa de rutas'     },
               { to: '/gobierno', icon: LayoutDashboard,  label: 'Panel Gobierno'    },
-              { to: '/unirse',   icon: UserPlus,         label: 'Soy transportista' },
+              { to: '/unirse',   icon: UserPlus,         label: '¿Eres Transportista?' },
             ].map(({ to, icon: Icon, label }) => (
               <Link key={to} to={to} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -65,9 +80,9 @@ export default function Footer() {
             ))}
           </nav>
 
-          {/* Contact */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-end' }}>
-            <a href="https://wa.me" target="_blank" rel="noreferrer" style={{
+          {/* Contact + Social */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-end' }}>
+            <a href="https://wa.me/14155238886?text=hola" target="_blank" rel="noreferrer" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               backgroundColor: '#25D366', color: '#fff',
               padding: '9px 18px', borderRadius: 8,
@@ -81,6 +96,27 @@ export default function Footer() {
               <MessageCircle size={14} />
               Contacto WhatsApp
             </a>
+
+            <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+              <a href="https://www.instagram.com/poramorapuebla.chulavia/" target="_blank" rel="noopener noreferrer"
+                aria-label="Instagram ChulaVia"
+                style={{ color: 'rgba(255,255,255,0.45)', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#E1306C'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.45)'}
+              ><IconInstagram /></a>
+              <a href="https://web.facebook.com/profile.php?id=61560493651891" target="_blank" rel="noopener noreferrer"
+                aria-label="Facebook ChulaVia"
+                style={{ color: 'rgba(255,255,255,0.45)', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#1877F2'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.45)'}
+              ><IconFacebook /></a>
+              <a href="mailto:poramorapuebla.chulavia@gmail.com"
+                aria-label="Correo ChulaVia"
+                style={{ color: 'rgba(255,255,255,0.45)', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#fff'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.45)'}
+              ><Mail size={16} /></a>
+            </div>
           </div>
         </div>
 
@@ -93,7 +129,7 @@ export default function Footer() {
             © 2026 ChulaVía · Puebla, México
           </p>
           <p style={{ margin: 0, fontSize: 12, color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: 4 }}>
-            Hecho con <Heart size={11} style={{ color: '#F4C430' }} /> por el equipo ChulaVía
+            Hecho con <Heart size={11} style={{ color: '#F4C430' }} /> por el equipo CuboLobos
           </p>
         </div>
 
