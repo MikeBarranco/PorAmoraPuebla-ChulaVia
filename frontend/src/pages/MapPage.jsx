@@ -206,7 +206,7 @@ export default function MapPage() {
       }}>
         <div>
           <h1 style={{ margin: 0, fontSize: 19, fontWeight: 700, color: BLUE }}>
-            Mapa de movilidad rural
+            {t('mapa','titulo')}
           </h1>
           <p style={{ margin: '2px 0 0', fontSize: 13, color: '#6b7280' }}>
             Puebla, México · {comunidadesMapa.length.toLocaleString()} comunidades registradas
@@ -218,28 +218,28 @@ export default function MapPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 12, color: '#374151' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
               <span style={{ width: 11, height: 11, borderRadius: '50%', backgroundColor: GREEN, border: '2px solid #F4C430', display: 'inline-block' }} />
-              Con rutas ({comunidades.length})
+              {t('mapa','con_rutas')} ({comunidades.length})
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
               <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: GREEN, display: 'inline-block' }} />
-              {t('mapa','con_cobertura')} ({conCobertura})
+              {t('mapa','filtro_con')} ({conCobertura})
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
               <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: RED, display: 'inline-block' }} />
-              {t('mapa','sin_cobertura')} ({sinCobertura})
+              {t('mapa','filtro_sin')} ({sinCobertura})
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
               <span style={{ width: 24, height: 2, borderTop: `2px dashed ${BLUE}`, display: 'inline-block', opacity: 0.6 }} />
-              Rutas ({rutas.length})
+              {t('mapa','ruta_activa')} ({rutas.length})
             </span>
           </div>
 
           {/* Filtro */}
           <div style={{ display: 'flex', gap: 4 }}>
             {[
-              { id: 'todas', label: 'Todas' },
-              { id: 'con',   label: 'Con cobertura' },
-              { id: 'sin',   label: 'Sin cobertura' },
+              { id: 'todas', label: t('mapa','filtro_todas') },
+              { id: 'con',   label: t('mapa','filtro_con') },
+              { id: 'sin',   label: t('mapa','filtro_sin') },
             ].map(f => (
               <button
                 key={f.id}
@@ -273,7 +273,7 @@ export default function MapPage() {
             flexDirection: 'column', gap: 12, color: BLUE,
           }}>
             <Navigation size={32} style={{ opacity: 0.4 }} />
-            <p style={{ margin: 0, fontSize: 14, color: '#6b7280' }}>Cargando mapa...</p>
+            <p style={{ margin: 0, fontSize: 14, color: '#6b7280' }}>{t('mapa','cargando')}</p>
           </div>
         )}
 
@@ -329,7 +329,7 @@ export default function MapPage() {
                   {selected.tieneTransporte ? t('mapa','con_cobertura') : t('mapa','sin_cobertura')}
                 </p>
                 <p style={{ margin: '2px 0 0', fontSize: 12, color: '#6b7280' }}>
-                  {selected.tieneTransporte ? 'Cuenta con ruta registrada' : 'Solo transporte informal'}
+                  {selected.tieneTransporte ? t('mapa','con_ruta_reg') : t('mapa','solo_informal')}
                 </p>
               </div>
             </div>
@@ -337,10 +337,10 @@ export default function MapPage() {
             {/* Info grid */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
               {[
-                { label: 'Población', value: selected.poblacion.toLocaleString() + ' hab.' },
-                { label: 'Municipio',  value: selected.municipio },
-                { label: 'Latitud',    value: selected.lat.toFixed(4) },
-                { label: 'Longitud',   value: selected.lng.toFixed(4) },
+                { label: t('mapa','panel_poblacion'), value: selected.poblacion.toLocaleString() + ' hab.' },
+                { label: t('mapa','panel_municipio'), value: selected.municipio },
+                { label: 'Lat',                       value: selected.lat.toFixed(4) },
+                { label: 'Lng',                       value: selected.lng.toFixed(4) },
               ].map(({ label, value }) => (
                 <div key={label} style={{ backgroundColor: '#f8f9fb', borderRadius: 10, padding: '10px 12px' }}>
                   <p style={{ margin: 0, fontSize: 10, color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{label}</p>
@@ -352,7 +352,7 @@ export default function MapPage() {
             {/* Rutas */}
             <div>
               <h3 style={{ margin: '0 0 8px', fontSize: 14, fontWeight: 700, color: BLUE }}>
-                Rutas disponibles ({rutasComunidadSeleccionada.length})
+                {t('mapa','panel_rutas')} ({rutasComunidadSeleccionada.length})
               </h3>
               {rutasComunidadSeleccionada.length === 0 ? (
                 <div style={{
@@ -363,10 +363,10 @@ export default function MapPage() {
                 }}>
                   <AlertCircle size={20} color={RED} style={{ margin: '0 auto 6px' }} />
                   <p style={{ margin: 0, fontSize: 13, color: '#6b7280' }}>
-                    No hay rutas registradas para esta comunidad.
+                    {t('mapa','sin_rutas')}
                   </p>
                   <p style={{ margin: '4px 0 0', fontSize: 12, color: '#9ca3af' }}>
-                    Existe demanda sin cobertura.
+                    {t('mapa','demanda')}
                   </p>
                 </div>
               ) : (
@@ -405,7 +405,7 @@ export default function MapPage() {
               onMouseEnter={e => e.currentTarget.style.backgroundColor = '#142d55'}
               onMouseLeave={e => e.currentTarget.style.backgroundColor = BLUE}
             >
-              <MapPin size={15} /> Buscar transporte aquí
+              <MapPin size={15} /> {t('mapa','btn_buscar')}
             </a>
           </div>
         )}

@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { User, Phone, Truck, MapPin, Clock, CheckCircle, Shield, Star, ChevronDown, ArrowRight, Camera } from 'lucide-react'
 import { comunidades } from '../data/comunidades'
 import { api } from '../data/api'
+import { useT } from '../context/LangContext.jsx'
 
 const BLUE   = '#1B3A6B'
 const YELLOW = '#F4C430'
@@ -96,6 +97,7 @@ function StepBadge({ n, label, active, done }) {
 }
 
 export default function JoinPage() {
+  const t = useT()
   const [step, setStep]     = useState(1)
   const [done, setDone]     = useState(false)
 
@@ -147,9 +149,9 @@ export default function JoinPage() {
   const step3OK = dias.length > 0 && horarios.length > 0
 
   const steps = [
-    { n: 1, label: 'Datos personales' },
-    { n: 2, label: 'Tu ruta' },
-    { n: 3, label: 'Horarios' },
+    { n: 1, label: t('registro','paso1') },
+    { n: 2, label: t('registro','paso2') },
+    { n: 3, label: t('registro','paso3') },
   ]
 
   if (done) {
@@ -159,7 +161,7 @@ export default function JoinPage() {
           <div style={{ width: 72, height: 72, borderRadius: '50%', backgroundColor: 'rgba(42,96,73,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
             <CheckCircle size={36} color={GREEN} />
           </div>
-          <h1 style={{ margin: '0 0 12px', fontSize: 24, fontWeight: 800, color: BLUE }}>Registro completado</h1>
+          <h1 style={{ margin: '0 0 12px', fontSize: 24, fontWeight: 800, color: BLUE }}>{t('registro','exito_titulo')}</h1>
           <p style={{ margin: '0 0 8px', fontSize: 15, color: GRAY, lineHeight: 1.65 }}>
             Bienvenido a ChulaVia, <strong style={{ color: BLUE }}>{nombre}</strong>.
           </p>
@@ -215,10 +217,10 @@ export default function JoinPage() {
 
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <h1 style={{ color: '#fff', fontSize: 'clamp(1.6rem,3.5vw,2.2rem)', fontWeight: 800, margin: '0 0 8px', letterSpacing: '-0.02em' }}>
-            Eres transportista? Registrate gratis
+            {t('registro','titulo')}
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 15, margin: 0 }}>
-            Gratis &bull; Verificacion en 24 horas &bull; Mas pasajeros para ti
+            {t('registro','subtitulo')}
           </p>
         </div>
       </div>
@@ -243,40 +245,40 @@ export default function JoinPage() {
             {/* ── Step 1: Datos personales ── */}
             {step === 1 && (
               <div>
-                <h2 style={{ margin: '0 0 6px', fontSize: 18, fontWeight: 700, color: BLUE }}>Tus datos personales</h2>
-                <p style={{ margin: '0 0 28px', fontSize: 14, color: GRAY }}>Necesitamos verificar tu identidad para proteger a los pasajeros.</p>
+                <h2 style={{ margin: '0 0 6px', fontSize: 18, fontWeight: 700, color: BLUE }}>{t('registro','p1_titulo')}</h2>
+                <p style={{ margin: '0 0 28px', fontSize: 14, color: GRAY }}>{t('registro','p1_desc')}</p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
                   <div>
-                    <Label required>Nombre completo</Label>
+                    <Label required>{t('registro','nombre')}</Label>
                     <Input value={nombre} onChange={setNombre} placeholder="Ej. Maria Guadalupe Flores" icon={User} />
                   </div>
 
                   <div>
-                    <Label required>Numero de telefono (WhatsApp)</Label>
+                    <Label required>{t('registro','telefono')}</Label>
                     <Input type="tel" value={telefono} onChange={setTelefono} placeholder="Ej. 2221234567" icon={Phone} />
-                    <p style={{ margin: '5px 0 0', fontSize: 12, color: GRAY }}>Te enviaremos un codigo de verificacion por SMS.</p>
+                    <p style={{ margin: '5px 0 0', fontSize: 12, color: GRAY }}>{t('registro','tel_hint')}</p>
                   </div>
 
                   <div>
-                    <Label required>Ultimos 4 digitos de tu INE</Label>
+                    <Label required>{t('registro','ine')}</Label>
                     <Input value={ine} onChange={v => setIne(v.slice(0, 4))} placeholder="Ej. 4521" icon={Shield} />
-                    <p style={{ margin: '5px 0 0', fontSize: 12, color: GRAY }}>Solo guardamos los ultimos 4 digitos. Tu INE no se almacena completo.</p>
+                    <p style={{ margin: '5px 0 0', fontSize: 12, color: GRAY }}>{t('registro','ine_hint')}</p>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                     <div>
-                      <Label required>Tipo de vehiculo</Label>
+                      <Label required>{t('registro','tipo')}</Label>
                       <SelectInput value={tipo} onChange={setTipo} options={TIPOS} placeholder="Selecciona" icon={Truck} />
                     </div>
                     <div>
-                      <Label required>Capacidad (personas)</Label>
+                      <Label required>{t('registro','capacidad')}</Label>
                       <Input type="number" value={capacidad} onChange={setCapacidad} placeholder="Ej. 12" />
                     </div>
                   </div>
 
                   <div>
-                    <Label required>Placa del vehiculo</Label>
+                    <Label required>{t('registro','placa')}</Label>
                     <Input value={placa} onChange={v => setPlaca(v.toUpperCase())} placeholder="Ej. PBL-123" icon={Truck} />
                   </div>
                 </div>
@@ -333,17 +335,17 @@ export default function JoinPage() {
             {/* ── Step 2: Ruta ── */}
             {step === 2 && (
               <div>
-                <h2 style={{ margin: '0 0 6px', fontSize: 18, fontWeight: 700, color: BLUE }}>Tu ruta habitual</h2>
-                <p style={{ margin: '0 0 28px', fontSize: 14, color: GRAY }}>Define de donde sales y a donde llevas pasajeros normalmente.</p>
+                <h2 style={{ margin: '0 0 6px', fontSize: 18, fontWeight: 700, color: BLUE }}>{t('registro','p2_titulo')}</h2>
+                <p style={{ margin: '0 0 28px', fontSize: 14, color: GRAY }}>{t('registro','p2_desc')}</p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                   <div>
-                    <Label required>Comunidad de origen (donde sales)</Label>
+                    <Label required>{t('registro','origen')}</Label>
                     <SelectInput value={origen} onChange={setOrigen} options={comunidadesOpc} placeholder="Selecciona tu comunidad" icon={MapPin} />
                   </div>
 
                   <div>
-                    <Label required>Destinos que cubres</Label>
+                    <Label required>{t('registro','destinos')}</Label>
                     <p style={{ margin: '0 0 10px', fontSize: 12, color: GRAY }}>Selecciona todas las comunidades a las que llevas pasajeros.</p>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                       {comunidadesOpc.filter(c => c !== origen).map(c => (
@@ -367,7 +369,7 @@ export default function JoinPage() {
                   </div>
 
                   <div>
-                    <Label required>Precio por persona (pesos MXN)</Label>
+                    <Label required>{t('registro','precio')}</Label>
                     <div style={{ position: 'relative' }}>
                       <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', fontSize: 15, fontWeight: 600, color: GRAY }}>$</span>
                       <input type="number" value={precio} onChange={e => setPrecio(e.target.value)}
@@ -391,12 +393,12 @@ export default function JoinPage() {
             {/* ── Step 3: Horarios ── */}
             {step === 3 && (
               <div>
-                <h2 style={{ margin: '0 0 6px', fontSize: 18, fontWeight: 700, color: BLUE }}>Dias y horarios</h2>
-                <p style={{ margin: '0 0 28px', fontSize: 14, color: GRAY }}>Cuando ofreces tu servicio. Los pasajeros veran esto al buscar.</p>
+                <h2 style={{ margin: '0 0 6px', fontSize: 18, fontWeight: 700, color: BLUE }}>{t('registro','p3_titulo')}</h2>
+                <p style={{ margin: '0 0 28px', fontSize: 14, color: GRAY }}>{t('registro','p3_desc')}</p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                   <div>
-                    <Label required>Dias que trabajas</Label>
+                    <Label required>{t('registro','dias')}</Label>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                       {DIAS.map(d => (
                         <button key={d} onClick={() => toggleDia(d)}
@@ -414,7 +416,7 @@ export default function JoinPage() {
                   </div>
 
                   <div>
-                    <Label required>Horarios de salida</Label>
+                    <Label required>{t('registro','horarios')}</Label>
                     <p style={{ margin: '0 0 10px', fontSize: 12, color: GRAY }}>Selecciona a que horas sueles salir.</p>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                       {HORARIOS_OPC.map(h => (
@@ -485,7 +487,7 @@ export default function JoinPage() {
                     cursor: (step === 1 ? step1OK : step2OK) ? 'pointer' : 'not-allowed',
                     transition: 'all 0.2s',
                   }}>
-                  Siguiente <ArrowRight size={16} />
+                  {t('registro','siguiente')} <ArrowRight size={16} />
                 </button>
               ) : (
                 <button
@@ -519,9 +521,9 @@ export default function JoinPage() {
         {/* Beneficios */}
         <div style={{ marginTop: 24, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px,1fr))', gap: 14 }}>
           {[
-            { icon: Star,   title: 'Mas pasajeros',     desc: 'Los pasajeros te encuentran cuando buscan tu ruta.' },
-            { icon: Shield, title: 'Perfil verificado',  desc: 'El badge de verificado genera mas confianza y reservaciones.' },
-            { icon: Truck,  title: '100% gratis',        desc: 'Sin costo durante el periodo de lanzamiento en Puebla.' },
+            { icon: Star,   title: t('registro','ben1_titulo'), desc: t('registro','ben1_desc') },
+            { icon: Shield, title: t('registro','ben2_titulo'), desc: t('registro','ben2_desc') },
+            { icon: Truck,  title: t('registro','ben3_titulo'), desc: t('registro','ben3_desc') },
           ].map(({ icon: Icon, title, desc }) => (
             <div key={title} style={{ backgroundColor: '#fff', borderRadius: 14, padding: '20px', border: '1px solid #e8edf5', display: 'flex', gap: 12 }}>
               <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: BLUE + '12', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>

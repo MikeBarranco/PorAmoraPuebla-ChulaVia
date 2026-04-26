@@ -33,7 +33,8 @@
       "Bash(git show *)",
       "Bash(ls -la frontend/public/zonas/)",
       "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(s,list\\(d[s].keys\\(\\)\\)\\) for s in d]\")",
-      "Bash(python -c \"import json; d=json.load\\(open\\('src/data/traducciones.json'\\)\\); print\\(d['navegacion']['soy_transportista']\\)\")"
+      "Bash(python -c \"import json; d=json.load\\(open\\('src/data/traducciones.json'\\)\\); print\\(d['navegacion']['soy_transportista']\\)\")",
+      "Bash(grep -v \"//\")"
     ]
   }
 }

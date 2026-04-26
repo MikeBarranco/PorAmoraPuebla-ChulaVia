@@ -1,182 +1,161 @@
 {
   "navegacion": {
-    "buscar_transporte": {
-      "es": "Buscar transporte",
-      "nah": "Xiktemo tepoztli",
-      "tot": "Kaputsati chiki"
-    },
-    "ver_mapa": {
-      "es": "Ver mapa",
-      "nah": "Xikitta amatl",
-      "tot": "Kaukxilh tapatot"
-    },
-    "panel_gobierno": {
-      "es": "Panel gobierno",
-      "nah": "Tekiwayo tlapowali",
-      "tot": "Xlimapakgsina"
-    },
-    "soy_transportista": {
-      "es": "¿Eres transportista?",
-      "nah": "¿Tihtepoztlazo?",
-      "tot": "¿Akit kgalhiyi chiki?"
-    }
+    "buscar_transporte": { "es": "Buscar transporte", "nah": "Xiktemo tepoztli", "tot": "Kaputsati chiki" },
+    "ver_mapa":          { "es": "Ver mapa",           "nah": "Xikitta amatl",    "tot": "Kaukxilh tapatot" },
+    "panel_gobierno":    { "es": "Panel gobierno",     "nah": "Tekiwayo tlapowali","tot": "Xlimapakgsina" },
+    "soy_transportista": { "es": "¿Eres transportista?","nah": "¿Tihtepoztlazo?", "tot": "¿Akit kgalhiyi chiki?" }
   },
   "busqueda": {
-    "origen": {
-      "es": "Origen",
-      "nah": "Pejkayotl",
-      "tot": "Niku tsuku"
-    },
-    "destino": {
-      "es": "Destino",
-      "nah": "Kampa tiyow",
-      "tot": "Niku na an"
-    },
-    "de_donde_sales": {
-      "es": "¿De dónde sales?",
-      "nah": "¿Kampa tiwala?",
-      "tot": "¿Niku tsukuya?"
-    },
-    "a_donde_vas": {
-      "es": "¿A dónde vas?",
-      "nah": "¿Kampa tiyow?",
-      "tot": "¿Niku pina?"
-    },
-    "buscar": {
-      "es": "Buscar",
-      "nah": "Xiktemo",
-      "tot": "Kaputsati"
-    },
-    "di_nombre_comunidad": {
-      "es": "Di el nombre de tu comunidad",
-      "nah": "Xikijto itoka moaltepe",
-      "tot": "Kawani xkuini minkachikin"
-    }
+    "origen":          { "es": "Origen",                      "nah": "Pejkayotl",         "tot": "Niku tsuku" },
+    "destino":         { "es": "Destino",                     "nah": "Kampa tiyow",        "tot": "Niku na an" },
+    "de_donde_sales":  { "es": "¿De dónde sales?",            "nah": "¿Kampa tiwala?",     "tot": "¿Niku tsukuya?" },
+    "a_donde_vas":     { "es": "¿A dónde vas?",               "nah": "¿Kampa tiyow?",      "tot": "¿Niku pina?" },
+    "buscar":          { "es": "Buscar",                      "nah": "Xiktemo",            "tot": "Kaputsati" },
+    "di_nombre_comunidad": { "es": "Di el nombre de tu comunidad", "nah": "Xikijto itoka moaltepe", "tot": "Kawani xkuini minkachikin" },
+    "sin_resultados":  { "es": "No encontramos rutas para esa combinación.", "nah": "Amo onkah ohtli kampa tikneki.", "tot": "Nitulan tiji." },
+    "intenta":         { "es": "Intenta con comunidades cercanas o revisa el mapa.", "nah": "Xiktemo in altepemeh tlen kahki nepa san xikitta amatl.", "tot": "Kaputza lakatatsu u kaukxila mapa." },
+    "modal_titulo":    { "es": "Confirmar reservación",       "nah": "Xikneltoka mo-ohtli",  "tot": "Kamaklhti tiji" },
+    "modal_tel":       { "es": "Tu número de WhatsApp",       "nah": "Mo-tlapowalli WhatsApp","tot": "Tachuwin WhatsApp" },
+    "modal_btn":       { "es": "Confirmar por WhatsApp",      "nah": "Xikneltoka ika WhatsApp","tot": "Kamaklhti WhatsApp" },
+    "modal_folio":     { "es": "Folio de reservación",        "nah": "Tlapowalli ohtli",    "tot": "Tzokni tiji" },
+    "modal_exito":     { "es": "¡Reservación confirmada!",    "nah": "¡Ohtli neltokak!",    "tot": "¡Tiji lhtata!" },
+    "modal_contacto":  { "es": "El transportista te contactará por WhatsApp.", "nah": "Tepozkalli mitznotzas ika WhatsApp.", "tot": "Tapatzin tachuwin WhatsApp." },
+    "ver_resenas":     { "es": "Ver reseñas",                 "nah": "Xikitta tlapowalli",  "tot": "Kaukxila kachiwinalin" }
   },
   "resultados": {
-    "transportista_verificado": {
-      "es": "Transportista verificado",
-      "nah": "Tepuznenemini melawak",
-      "tot": "Xa kgalhiyi chiki tlan"
-    },
-    "calificacion": {
-      "es": "Calificación",
-      "nah": "Kenami kuali",
-      "tot": "Xatapatani"
-    },
-    "precio_por_persona": {
-      "es": "Precio por persona",
-      "nah": "Keski ipatiw san se",
-      "tot": "Xlakata puks chatum"
-    },
-    "horarios": {
-      "es": "Horarios",
-      "nah": "Kemanian",
-      "tot": "Tuku oras"
-    },
-    "dias_de_servicio": {
-      "es": "Días de servicio",
-      "nah": "Tonaltin tekipanoa",
-      "tot": "Qolo xla taskujut"
-    },
-    "reservar_viaje": {
-      "es": "Reservar viaje",
-      "nah": "Xikpiya moojtli",
-      "tot": "Lhaqawa tlajan"
-    },
-    "tiempo_estimado": {
-      "es": "Tiempo estimado",
-      "nah": "Keski kawitl",
-      "tot": "Laktalhiman"
-    }
+    "transportista_verificado": { "es": "Transportista verificado", "nah": "Tepuznenemini melawak",     "tot": "Xa kgalhiyi chiki tlan" },
+    "calificacion":             { "es": "Calificación",             "nah": "Kenami kuali",              "tot": "Xatapatani" },
+    "precio_por_persona":       { "es": "Precio por persona",       "nah": "Keski ipatiw san se",       "tot": "Xlakata puks chatum" },
+    "horarios":                 { "es": "Horarios",                 "nah": "Kemanian",                  "tot": "Tuku oras" },
+    "dias_de_servicio":         { "es": "Días de servicio",         "nah": "Tonaltin tekipanoa",         "tot": "Qolo xla taskujut" },
+    "reservar_viaje":           { "es": "Reservar viaje",           "nah": "Xikpiya moojtli",           "tot": "Lhaqawa tlajan" },
+    "tiempo_estimado":          { "es": "Tiempo estimado",          "nah": "Keski kawitl",              "tot": "Laktalhiman" }
   },
   "hero_landing": {
-    "conecta_comunidad": {
-      "es": "Conecta tu comunidad",
-      "nah": "Xiksaloka moaltepe",
-      "tot": "Kamakgtayakg minkachikin"
-    },
-    "muevete_confianza": {
-      "es": "Muévete con confianza",
-      "nah": "Xiyow ika mo yolchikawalis",
-      "tot": "Tlaway tlan"
-    },
-    "buscar_transporte_ahora": {
-      "es": "Buscar transporte ahora",
-      "nah": "Xiktemo tepoztli aman",
-      "tot": "Kaputsati chiki chuhua"
-    }
+    "conecta_comunidad":        { "es": "Conecta tu comunidad",     "nah": "Xiksaloka moaltepe",        "tot": "Kamakgtayakg minkachikin" },
+    "muevete_confianza":        { "es": "Muévete con confianza",    "nah": "Xiyow ika mo yolchikawalis","tot": "Tlaway tlan" },
+    "buscar_transporte_ahora":  { "es": "Buscar transporte ahora",  "nah": "Xiktemo tepoztli aman",     "tot": "Kaputsati chiki chuhua" }
   },
   "mapa": {
-    "con_cobertura": {
-      "es": "Con cobertura",
-      "nah": "Nikan yawi",
-      "tot": "Kgalhi tekxtu"
-    },
-    "sin_cobertura": {
-      "es": "Sin cobertura",
-      "nah": "Amo yawi nikan",
-      "tot": "Nitlan tekxtu"
-    },
-    "toca_donde_estas": {
-      "es": "Toca donde estás tú",
-      "nah": "Xikpacho kampa tika",
-      "tot": "Katlaway niku wilay"
-    },
-    "toca_donde_quieres_ir": {
-      "es": "Toca a donde quieres ir",
-      "nah": "Xikpacho kampa tikneki tiyas",
-      "tot": "Katlaway niku pina"
-    }
+    "con_cobertura":   { "es": "Con cobertura",      "nah": "Nikan yawi",       "tot": "Kgalhi tekxtu" },
+    "sin_cobertura":   { "es": "Sin cobertura",      "nah": "Amo yawi nikan",   "tot": "Nitlan tekxtu" },
+    "toca_donde_estas":      { "es": "Toca donde estás tú",       "nah": "Xikpacho kampa tika",        "tot": "Katlaway niku wilay" },
+    "toca_donde_quieres_ir": { "es": "Toca a donde quieres ir",   "nah": "Xikpacho kampa tikneki tiyas","tot": "Katlaway niku pina" },
+    "titulo":          { "es": "Mapa de movilidad rural",     "nah": "Amatl tlen altepemeh ohtli",  "tot": "Mapa tiji kachikin" },
+    "cargando":        { "es": "Cargando mapa...",             "nah": "Kitemohka amatl...",          "tot": "Lhtata mapa..." },
+    "con_rutas":       { "es": "Con rutas",                   "nah": "Ika ohtli",                   "tot": "Kgalhi tiji" },
+    "ruta_activa":     { "es": "Rutas activas",               "nah": "Ohtli tekiti",                "tot": "Tiji lhtata" },
+    "filtro_todas":    { "es": "Todas",                       "nah": "Nochi",                       "tot": "Xaputsapan" },
+    "filtro_con":      { "es": "Con cobertura",               "nah": "Ika palehwili",               "tot": "Kgalhi tiji" },
+    "filtro_sin":      { "es": "Sin cobertura",               "nah": "Amo palehwili",               "tot": "Nitulan tiji" },
+    "panel_rutas":     { "es": "Rutas disponibles",           "nah": "Ohtli kahki",                 "tot": "Tiji wa" },
+    "panel_poblacion": { "es": "Población",                   "nah": "Masehualmeh",                 "tot": "Lataman" },
+    "panel_municipio": { "es": "Municipio",                   "nah": "Altepetl",                    "tot": "Kachikin" },
+    "con_ruta_reg":    { "es": "Cuenta con ruta registrada",  "nah": "Kipiya ohtli tlahkuilolli",   "tot": "Kgalhi tzokni tiji" },
+    "solo_informal":   { "es": "Solo transporte informal",    "nah": "San tepozkameh masehual",     "tot": "Kaj tapatzin lataman" },
+    "sin_rutas":       { "es": "No hay rutas registradas para esta comunidad.", "nah": "Amo onkah ohtli tlahkuilolli inin altepetl.", "tot": "Nitulan tzokni tiji nak kachikin." },
+    "demanda":         { "es": "Existe demanda sin cobertura.", "nah": "Moneki tepoztli wan amo onkah.", "tot": "Putza tiji nitulan." },
+    "btn_buscar":      { "es": "Buscar transporte aquí",      "nah": "Xiktemo tepoztli nikan",      "tot": "Kaputza tapatzin uwa" }
   },
   "como_funciona": {
-    "paso1_titulo": { "es": "Busca tu ruta",         "nah": "Xiktemo mo-ohtli",              "tot": "Kaputza mintiji" },
+    "paso1_titulo": { "es": "Busca tu ruta",          "nah": "Xiktemo mo-ohtli",              "tot": "Kaputza mintiji" },
     "paso1_desc":   { "es": "Escribe de donde sales y a donde vas. Encontramos los transportistas disponibles cerca de ti.", "nah": "Xikihkuilo kampa tipehwas wan kampa tiyoh. Tikintemoah tepoztli in tlen kahki nepa.", "tot": "Katzokni niku pite chu niku pin. Iklakaputza tiji kachikin." },
-    "paso2_titulo": { "es": "Elige con confianza",   "nah": "Xiktlapehpena ika motemachilis", "tot": "Kalaksaka lakatzuku" },
+    "paso2_titulo": { "es": "Elige con confianza",    "nah": "Xiktlapehpena ika motemachilis", "tot": "Kalaksaka lakatzuku" },
     "paso2_desc":   { "es": "Ve horarios, precios y calificaciones de transportistas verificados por tu propia comunidad.", "nah": "Xikitta tlahko tonalli, tlahkoli wan kuali tepozkameh tlen altepetl mokampa.", "tot": "Kaukxila kilhtamaku, tumin chu kachiwinalin nak kachikin." },
-    "paso3_titulo": { "es": "Confirma por WhatsApp", "nah": "Xikneltoka ika WhatsApp",        "tot": "Kamaklhti WhatsApp" },
+    "paso3_titulo": { "es": "Confirma por WhatsApp",  "nah": "Xikneltoka ika WhatsApp",       "tot": "Kamaklhti WhatsApp" },
     "paso3_desc":   { "es": "Sin app que instalar. Solo WhatsApp. Funciona con cualquier telefono y conexion basica.", "nah": "Amo moneki app. San WhatsApp. Tekiti ika tepozkalli wan amo weyi internet.", "tot": "Nitulan app. Kaj WhatsApp. Lhtata 2G." }
   },
   "razones": {
-    "r1_titulo": { "es": "Transportistas verificados", "nah": "Tepozkameh neltokakeh",          "tot": "Takgalhchuku tapatzin" },
+    "r1_titulo": { "es": "Transportistas verificados", "nah": "Tepozkameh neltokakeh",        "tot": "Takgalhchuku tapatzin" },
     "r1_desc":   { "es": "INE confirmado, placa registrada y calificaciones reales de pasajeros.", "nah": "INE neltokak, placa tlahkuilolli wan kuali tlatoa in masehualmeh.", "tot": "INE takgalhchuku, placa chu staka kachikin." },
-    "r2_titulo": { "es": "Solo necesitas WhatsApp",    "nah": "San moneki WhatsApp",             "tot": "Kaj WhatsApp" },
-    "r2_desc":   { "es": "Funciona con 2G. Sin smartphone caro ni internet rapido.",             "nah": "Tekiti ika 2G. Amo moneki weyi smartphone niyan internet tlen ihsiwka.", "tot": "Lhtata 2G. Ni lanka smartphone ni internet." },
-    "r3_titulo": { "es": "Datos para el gobierno",     "nah": "Tlapowalli ika tekiwah",          "tot": "Tachuwin tekiwah" },
-    "r3_desc":   { "es": "Primera base de datos de movilidad rural de Puebla.",                  "nah": "Yachto tlapowalli tepozkameh masehualaltepetl in Puebla.", "tot": "Pulu tachuwin tiji nak Puebla." },
-    "r4_titulo": { "es": "Hecho para comunidades",     "nah": "Tlachihchiwalli ika altepemeh",   "tot": "Tlakan kachikin" },
-    "r4_desc":   { "es": "Para zonas donde el transporte formal no llega.",                       "nah": "Kampa amo ahsih in weyi tepozkameh.", "tot": "Niku ni chan lanka tiji." }
+    "r2_titulo": { "es": "Solo necesitas WhatsApp",    "nah": "San moneki WhatsApp",           "tot": "Kaj WhatsApp" },
+    "r2_desc":   { "es": "Funciona con 2G. Sin smartphone caro ni internet rapido.",            "nah": "Tekiti ika 2G. Amo moneki weyi smartphone niyan internet tlen ihsiwka.", "tot": "Lhtata 2G. Ni lanka smartphone ni internet." },
+    "r3_titulo": { "es": "Datos para el gobierno",     "nah": "Tlapowalli ika tekiwah",        "tot": "Tachuwin tekiwah" },
+    "r3_desc":   { "es": "Primera base de datos de movilidad rural de Puebla.",                 "nah": "Yachto tlapowalli tepozkameh masehualaltepetl in Puebla.", "tot": "Pulu tachuwin tiji nak Puebla." },
+    "r4_titulo": { "es": "Hecho para comunidades",     "nah": "Tlachihchiwalli ika altepemeh", "tot": "Tlakan kachikin" },
+    "r4_desc":   { "es": "Para zonas donde el transporte formal no llega.",                      "nah": "Kampa amo ahsih in weyi tepozkameh.", "tot": "Niku ni chan lanka tiji." }
   },
   "estadisticas": {
-    "stat1": { "es": "Localidades rurales en Puebla",       "nah": "Masehualaltepemeh in Puebla",     "tot": "Kachikin nak Puebla" },
-    "stat2": { "es": "Municipios con alta marginacion",     "nah": "Altepemeh tlen monekih palehwili", "tot": "Kachikin nitulan tumin" },
-    "stat3": { "es": "Transporte informal en zonas rurales","nah": "Tepozkameh in altepemeh",          "tot": "Tiji nak kachikin" }
+    "stat1": { "es": "Localidades rurales en Puebla",        "nah": "Masehualaltepemeh in Puebla",     "tot": "Kachikin nak Puebla" },
+    "stat2": { "es": "Municipios con alta marginacion",      "nah": "Altepemeh tlen monekih palehwili", "tot": "Kachikin nitulan tumin" },
+    "stat3": { "es": "Transporte informal en zonas rurales", "nah": "Tepozkameh in altepemeh",          "tot": "Tiji nak kachikin" }
+  },
+  "landing": {
+    "hero_titulo":       { "es": "La ciudad que todos podemos recorrer", "nah": "In altepetl kampa nochi tiyoh", "tot": "Lanka kachikin niku pin" },
+    "hero_subtitulo":    { "es": "La primera plataforma de transporte intercomunitario rural de Puebla. Conectamos pasajeros con transportistas verificados donde el transporte formal no llega.", "nah": "Yachto tepozkalli in altepemeh Puebla. Tikinsaloh masehualmeh ika tepozkameh neltokakeh kampa amo ahsih weyi tepoztli.", "tot": "Pulu lanka tiji nak Puebla. Kamachaka lataman chu tapatzin niku ni chan tiji." },
+    "wa_badge":          { "es": "Funciona con cualquier WhatsApp",      "nah": "Tekiti ika nochi WhatsApp",    "tot": "Lhtata WhatsApp" },
+    "wa_titulo":         { "es": "Reserva sin salir de WhatsApp",        "nah": "Xikpiya mo-ohtli ika WhatsApp","tot": "Kamaklhti WhatsApp" },
+    "wa_desc1":          { "es": "Sin descargar ninguna app. Funciona con 2G y en cualquier teléfono con WhatsApp instalado.", "nah": "Amo moneki app. Tekiti ika 2G wan nochi tepozkalli ika WhatsApp.", "tot": "Nitulan app. Kaj 2G chu WhatsApp." },
+    "wa_desc2":          { "es": "Ideal para comunidades rurales donde el internet es limitado.", "nah": "Kuali ika altepemeh kampa amo onkah weyi internet.", "tot": "Tlan nak kachikin niku nitulan internet." },
+    "roadmap_titulo":    { "es": "Hacia donde vamos",                    "nah": "Kampa tiyoh",                  "tot": "Niku pin" },
+    "roadmap_subtitulo": { "es": "ChulaVia es el primer paso de una plataforma de movilidad que puede escalar a todo Puebla.", "nah": "ChulaVia in yachto tlamantli ika ohtli tlen tekiti in nochi Puebla.", "tot": "ChulaVia pulu tiji nak Puebla." },
+    "equipo_titulo":     { "es": "El equipo",                            "nah": "In tekitkayotl",               "tot": "Lataman tekitl" },
+    "equipo_subtitulo":  { "es": "Cuatro especialidades, un solo objetivo: conectar a las comunidades rurales de Puebla.", "nah": "Nawi tlamatilis, san se tekitl: tikinsalos in altepemeh Puebla.", "tot": "Lakatati tekitl, akgtum lakaputza: kamachaka kachikin nak Puebla." },
+    "cta_desc":          { "es": "Llega a mas pasajeros, optimiza tus rutas y forma parte de la primera red de transporte rural digital de Puebla.", "nah": "Xikahsiki okachi masehualmeh, xikuali mo-ohtli wan xikpiya tekipanolli in Puebla.", "tot": "Kalaktsin lataman, kalaksaka mintiji." },
+    "cta_btn":           { "es": "Registrarme gratis",                   "nah": "Ximoihkuilo amo patiw",        "tot": "Katzokni nitulan tumin" }
+  },
+  "registro": {
+    "titulo":      { "es": "Regístrate como transportista",       "nah": "Ximoihkuilo tepozkalli",        "tot": "Katzokni tapatzin" },
+    "subtitulo":   { "es": "Conecta tu comunidad. Gana más pasajeros.", "nah": "Xiksalol mo-altepetl. Xikahsiki okachi masehualmeh.", "tot": "Kamachaka minkachikin. Kgalhi lataman." },
+    "paso1":       { "es": "Datos personales",                    "nah": "Mo-tlapowal",                   "tot": "Tzokni uku" },
+    "paso2":       { "es": "Tu ruta",                             "nah": "Mo-ohtli",                      "tot": "Mintiji" },
+    "paso3":       { "es": "Horarios",                            "nah": "Tlahko tonalli",                "tot": "Kilhtamaku" },
+    "p1_titulo":   { "es": "Tus datos personales",                "nah": "Mo-tlapowal nelli",             "tot": "Tzokni tuku" },
+    "p1_desc":     { "es": "Necesitamos verificar tu identidad para proteger a los pasajeros.", "nah": "Tiknekih tikittas akin tehwatzin ika palehwi masehualmeh.", "tot": "Kgalhi takgalhchuku." },
+    "nombre":      { "es": "Nombre completo",                     "nah": "Mo-toka nochi",                 "tot": "Mintuku lanka" },
+    "telefono":    { "es": "Número de teléfono",                  "nah": "Mo-tlapowalli tepozkalli",      "tot": "Tachuwin" },
+    "tel_hint":    { "es": "Te enviaremos un código de verificación por SMS.", "nah": "Timitzitlanilis tlapowalli ika SMS.", "tot": "Kamalakacha tzokni SMS." },
+    "ine":         { "es": "Últimos 4 dígitos de tu INE",         "nah": "Nawi tlapowalli sa itla in mo-INE","tot": "Akgtati INE" },
+    "ine_hint":    { "es": "Solo guardamos los últimos 4 dígitos. Tu INE no se almacena completo.", "nah": "San tikpiyah nawi tlapowalli. Mo-INE amo mochiwa nochi.", "tot": "Kaj akgtati. INE nitulan lanka." },
+    "tipo":        { "es": "Tipo de vehículo",                    "nah": "Kenami tepoztli",               "tot": "Tapatzin tuku" },
+    "capacidad":   { "es": "Capacidad (personas)",                "nah": "Kexkich masehualmeh",           "tot": "Lataman wila" },
+    "placa":       { "es": "Número de placa",                     "nah": "Tlapowalli placa",              "tot": "Tzokni placa" },
+    "foto":        { "es": "Foto del vehículo (opcional)",        "nah": "Tlaixkopin tepoztli (tla tikneki)","tot": "Tlaixkopin tapatzin" },
+    "p2_titulo":   { "es": "Tu ruta habitual",                    "nah": "Mo-ohtli nochipa",              "tot": "Mintiji lhtata" },
+    "p2_desc":     { "es": "Define de dónde sales y a dónde llevas pasajeros normalmente.", "nah": "Xikihkuilo kampa tipehwas wan kampa tikinwika masehualmeh.", "tot": "Niku pite chu niku pin." },
+    "origen":      { "es": "Comunidad de origen",                 "nah": "Altepetl kampa tipehwas",       "tot": "Kachikin pite" },
+    "destinos":    { "es": "Destinos (puedes elegir varios)",     "nah": "Kampa tiyoh (kuali tikinpehpena miyak)","tot": "Niku pin" },
+    "precio":      { "es": "Precio por persona (MXN)",            "nah": "Patiw ipan masehual (MXN)",     "tot": "Tumin lataman (MXN)" },
+    "p3_titulo":   { "es": "Días y horarios",                     "nah": "Tonalli wan tlahko tonalli",    "tot": "Chichini chu kilhtamaku" },
+    "p3_desc":     { "es": "Cuándo ofreces tu servicio. Los pasajeros verán esto al buscar.", "nah": "Keman tikchiwa mo-tekitl. Masehualmeh kittaskeh inin.", "tot": "Niku lhtata." },
+    "dias":        { "es": "Días de servicio",                    "nah": "Tonalli tekitl",                "tot": "Chichini tekitl" },
+    "horarios":    { "es": "Horarios de salida",                  "nah": "Tlahko tonalli tipehwas",       "tot": "Kilhtamaku pite" },
+    "siguiente":   { "es": "Siguiente",                           "nah": "Niman",                         "tot": "Tlan" },
+    "registrar":   { "es": "Registrarme",                         "nah": "Ximoihkuilo",                   "tot": "Katzokni" },
+    "exito_titulo":{ "es": "¡Registro completado!",              "nah": "¡Moihkuilo kuali!",             "tot": "¡Tzokni tlan!" },
+    "exito_desc":  { "es": "Tu perfil está en revisión. Te contactaremos por WhatsApp para verificar tu INE y placa.", "nah": "Mo-amaw tikittaskeh. Timitznotzaskeh ika WhatsApp ika tikneltokas mo-INE wan placa.", "tot": "Kaukxila uku. Kamalakacha WhatsApp INE chu placa." },
+    "ben1_titulo": { "es": "Más pasajeros",                       "nah": "Okachi masehualmeh",            "tot": "Lataman kgalhi" },
+    "ben1_desc":   { "es": "Los pasajeros te encuentran cuando buscan tu ruta.", "nah": "Masehualmeh mitzahsih kampa kitemoah mo-ohtli.", "tot": "Lataman putza mintiji." },
+    "ben2_titulo": { "es": "Perfil verificado",                   "nah": "Amaw neltokak",                 "tot": "Takgalhchuku tlan" },
+    "ben2_desc":   { "es": "El badge de verificado genera más confianza y reservaciones.", "nah": "Amaw neltokak kichiwa okachi temachilis wan ohtli.", "tot": "Takgalhchuku kamachaka tlan." },
+    "ben3_titulo": { "es": "100% gratis",                         "nah": "Amo patiw",                     "tot": "Nitulan tumin" },
+    "ben3_desc":   { "es": "Sin costo durante el periodo de lanzamiento en Puebla.", "nah": "Amo patiw inin tonalli pehwas in Puebla.", "tot": "Nitulan tumin nak Puebla." }
+  },
+  "gobierno": {
+    "titulo":              { "es": "Panel de Datos — Gobierno de Puebla",   "nah": "Tlapowalli Tekiwah — Puebla",      "tot": "Tachuwin Tekiwah — Puebla" },
+    "subtitulo":           { "es": "Movilidad Rural · Región Mixteca",       "nah": "Ohtli Altepemeh · Mixteca",        "tot": "Tiji Kachikin · Mixteca" },
+    "desc":                { "es": "Datos en tiempo real para informar política pública de transporte.", "nah": "Tlapowalli aman ika chihchiwa tekitl ohtli.", "tot": "Tachuwin uku tekiwah." },
+    "tab_resumen":         { "es": "Resumen general",                        "nah": "Nochi tlapowalli",                 "tot": "Tachuwin xaputsapan" },
+    "tab_cobertura":       { "es": "Cobertura",                              "nah": "Palehwili",                        "tot": "Tiji nak" },
+    "tab_transportistas":  { "es": "Transportistas",                         "nah": "Tepozkameh",                       "tot": "Tapatzin" },
+    "kpi_comunidades":     { "es": "Comunidades registradas",                "nah": "Altepemeh tlahkuilolli",           "tot": "Kachikin tzokni" },
+    "kpi_transportistas":  { "es": "Transportistas activos",                 "nah": "Tepozkameh tekitih",               "tot": "Tapatzin lhtata" },
+    "kpi_rutas":           { "es": "Rutas activas",                          "nah": "Ohtli tekitih",                    "tot": "Tiji lhtata" },
+    "kpi_solicitudes":     { "es": "Solicitudes registradas",                "nah": "Tepoztli moneki",                  "tot": "Putza tiji" },
+    "kpi_sin_cobertura":   { "es": "Comunidades sin cobertura",              "nah": "Altepemeh amo palehwili",          "tot": "Kachikin nitulan tiji" },
+    "kpi_viajes":          { "es": "Viajes completados",                     "nah": "Ohtli mochiwak",                   "tot": "Tiji tlan" },
+    "deficit_titulo":      { "es": "Comunidades con mayor déficit de movilidad", "nah": "Altepemeh kampa moneki okachi tepoztli", "tot": "Kachikin nitulan lanka tiji" },
+    "deficit_desc":        { "es": "Solicitudes registradas sin ruta disponible — oportunidades de inversión", "nah": "Tepoztli moneki kampa amo onkah ohtli — kuali ika tekitl", "tot": "Putza tiji nitulan — tlan tumin" },
+    "con_transporte":      { "es": "Con transporte formal",                  "nah": "Ika tepoztli neltokak",            "tot": "Kgalhi tapatzin" },
+    "sin_transporte":      { "es": "Sin transporte formal",                  "nah": "Amo tepoztli neltokak",            "tot": "Nitulan tapatzin" },
+    "cal_promedio":        { "es": "Calificación promedio",                  "nah": "Kuali tlapowalli",                 "tot": "Kachiwinalin lhtata" },
+    "viajes_acum":         { "es": "Viajes acumulados",                      "nah": "Nochi ohtli",                      "tot": "Xaputsapan tiji" }
   },
   "general": {
-    "bienvenido": {
-      "es": "Bienvenido",
-      "nah": "Ximopanolti",
-      "tot": "Skalh tenk"
-    },
-    "gratis": {
-      "es": "Gratis",
-      "nah": "Amo ipatiw",
-      "tot": "Nixtapalh"
-    },
-    "verificado": {
-      "es": "Verificado",
-      "nah": "Melawak",
-      "tot": "Xakwali"
-    },
-    "comunidades_conectadas": {
-      "es": "Comunidades conectadas",
-      "nah": "Altepemeh tlasaloltok",
-      "tot": "Kachikin stakyaw"
-    },
-    "sin_transporte_formal": {
-      "es": "Sin transporte formal",
-      "nah": "Amo kipiya tepoztli",
-      "tot": "Nina kgalhi chiki"
-    }
+    "bienvenido":           { "es": "Bienvenido",            "nah": "Ximopanolti",         "tot": "Skalh tenk" },
+    "gratis":               { "es": "Gratis",                "nah": "Amo ipatiw",           "tot": "Nixtapalh" },
+    "verificado":           { "es": "Verificado",            "nah": "Melawak",              "tot": "Xakwali" },
+    "comunidades_conectadas":{ "es": "Comunidades conectadas","nah": "Altepemeh tlasaloltok","tot": "Kachikin stakyaw" },
+    "sin_transporte_formal": { "es": "Sin transporte formal", "nah": "Amo kipiya tepoztli",  "tot": "Nina kgalhi chiki" }
   }
 }
