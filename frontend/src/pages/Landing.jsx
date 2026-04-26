@@ -627,23 +627,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ══ FOOTER ══ */}
-      <footer style={{
-        backgroundColor: '#fff',
-        borderTop: '1px solid #e8edf5',
-        padding: '40px 24px',
-        textAlign: 'center',
-      }}>
-        <div style={{ maxWidth: '72rem', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-          <img src="/logo.png" alt="ChulaVia" style={{ height: 52, width: 'auto' }} />
-          <p style={{ margin: 0, color: '#4b5563', fontSize: 14, fontWeight: 500 }}>
-            Plataforma de movilidad rural intercomunitaria de Puebla
-          </p>
-          <p style={{ margin: 0, color: '#9ca3af', fontSize: 12 }}>
-            Hackathon Por Amor a Puebla 2026 &bull; Eje Movilidad Rural
-          </p>
-        </div>
-      </footer>
     </main>
   )
 }
