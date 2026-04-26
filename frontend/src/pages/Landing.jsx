@@ -116,7 +116,7 @@ export default function Landing() {
       <style>{CSS}</style>
 
       {/* ══ HERO ══ */}
-      <section style={{
+      <section className="cv-hero" style={{
         position: 'relative',
         overflow: 'hidden',
         backgroundColor: '#1B3A6B',
@@ -183,7 +183,7 @@ export default function Landing() {
           </p>
 
           {/* CTAs */}
-          <div style={{
+          <div className="cv-hero-ctas" style={{
             display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center',
             animation: 'fadeUp 0.7s ease 0.3s both',
           }}>
@@ -224,6 +224,7 @@ export default function Landing() {
       <section style={{ backgroundColor: '#FAFAFA', padding: '0 24px' }}>
         <div
           ref={statsRef}
+          className="cv-stats-grid"
           style={{
             maxWidth: '72rem', margin: '0 auto',
             display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
@@ -272,7 +273,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 24 }}>
+          <div className="cv-steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 24 }}>
             {STEPS.map(({ n, icon: Icon, title, desc }, i) => (
               <div key={n}
                 style={{
@@ -323,7 +324,7 @@ export default function Landing() {
         }}
       >
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
+          <div className="cv-why-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
 
             <div style={{
               opacity: whyOn ? 1 : 0,
@@ -355,7 +356,7 @@ export default function Landing() {
               </Link>
             </div>
 
-            <div style={{
+            <div className="cv-why-cards" style={{
               display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14,
               opacity: whyOn ? 1 : 0,
               transform: whyOn ? 'translateX(0)' : 'translateX(24px)',
@@ -399,7 +400,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24, position: 'relative' }}>
+          <div className="cv-roadmap-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24, position: 'relative' }}>
             {[
               {
                 fase: '01',
@@ -475,7 +476,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24, marginBottom: 40 }}>
+          <div className="cv-team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24, marginBottom: 40 }}>
             {[
               { nombre: 'Miguel Barranco', rol: 'Frontend & UX', tech: 'React · Leaflet · Vite', iniciales: 'MB' },
               { nombre: 'Isabel', rol: 'Backend & API', tech: 'Django · Railway · Supabase', iniciales: 'IS' },

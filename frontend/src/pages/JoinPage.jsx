@@ -231,7 +231,7 @@ export default function JoinPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '820px', margin: '40px auto 0', padding: '0 24px 64px' }}>
+      <div className="cv-join-card" style={{ maxWidth: '820px', margin: '40px auto 0', padding: '0 24px 64px' }}>
         <div style={{ backgroundColor: '#fff', borderRadius: 20, boxShadow: '0 8px 32px rgba(27,58,107,0.1)', overflow: 'hidden' }}>
 
           {/* Progress steps */}
