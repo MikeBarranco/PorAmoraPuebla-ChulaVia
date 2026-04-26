@@ -13,4 +13,5 @@ urlpatterns = [
     path('api/analytics/deficit/', views.analytics_deficit),
     path('api/analytics/rutas-populares/', views.analytics_rutas_populares),
     path('api/subir-foto-transportista/', views.comprimir_foto),
+    path('api/solicitudes/<int:solicitud_id>/completar/', views.completar_solicitud),
 ]

@@ -1,15 +1,26 @@
 import base64
+import os
 from io import BytesIO
 from PIL import Image
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Count, Q
-from .models import Comunidad, Ruta, Solicitud, Transportista
+from .models import Comunidad, Ruta, Solicitud, Transportista, Calificacion
 from .serializers import ComunidadSerializer, RutaSerializer, SolicitudSerializer, TransportistaSerializer
 from twilio.twiml.messaging_response import MessagingResponse
+from twilio.rest import Client
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
+from django.views.decorators.http import require_POST
+from django.http import HttpResponse, JsonResponse
+
+def enviar_whatsapp(to, body):
+    client = Client(os.environ.get('TWILIO_ACCOUNT_SID'), os.environ.get('TWILIO_AUTH_TOKEN'))
+    client.messages.create(
+        from_=os.environ.get('TWILIO_WHATSAPP_FROM'),
+        to=to,
+        body=body
+    )
 
 class ComunidadList(generics.ListAPIView):
     queryset = Comunidad.objects.all().order_by('municipio')
@@ -109,6 +120,61 @@ def whatsapp_webhook(request):
     # Obtener el estado actual del usuario
     estado = CONVERSACIONES.get(numero, {'paso': 'inicio'})
 
+    # Flujo post-viaje: calificación
+    if estado.get('paso') == 'esperando_calificacion':
+        if mensaje in ['1', '2', '3', '4', '5']:
+            puntuacion = int(mensaje)
+            solicitud_id = estado.get('solicitud_id')
+            ruta_id = estado.get('ruta_id')
+
+            # Guardar calificación
+            try:
+                solicitud = Solicitud.objects.get(id=solicitud_id)
+                Calificacion.objects.create(
+                    ruta_id=ruta_id,
+                    solicitud=solicitud,
+                    puntuacion=puntuacion,
+                    comentario=''
+                )
+
+                # Recalcular promedio del transportista
+                if ruta_id:
+                    from django.db.models import Avg
+                    ruta = Ruta.objects.get(id=ruta_id)
+                    nuevo_promedio = Calificacion.objects.filter(
+                        ruta__transportista=ruta.transportista
+                    ).aggregate(Avg('puntuacion'))['puntuacion__avg']
+                    ruta.transportista.calificacion = round(nuevo_promedio, 2)
+                    ruta.transportista.total_viajes += 1
+                    ruta.transportista.save()
+            except Exception:
+                pass
+
+            CONVERSACIONES[numero] = {'paso': 'esperando_comentario', 'solicitud_id': solicitud_id, 'ruta_id': ruta_id, 'puntuacion': puntuacion}
+            estrellas = '⭐' * puntuacion
+            msg.body(f"¡Gracias! Registramos {estrellas}\n\n¿Quieres dejar un comentario? Escríbelo ahora (en español, náhuatl o totonaco), o escribe 'no' para terminar.")
+        else:
+            msg.body("Por favor responde con un número del 1 al 5 para calificar tu viaje.")
+        return HttpResponse(str(resp), content_type='text/xml')
+
+    if estado.get('paso') == 'esperando_comentario':
+        solicitud_id = estado.get('solicitud_id')
+        ruta_id = estado.get('ruta_id')
+        puntuacion = estado.get('puntuacion', 5)
+
+        if mensaje.lower() != 'no' and len(mensaje) > 1:
+            try:
+                cal = Calificacion.objects.filter(solicitud_id=solicitud_id).last()
+                if cal:
+                    cal.comentario = mensaje
+                    cal.save()
+            except Exception:
+                pass
+
+        CONVERSACIONES[numero] = {'paso': 'inicio'}
+        msg.body("¡Gracias por tu opinión! Nos ayuda a mejorar el servicio para toda la comunidad. 🙏\n\nEscribe 'hola' para hacer otra búsqueda.")
+        return HttpResponse(str(resp), content_type='text/xml')
+
     # 1. Inicio / Reiniciar
     if mensaje in ['hola', 'hola!', 'hi', 'inicio', 'menu', 'menú']:
         CONVERSACIONES[numero] = {'paso': 'elegir_idioma'}
@@ -125,8 +191,8 @@ def whatsapp_webhook(request):
     elif estado['paso'] == 'pedir_origen':
         idioma = estado.get('idioma', 'es')
         CONVERSACIONES[numero] = {
-            'paso': 'pedir_destino', 
-            'origen': mensaje, 
+            'paso': 'pedir_destino',
+            'origen': mensaje,
             'idioma': idioma
         }
         msg.body(MENSAJES['pedir_destino'][idioma].format(origen=mensaje))
@@ -136,8 +202,7 @@ def whatsapp_webhook(request):
         idioma = estado.get('idioma', 'es')
         origen = estado.get('origen', '')
         destino = mensaje
-        
-        # Simulación de respuesta fija para el demo
+
         if 'puebla' in destino or 'izucar' in destino:
             msg.body(MENSAJES['confirmado'][idioma].format(
                 nombre='Ernesto García',
@@ -156,6 +221,41 @@ def whatsapp_webhook(request):
         CONVERSACIONES[numero] = {'paso': 'inicio'}
 
     return HttpResponse(str(resp), content_type='text/xml')
+
+
+@csrf_exempt
+@require_POST
+def completar_solicitud(request, solicitud_id):
+    try:
+        solicitud = Solicitud.objects.get(id=solicitud_id)
+        solicitud.estado = 'completada'
+        solicitud.save()
+
+        # Guardar en CONVERSACIONES que este número espera calificación
+        CONVERSACIONES[solicitud.telefono_whatsapp] = {
+            'paso': 'esperando_calificacion',
+            'solicitud_id': solicitud.id,
+            'ruta_id': solicitud.ruta_id,
+        }
+
+        # Mandar WhatsApp al pasajero
+        origen = solicitud.origen_texto
+        destino = solicitud.destino_texto
+        enviar_whatsapp(
+            solicitud.telefono_whatsapp,
+            f"¡Gracias por viajar con ChulaVía!\n\n"
+            f"Tu viaje de {origen} a {destino} ha concluido.\n\n"
+            f"¿Cómo estuvo el servicio? Responde con un número:\n"
+            f"5 ⭐⭐⭐⭐⭐ Excelente\n"
+            f"4 ⭐⭐⭐⭐ Muy bueno\n"
+            f"3 ⭐⭐⭐ Regular\n"
+            f"2 ⭐⭐ Malo\n"
+            f"1 ⭐ Muy malo\n\n"
+            f"Puedes agregar un comentario en español, náhuatl o totonaco."
+        )
+        return JsonResponse({'ok': True})
+    except Solicitud.DoesNotExist:
+        return JsonResponse({'error': 'No encontrada'}, status=404)
 
 @api_view(['POST'])
 def comprimir_foto(request):
