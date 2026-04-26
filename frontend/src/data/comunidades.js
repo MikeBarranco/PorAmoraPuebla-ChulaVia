@@ -31,6 +31,12 @@ export const rutas = [
     totalViajes: 145,
     verificado: true,
     telefono: "2221345678",
+    eta: "45 min",
+    resenas: [
+      { autor: "María G.", texto: "Muy puntual y amable, llegué a tiempo a mi cita.", estrellas: 5 },
+      { autor: "Pedro R.", texto: "Buena combi, asientos cómodos para el camino.", estrellas: 5 },
+      { autor: "Lupita M.", texto: "Siempre sale a tiempo. Lo recomiendo.", estrellas: 4 },
+    ],
   },
   {
     id: 2,
@@ -46,6 +52,11 @@ export const rutas = [
     totalViajes: 89,
     verificado: true,
     telefono: "2227654321",
+    eta: "30 min",
+    resenas: [
+      { autor: "Carmen T.", texto: "Ruta muy tranquila, la señora conduce con cuidado.", estrellas: 5 },
+      { autor: "Andrés V.", texto: "Bien, aunque a veces sale un poco tarde.", estrellas: 4 },
+    ],
   },
   {
     id: 3,
@@ -61,6 +72,12 @@ export const rutas = [
     totalViajes: 234,
     verificado: true,
     telefono: "2229871234",
+    eta: "20 min",
+    resenas: [
+      { autor: "Rosa N.", texto: "El mejor servicio de la zona. Siempre disponible.", estrellas: 5 },
+      { autor: "Felipe C.", texto: "Muy rápido y económico. Ideal para ir al mercado.", estrellas: 5 },
+      { autor: "Olga P.", texto: "Puntual y amable. Lo uso cada semana.", estrellas: 5 },
+    ],
   },
   {
     id: 4,
@@ -76,6 +93,11 @@ export const rutas = [
     totalViajes: 67,
     verificado: true,
     telefono: "2224567890",
+    eta: "15 min",
+    resenas: [
+      { autor: "Tomás H.", texto: "Buena familia, llevan años haciendo esta ruta.", estrellas: 5 },
+      { autor: "Elena B.", texto: "Camioneta limpia y en buen estado.", estrellas: 4 },
+    ],
   },
   {
     id: 5,
@@ -91,5 +113,10 @@ export const rutas = [
     totalViajes: 42,
     verificado: false,
     telefono: "2226543210",
+    eta: "55 min",
+    resenas: [
+      { autor: "Javier S.", texto: "Servicio regular pero cumple. Podría mejorar la puntualidad.", estrellas: 4 },
+      { autor: "Norma E.", texto: "Llegamos bien, el camino es largo pero seguro.", estrellas: 4 },
+    ],
   },
 ]
