@@ -4,11 +4,14 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import './chulavia-bg.css'
 import App from './App.jsx'
+import { LangProvider } from './context/LangContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <LangProvider>
+        <App />
+      </LangProvider>
     </BrowserRouter>
   </StrictMode>,
 )
