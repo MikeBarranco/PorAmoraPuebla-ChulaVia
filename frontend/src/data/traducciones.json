@@ -1,0 +1,159 @@
+{
+  "navegacion": {
+    "buscar_transporte": {
+      "es": "Buscar transporte",
+      "nah": "Xiktemo tepoztli",
+      "tot": "Kaputsati chiki"
+    },
+    "ver_mapa": {
+      "es": "Ver mapa",
+      "nah": "Xikitta amatl",
+      "tot": "Kaukxilh tapatot"
+    },
+    "panel_gobierno": {
+      "es": "Panel gobierno",
+      "nah": "Tekiwayo tlapowali",
+      "tot": "Xlimapakgsina"
+    },
+    "soy_transportista": {
+      "es": "Soy transportista",
+      "nah": "Ni tepuznenemini",
+      "tot": "Akit kgalhiyi chiki"
+    }
+  },
+  "busqueda": {
+    "origen": {
+      "es": "Origen",
+      "nah": "Pejkayotl",
+      "tot": "Niku tsuku"
+    },
+    "destino": {
+      "es": "Destino",
+      "nah": "Kampa tiyow",
+      "tot": "Niku na an"
+    },
+    "de_donde_sales": {
+      "es": "¿De dónde sales?",
+      "nah": "¿Kampa tiwala?",
+      "tot": "¿Niku tsukuya?"
+    },
+    "a_donde_vas": {
+      "es": "¿A dónde vas?",
+      "nah": "¿Kampa tiyow?",
+      "tot": "¿Niku pina?"
+    },
+    "buscar": {
+      "es": "Buscar",
+      "nah": "Xiktemo",
+      "tot": "Kaputsati"
+    },
+    "di_nombre_comunidad": {
+      "es": "Di el nombre de tu comunidad",
+      "nah": "Xikijto itoka moaltepe",
+      "tot": "Kawani xkuini minkachikin"
+    }
+  },
+  "resultados": {
+    "transportista_verificado": {
+      "es": "Transportista verificado",
+      "nah": "Tepuznenemini melawak",
+      "tot": "Xa kgalhiyi chiki tlan"
+    },
+    "calificacion": {
+      "es": "Calificación",
+      "nah": "Kenami kuali",
+      "tot": "Xatapatani"
+    },
+    "precio_por_persona": {
+      "es": "Precio por persona",
+      "nah": "Keski ipatiw san se",
+      "tot": "Xlakata puks chatum"
+    },
+    "horarios": {
+      "es": "Horarios",
+      "nah": "Kemanian",
+      "tot": "Tuku oras"
+    },
+    "dias_de_servicio": {
+      "es": "Días de servicio",
+      "nah": "Tonaltin tekipanoa",
+      "tot": "Qolo xla taskujut"
+    },
+    "reservar_viaje": {
+      "es": "Reservar viaje",
+      "nah": "Xikpiya moojtli",
+      "tot": "Lhaqawa tlajan"
+    },
+    "tiempo_estimado": {
+      "es": "Tiempo estimado",
+      "nah": "Keski kawitl",
+      "tot": "Laktalhiman"
+    }
+  },
+  "hero_landing": {
+    "conecta_comunidad": {
+      "es": "Conecta tu comunidad",
+      "nah": "Xiksaloka moaltepe",
+      "tot": "Kamakgtayakg minkachikin"
+    },
+    "muevete_confianza": {
+      "es": "Muévete con confianza",
+      "nah": "Xiyow ika mo yolchikawalis",
+      "tot": "Tlaway tlan"
+    },
+    "buscar_transporte_ahora": {
+      "es": "Buscar transporte ahora",
+      "nah": "Xiktemo tepoztli aman",
+      "tot": "Kaputsati chiki chuhua"
+    }
+  },
+  "mapa": {
+    "con_cobertura": {
+      "es": "Con cobertura",
+      "nah": "Nikan yawi",
+      "tot": "Kgalhi tekxtu"
+    },
+    "sin_cobertura": {
+      "es": "Sin cobertura",
+      "nah": "Amo yawi nikan",
+      "tot": "Nitlan tekxtu"
+    },
+    "toca_donde_estas": {
+      "es": "Toca donde estás tú",
+      "nah": "Xikpacho kampa tika",
+      "tot": "Katlaway niku wilay"
+    },
+    "toca_donde_quieres_ir": {
+      "es": "Toca a donde quieres ir",
+      "nah": "Xikpacho kampa tikneki tiyas",
+      "tot": "Katlaway niku pina"
+    }
+  },
+  "general": {
+    "bienvenido": {
+      "es": "Bienvenido",
+      "nah": "Ximopanolti",
+      "tot": "Skalh tenk"
+    },
+    "gratis": {
+      "es": "Gratis",
+      "nah": "Amo ipatiw",
+      "tot": "Nixtapalh"
+    },
+    "verificado": {
+      "es": "Verificado",
+      "nah": "Melawak",
+      "tot": "Xakwali"
+    },
+    "comunidades_conectadas": {
+      "es": "Comunidades conectadas",
+      "nah": "Altepemeh tlasaloltok",
+      "tot": "Kachikin stakyaw"
+    },
+    "sin_transporte_formal": {
+      "es": "Sin transporte formal",
+      "nah": "Amo kipiya tepoztli",
+      "tot": "Nina kgalhi chiki"
+    }
+  }
+}
