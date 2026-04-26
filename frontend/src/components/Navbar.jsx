@@ -1,5 +1,5 @@
-import { Link, useLocation } from 'react-router-dom'
-import { MapPin, Search, LayoutDashboard, UserPlus } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { MapPin, Search, LayoutDashboard, UserPlus, ArrowLeft } from 'lucide-react'
 
 const links = [
   { to: '/mapa', label: 'Mapa', icon: MapPin },
@@ -9,9 +9,12 @@ const links = [
 
 export default function Navbar() {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const isHome = pathname === '/'
 
   return (
     <nav
+      className="cv-cyber-bg"
       aria-label="Navegacion principal"
       style={{
         backgroundColor: '#1B3A6B',
@@ -23,29 +26,64 @@ export default function Navbar() {
       }}
     >
       <div
+        className="cv-nav-inner"
         style={{
-          maxWidth: '72rem',
-          margin: '0 auto',
-          padding: '0 1.5rem',
+          width: '100%',
+          padding: '0 4vw',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '68px',
+          height: '80px',
         }}
       >
-        <Link
-          to="/"
-          aria-label="ChulaVia - Inicio"
-          style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
-        >
-          <img
-            src="/logo.png"
-            alt="ChulaVia"
-            style={{ height: '52px', width: 'auto' }}
-          />
-        </Link>
+        {/* Flecha de regreso — visible en todas las páginas menos Inicio */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {!isHome && (
+            <button
+              onClick={() => navigate(-1)}
+              aria-label="Regresar"
+              title="Regresar"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                background: 'rgba(255,255,255,0.1)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: 8,
+                color: '#FAFAFA',
+                fontSize: 13,
+                fontWeight: 600,
+                padding: '6px 12px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                minHeight: 36,
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.2)'
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.4)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'
+              }}
+            >
+              <ArrowLeft size={15} strokeWidth={2.5} />
+              <span className="back-label">Regresar</span>
+            </button>
+          )}
 
-        <ul style={{ display: 'flex', alignItems: 'center', gap: '4px', listStyle: 'none', margin: 0, padding: 0 }}>
+          <Link
+            to="/"
+            aria-label="ChulaVia - Inicio"
+            style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
+          >
+            <img
+              src="/logo.png"
+              alt="ChulaVia"
+              style={{ height: '64px', width: 'auto', filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))' }}
+            />
+          </Link>
+        </div>
+
+        <ul className="cv-nav-links" style={{ display: 'flex', alignItems: 'center', gap: '4px', listStyle: 'none', margin: 0, padding: 0 }}>
           {links.map(({ to, label, icon: Icon }) => {
             const active = pathname === to
             return (
@@ -121,7 +159,7 @@ export default function Navbar() {
               }}
             >
               <UserPlus size={15} aria-hidden="true" strokeWidth={2} />
-              <span>Soy transportista</span>
+              <span>¿Eres Transportista?</span>
             </Link>
           </li>
         </ul>
@@ -130,6 +168,9 @@ export default function Navbar() {
       <style>{`
         @media (max-width: 640px) {
           .nav-label { display: none; }
+          .back-label { display: none; }
+          .cv-nav-links { gap: 2px !important; }
+          .cv-nav-links a { padding: 8px 10px !important; }
         }
       `}</style>
     </nav>
