@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Count, Q
 from .models import Comunidad, Ruta, Solicitud, Transportista
-from .serializers import ComunidadSerializer, RutaSerializer, SolicitudSerializer
+from .serializers import ComunidadSerializer, RutaSerializer, SolicitudSerializer, TransportistaSerializer
 from twilio.twiml.messaging_response import MessagingResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
@@ -35,6 +35,7 @@ class SolicitudCreate(generics.CreateAPIView):
 
 class TransportistaCreate(generics.CreateAPIView):
     queryset = Transportista.objects.all()
+    serializer_class = TransportistaSerializer
 
 @api_view(['GET'])
 def analytics_resumen(request):
@@ -60,8 +61,6 @@ def analytics_rutas_populares(request):
         num_solicitudes=Count('solicitudes')
     ).order_by('-num_solicitudes')[:5]
     return Response(RutaSerializer(rutas, many=True).data)
-
-from twilio.twiml.messaging_response import MessagingResponse
 
 @csrf_exempt
 def whatsapp_webhook(request):
