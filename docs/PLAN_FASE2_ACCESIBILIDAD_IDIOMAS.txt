@@ -1,0 +1,811 @@
+================================================================================
+PLAN FASE 2 - CHULAVIA
+Accesibilidad Real, Lenguas Originarias y Mapa Completo de Puebla
+Actualizado: 25 de abril 2026, 11pm
+Deadline: Domingo 26 de abril, 12:00pm (13 horas)
+================================================================================
+
+EQUIPO:
+  Miguel  - Frontend + Lider (trabaja con Claude)
+  Isabel  - Backend + Django + WhatsApp bot
+  Monica  - Investigacion + Datos del mapa + Comunidades
+  Sumayra - Pitch + Traducciones + Video
+
+================================================================================
+EL PROBLEMA REAL QUE EL MENTOR SENALO
+================================================================================
+
+En las comunidades rurales de Puebla existe un problema que va mas alla de
+"no hay transporte": la mayoria de soluciones digitales no llegan a quien
+mas las necesita porque:
+
+1. ANALFABETISMO: Muchas personas mayores en comunidades indigenas no saben
+   leer ni escribir en espanol. El INEGI reporta que en municipios de alta
+   marginacion el indice de analfabetismo supera el 30%.
+
+2. LENGUA: El espanol es segundo idioma para muchos habitantes de la Sierra
+   Norte, Totonacapan, y regiones Nahuatl. Hay 8 lenguas originarias en Puebla:
+   Nahuatl, Totonaco, Mixteco, Mazateco, Popoloca, Otomi, Tepehua y Chocho.
+
+3. UBICACION: "Se donde vivo pero no se como se llama en el mapa." Las
+   comunidades se identifican por el nombre de la iglesia, el cerro, el rio,
+   el santo patron. No por el nombre oficial del INEGI. Una abuela sabe que
+   vive "junto a la iglesia de San Marcos" pero no sabe que eso se llama
+   "San Marcos Tlacoyalco" en los registros oficiales.
+
+4. TECNOLOGIA: Para una persona mayor, tocar una pantalla y escribir texto
+   ya es una barrera. Necesitan flujos guiados por voz o por imagenes.
+
+NUESTRA SOLUCION:
+  - Voz: el usuario habla en vez de escribir
+  - Mapa visual: toca tu comunidad en el mapa, sin escribir nada
+  - Idiomas: la interfaz en espanol, nahuatl o totonaco
+  - WhatsApp accesible: menus numerados + voz en el bot
+  - Iconos grandes: para quien no puede leer, los iconos guian el flujo
+
+================================================================================
+MIGUEL + CLAUDE - FRONTEND (trabajamos juntos)
+================================================================================
+
+BLOQUE 1 - VOZ EN EL BUSCADOR (SearchPage + MapPage)
+Tiempo estimado: 1.5 horas
+Archivo: frontend/src/pages/SearchPage.jsx
+
+Que es:
+  Un boton de microfono junto a los dropdowns de origen y destino.
+  El usuario habla el nombre de su comunidad en vez de escribirlo.
+  Usamos Web Speech API - completamente GRATIS, viene en todos los navegadores
+  modernos (Chrome Android, Safari iOS). No necesita backend, no necesita API key.
+
+Como funciona tecnico:
+  const recognition = new window.webkitSpeechRecognition() o SpeechRecognition
+  recognition.lang = idioma === 'nah' ? 'es-MX' : 'es-MX'
+  (Nahuatl no tiene soporte de voz nativo, pero es-MX captura palabras nahuatl
+  cuando el nombre de la comunidad es conocido)
+
+  recognition.onresult = (e) => {
+    const texto = e.results[0][0].transcript
+    // buscar la comunidad mas parecida con fuzzy match
+    const match = encontrarComunidadMasCercana(texto, comunidades)
+    setOrigen(match.nombre)
+  }
+
+El boton de microfono:
+  - Icono de microfono de lucide-react (Mic, MicOff)
+  - Azul (#1B3A6B) en reposo
+  - Animacion de pulso rojo cuando esta escuchando
+  - Mensaje de texto debajo: "Di el nombre de tu comunidad"
+  - Si no encuentra la comunidad: "No entendi, intenta de nuevo o elige del menu"
+
+Donde agregar:
+  SearchPage.jsx - junto al dropdown de origen y destino
+  MapPage.jsx - boton flotante en el mapa que activa busqueda por voz
+
+BLOQUE 2 - LECTURA EN VOZ ALTA (Text-to-Speech)
+Tiempo estimado: 1 hora
+Archivos: SearchPage.jsx, Landing.jsx
+
+Que es:
+  Cuando aparecen los resultados de rutas, un boton de altavoz lee
+  la informacion en voz alta. Para personas mayores o con baja vision.
+
+Como funciona:
+  const leer = (texto) => {
+    const utterance = new SpeechSynthesisUtterance(texto)
+    utterance.lang = 'es-MX'
+    utterance.rate = 0.85  // un poco mas lento para personas mayores
+    window.speechSynthesis.speak(utterance)
+  }
+
+  // Al aparecer un resultado de ruta:
+  leer(`Encontramos transporte de ${origen} a ${destino}.
+        El conductor es ${ruta.transportista}, sale a las ${ruta.horarios[0]},
+        el precio es ${ruta.precio} pesos por persona.`)
+
+Donde aparece:
+  - Boton de altavoz en cada RouteCard
+  - Icono Volume2 de lucide-react
+  - Tooltip: "Escuchar informacion de esta ruta"
+  - Al hacer clic: lee la informacion completa de la ruta en voz alta
+
+BLOQUE 3 - BUSQUEDA POR MAPA (sin escribir nada)
+Tiempo estimado: 2 horas
+Archivo: frontend/src/pages/MapPage.jsx
+
+Que es:
+  El flujo mas accesible de todos: el usuario toca su comunidad en el mapa,
+  luego toca la comunidad destino, y ve las rutas disponibles.
+  CERO escritura. CERO lectura de texto. Solo tocar el mapa.
+
+Como funciona (ya tenemos marcadores, hay que agregar el flujo):
+  Estado: seleccionMode = false | 'origen' | 'destino'
+
+  1. Boton grande en la parte baja del mapa: "Buscar mi ruta tocando el mapa"
+  2. Primer tap en un marcador = origen (marcador se pone azul con check)
+  3. Segundo tap en otro marcador = destino (marcador se pone verde con check)
+  4. Panel lateral aparece con rutas disponibles entre ambos puntos
+  5. Boton "Reservar" abre modal con solo campo de telefono
+
+  UI del flujo:
+  - Barra de instruccion en la parte superior del mapa:
+    Paso 1: "Toca donde estas TU" (icono persona)
+    Paso 2: "Toca a donde quieres IR" (icono flecha)
+    Paso 3: "Ve tus opciones" (icono bus)
+  - Los pasos tienen numeros grandes (1, 2, 3) para guiar incluso a quien
+    no lee bien
+
+BLOQUE 4 - SELECTOR DE IDIOMA EN NAVBAR
+Tiempo estimado: 1 hora
+Archivos: src/context/IdiomaContext.jsx (nuevo), src/components/Navbar.jsx,
+          src/data/traducciones.js (nuevo, espera datos de Sumayra)
+
+Que es:
+  Tres botones pequenos en el navbar: [ES] [NAH] [TOT]
+  Al seleccionar, toda la interfaz cambia al idioma elegido.
+
+Implementacion con React Context:
+  // IdiomaContext.jsx
+  export const IdiomaProvider = ({ children }) => {
+    const [idioma, setIdioma] = useState(
+      localStorage.getItem('chulavia_idioma') || 'es'
+    )
+    const t = (key) => traducciones[idioma]?.[key] ?? traducciones.es[key] ?? key
+    const cambiarIdioma = (lang) => {
+      setIdioma(lang)
+      localStorage.setItem('chulavia_idioma', lang)
+    }
+    return <IdiomaCtx.Provider value={{ idioma, cambiarIdioma, t }}>
+      {children}
+    </IdiomaCtx.Provider>
+  }
+
+En Navbar.jsx - agregar junto al logo:
+  <div style={{ display:'flex', gap:4, marginLeft:12 }}>
+    {['es','nah','tot'].map(lang => (
+      <button key={lang}
+        onClick={() => cambiarIdioma(lang)}
+        style={{
+          padding: '4px 8px', borderRadius: 6,
+          fontSize: 11, fontWeight: 700,
+          backgroundColor: idioma === lang ? '#F4C430' : 'transparent',
+          color: idioma === lang ? '#1B3A6B' : 'rgba(255,255,255,0.7)',
+          border: '1px solid rgba(255,255,255,0.2)',
+        }}
+      >
+        {lang === 'es' ? 'ES' : lang === 'nah' ? 'NAH' : 'TOT'}
+      </button>
+    ))}
+  </div>
+
+BLOQUE 5 - MODO ACCESIBLE (boton flotante)
+Tiempo estimado: 1 hora
+Archivo: src/App.jsx o componente nuevo AccesibleMode.jsx
+
+Que es:
+  Un boton flotante en la esquina inferior derecha de TODA la app.
+  Icono: accesibilidad o altavoz grande.
+  Al activar:
+  - Fuente aumenta a 20px en todo el sitio (agregar clase al body)
+  - Contraste aumenta (fondo blanco puro, texto muy oscuro)
+  - Los botones se hacen mas grandes (min-height 56px)
+  - Activa la lectura automatica de instrucciones al entrar a cada pagina
+
+  body.modo-accesible { font-size: 20px !important; }
+  body.modo-accesible button { min-height: 56px !important; }
+  body.modo-accesible .cv-hero h1 { font-size: 2.5rem !important; }
+
+Implementacion:
+  const [modoAccesible, setModoAccesible] = useState(false)
+  useEffect(() => {
+    document.body.classList.toggle('modo-accesible', modoAccesible)
+  }, [modoAccesible])
+
+Boton flotante:
+  position: fixed, bottom: 24px, right: 24px, zIndex: 999
+  width: 56px, height: 56px, borderRadius: '50%'
+  backgroundColor: '#1B3A6B', boxShadow grande
+  Icono Accessibility o Eye de lucide-react en amarillo
+
+BLOQUE 6 - MAPA: TIEMPO DE VIAJE + FOTO DEL CONDUCTOR
+Tiempo estimado: 1 hora
+Archivo: frontend/src/pages/MapPage.jsx
+
+Tiempo de viaje con formula Haversine (distancia en km / 45 km/h promedio rural):
+  function haversineKm(lat1, lon1, lat2, lon2) {
+    const R = 6371
+    const dLat = (lat2-lat1)*Math.PI/180
+    const dLon = (lon2-lon1)*Math.PI/180
+    const a = Math.sin(dLat/2)**2 +
+      Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+  }
+  function tiempoEst(origenNombre, destinoNombre) {
+    const o = comunidades.find(c => c.nombre===origenNombre)
+    const d = comunidades.find(c => c.nombre===destinoNombre)
+    if (!o || !d) return '~30 min'
+    const km = haversineKm(o.lat, o.lng, d.lat, d.lng)
+    const min = Math.round(km/45*60)
+    return min<60 ? `~${min} min` : `~${Math.floor(min/60)}h ${min%60}min`
+  }
+
+Mostrar en RouteCard del mapa:
+  - Icono Clock + "Tiempo estimado: 35 min"
+  - Icono Navigation + "28 km aprox"
+
+Foto / avatar del conductor en el panel lateral:
+  Si el transportista tiene foto: mostrar img circular 48px
+  Si no tiene foto: circulo azul con iniciales en amarillo
+  + nombre del conductor
+  + calificacion con estrella amarilla
+  + badge "Verificado" en verde
+  + boton de WhatsApp directo: wa.me/52[telefono]
+
+BLOQUE 7 - ACTUALIZAR comunidades.js CON DATOS DE MONICA
+Tiempo estimado: 30 minutos (cuando Monica entregue)
+Archivo: frontend/src/data/comunidades.js
+
+Cuando Monica entregue el JSON con 80+ comunidades:
+  1. Reemplazar el array comunidades[] con el nuevo array completo
+  2. Agregar campo 'region' y 'lengua' a la estructura
+  3. Actualizar el campo de filtro del mapa para filtrar por region
+  4. Dar el mismo JSON a Isabel para que actualice seed.py del backend
+
+BLOQUE 8 - PWA MANIFEST
+Tiempo estimado: 15 minutos
+Archivos: frontend/public/manifest.json, frontend/index.html
+
+manifest.json:
+  {
+    "name": "ChulaVia - Movilidad Rural Puebla",
+    "short_name": "ChulaVia",
+    "description": "Conecta tu comunidad con transporte verificado",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#1B3A6B",
+    "theme_color": "#1B3A6B",
+    "lang": "es-MX",
+    "icons": [
+      { "src": "/logo.png", "sizes": "192x192", "type": "image/png" },
+      { "src": "/logo.png", "sizes": "512x512", "type": "image/png" }
+    ]
+  }
+
+En index.html, dentro de <head>:
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1B3A6B">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ChulaVia">
+
+Resultado: en Android Chrome aparece banner "Instalar ChulaVia".
+Los jueces lo ven. Es un punto de innovacion visible.
+
+BLOQUE 9 - MERGE BACKEND DE ISABEL + DEPLOY FINAL
+Tiempo estimado: 20 minutos (~9am domingo)
+Cuando Isabel haga push de devIsa con los bugs corregidos:
+  git checkout main
+  git checkout origin/devIsa -- api/views.py
+  git checkout origin/devIsa -- api/serializers.py
+  git checkout origin/devIsa -- backend/urls.py
+  git checkout origin/devIsa -- requirements.txt
+  git add -A
+  git commit -m "feat: merge backend fixes + photo compression + WhatsApp bot with languages"
+  # Luego push en GitHub Desktop -> Vercel redeploya automatico
+
+================================================================================
+ISABEL - BACKEND
+================================================================================
+
+TAREA 1 - CORREGIR 2 BUGS CRITICOS (hacer primero, antes de las 2am)
+
+Bug 1: MessagingResponse importado dos veces en api/views.py
+  Eliminar la segunda importacion (la que esta a la mitad del archivo,
+  despues de la funcion analytics_rutas_populares).
+  Solo debe quedar: from twilio.twiml.messaging_response import MessagingResponse
+  al inicio del archivo.
+
+Bug 2: TransportistaCreate sin serializer_class (causa HTTP 500 en produccion)
+  En api/serializers.py, agregar:
+
+  class TransportistaSerializer(serializers.ModelSerializer):
+      class Meta:
+          model = Transportista
+          exclude = ['ine_ultimos_4']
+
+  En api/views.py, cambiar:
+
+  class TransportistaCreate(generics.CreateAPIView):
+      queryset = Transportista.objects.all()
+      serializer_class = TransportistaSerializer  # <- agregar esta linea
+
+  Y agregar el import al inicio de views.py:
+  from .serializers import TransportistaSerializer
+
+Despues de corregir: push a devIsa y avisar a Miguel.
+
+TAREA 2 - WHATSAPP BOT CON SELECCION DE IDIOMA
+
+El bot actual responde solo en espanol y tiene respuestas hardcodeadas.
+Mejorar en dos fases:
+
+FASE A - Seleccion de idioma al inicio:
+  Cuando usuario escribe "hola" o "inicio":
+
+  Bot responde:
+  "Bienvenido a ChulaVia
+  Bienvenido / Tlen kipia ChulaVia (Nahuatl)
+  Latamat ChulaVia (Totonaco)
+
+  Elige tu idioma / Xitlali motlahtol:
+  1. Espanol
+  2. Nahuatl
+  3. Totonaco"
+
+  Guardar en CONVERSACIONES[numero]['idioma'] = 'es' | 'nah' | 'tot'
+
+FASE B - Respuestas en el idioma elegido:
+  Crear un diccionario de respuestas del bot por idioma.
+
+  MENSAJES_BOT = {
+    'es': {
+      'pedir_origen': "De donde sales? Escribe el nombre de tu comunidad.",
+      'pedir_destino': "A donde vas? Escribe la comunidad destino.",
+      'sin_ruta': "No tenemos ruta todavia. Registramos tu solicitud.",
+      'confirmado': "Reservacion confirmada! El conductor te espera.",
+    },
+    'nah': {
+      'pedir_origen': "Canin tihuitz? Xihtoa itoca in moaltepetl.",
+      'pedir_destino': "Canin tiyas? Xihtoa itoca in altepetl.",
+      'sin_ruta': "Amo ticcaqui ohtli. Ticpia motequitl.",
+      'confirmado': "Moneltilti! In tlacatl mochixtoc.",
+    },
+    'tot': {
+      'pedir_origen': "Ta tajiniko? Quilhtamakga latamat in tachiwinti.",
+      'pedir_destino': "Nakan nakin? Quilhtamakga latamat.",
+      'sin_ruta': "Kiwini xakgni latamat. Titsikgni takgtum.",
+      'confirmado': "Latamat tanki! In kgili mochixtoc.",
+    }
+  }
+
+  Las traducciones exactas las entrega Sumayra antes de las 6am.
+  Si Sumayra no llega a tiempo: implementar con espanol y agregar nota
+  "Traduccion proxima" - el mecanismo ya funciona.
+
+FASE C - Aceptar mensajes de voz (opcional, si alcanza el tiempo):
+  Twilio envia MediaUrl cuando el usuario manda un audio en WhatsApp.
+  La ruta simple para el hackathon:
+
+  media_url = request.POST.get('MediaUrl0')
+  if media_url:
+      msg.body("Recibimos tu mensaje de voz. Por ahora escribe el nombre "
+               "de tu comunidad. Pronto podremos entenderte por voz.")
+
+  Esto reconoce que el usuario mando voz y responde amablemente, sin crash.
+  La transcripcion real (Whisper) es fase 3 post-hackathon.
+
+TAREA 3 - ENDPOINT DE COMUNIDADES MEJORADO
+Cuando Monica entregue los datos de 80+ comunidades, Isabel actualiza seed.py
+con el nuevo array y hace redeploy (Railway corre seed.py automaticamente).
+
+================================================================================
+MONICA - INVESTIGACION Y DATOS DEL MAPA
+================================================================================
+
+OBJETIVO: Entregar 2 archivos antes de las 6am del domingo.
+  - comunidades_puebla.json (80+ comunidades)
+  - traducciones_parciales.txt (frases clave en nahuatl y totonaco)
+
+================================================================================
+TAREA 1 - 80 COMUNIDADES DE TODO PUEBLA
+================================================================================
+
+FORMATO EXACTO que Miguel necesita para importar (no cambiar los nombres
+de los campos, son exactamente estos):
+
+[
+  {
+    "id": 16,
+    "nombre": "Cuetzalan del Progreso",
+    "municipio": "Cuetzalan",
+    "region": "Sierra Norte",
+    "lat": 20.0261,
+    "lng": -97.5226,
+    "poblacion": 5800,
+    "tieneTransporte": false,
+    "lengua": "Nahuatl",
+    "referencia": "Pueblo magico cerca del Tajin, iglesia colonial"
+  }
+]
+
+El campo "referencia" es MUY IMPORTANTE para el problema de ubicacion:
+  Es como describir el lugar con palabras que la gente usa.
+  Ejemplos:
+  - "referencia": "Junto a la cascada de Cuetzalan, mercado de los domingos"
+  - "referencia": "Cerca del cerro Xinocuautla, iglesia de San Pedro"
+  - "referencia": "A 3 km de la carretera a Tehuacan"
+  Esto ayuda a usuarios que no saben el nombre oficial pero si el lugar.
+
+DONDE CONSEGUIR LAS COORDENADAS:
+
+Opcion 1 (mas rapido): Google Maps
+  - Buscar el nombre de la comunidad en Google Maps
+  - Clic derecho en el pin -> primera opcion son las coordenadas (lat, lng)
+  - Copiar y pegar
+
+Opcion 2: INEGI AGEEML
+  URL: https://www.inegi.org.mx/app/ageeml/
+  - Seleccionar Entidad: Puebla
+  - Seleccionar Municipio (ir uno por uno para las zonas clave)
+  - La tabla muestra latitud, longitud, nombre oficial
+  - Exportar como CSV
+
+Opcion 3: Wikipedia
+  - Buscar "[nombre comunidad] Puebla" en Wikipedia
+  - La info box de la derecha tiene latitud/longitud
+
+REGIONES Y COMUNIDADES A CUBRIR:
+
+Las que ya tenemos (Mixteca - NO buscar estas, ya estan):
+  Tehuitzingo, Acatlan de Osorio, Chiautla de Tapia, Izucar de Matamoros,
+  Coatzingo, Piaxtla, Xayacatlan de Bravo, San Pablo Anicano,
+  San Jeronimo Xayacatlan, Santa Ana Coatlichan, Chietla, Tilapa,
+  San Pablo Ahuatempan, Huehuetlan el Grande, Tulcingo del Valle
+
+REGION 1: SIERRA NORTE / TOTONACAPAN (15 comunidades, lengua: Totonaco/Nahuatl)
+  Municipios a cubrir: Cuetzalan, Zacapoaxtla, Huehuetla, Pantepec,
+  Jopala, Olintla, Jonotla, Tuzamapan de Galeana, Tepango de Rodriguez,
+  San Felipe Tepatlan, Ixtepec, Tlapacoya, Naupan, Pahuatlan, Honey
+
+  Comunidades especificas a buscar:
+  - Cuetzalan del Progreso (centro, tiene transporte pero poco)
+  - San Andres Tzicuilan (sin transporte, Totonaco)
+  - Reyeshogpan de Hidalgo (sin transporte)
+  - Xiloxochico de Rafael Avila Camacho (sin transporte)
+  - Tepango de Rodriguez (sin transporte)
+  - Huehuetla (cabecera, algo de transporte)
+  - San Pablito Pahuatlan (sin transporte, famoso por amate)
+  - Jopala (sin transporte)
+  - Olintla (sin transporte)
+  - Jonotla (sin transporte)
+  - Tuzamapan de Galeana (algo de transporte)
+  - Naupan (sin transporte)
+  - Honey (sin transporte)
+  - Tenampulco (sin transporte)
+  - Ayotoxco de Guerrero (sin transporte)
+
+REGION 2: TEHUACAN - SIERRA NEGRA (12 comunidades, lengua: Nahuatl/Popoloca)
+  (Monica ya tiene algunos de su data.json, revisar cuales faltan)
+  Municipios: Tehuacan, San Gabriel Chilac, Coxcatlan, Ajalpan, Altepexi,
+  Zinacatepec, Atzitzintla, Tlacotepec, Coyomeapan, Zoquitlan
+
+  Comunidades a buscar:
+  - San Juan Ixcaquixtla (sin transporte)
+  - San Marcos Tlacoyalco (sin transporte, Popoloca)
+  - San Pedro Yeloixtlahuaca (sin transporte, Nahuatl)
+  - Magdalena Yodocono (sin transporte)
+  - San Isidro Gallinero (sin transporte)
+  - Santiago Nopala (sin transporte)
+  - Coyomeapan (sin transporte)
+  - Zoquitlan (sin transporte)
+  - Vicente Guerrero (sin transporte)
+  - San Luis Atolotitlan (sin transporte)
+  - Eloxochitlan (sin transporte)
+  - San Sebastian Tlacotepec (sin transporte)
+
+REGION 3: HUASTECA POBLANA (8 comunidades, lengua: Nahuatl/Totonaco)
+  Municipios: Hueytamalco, Ayotoxco, Tlatlauquitepec, Zautla,
+  Teteles de Avila Castillo, Chignautla
+
+  Comunidades a buscar:
+  - Hueytamalco (algo de transporte)
+  - Tlatlauquitepec (algo de transporte)
+  - Zautla (sin transporte)
+  - Teteles de Avila Castillo (sin transporte)
+  - Chignautla (sin transporte)
+  - Ixtacamaxtitlan (sin transporte)
+  - Tetela de Ocampo (algo de transporte)
+  - Xochiapulco (sin transporte)
+
+REGION 4: SIERRA NORTE ALTA (10 comunidades, lengua: Nahuatl)
+  Municipios: Zacatlan, Chignahuapan, Aquixtla, Tetela de Ocampo,
+  Ixtacamaxtitlan, Zacapoaxtla, Tlatlauquitepec
+
+  Comunidades:
+  - Zacatlan (tiene transporte)
+  - Chignahuapan (tiene transporte)
+  - Aquixtla (sin transporte)
+  - San Juan Xiutetelco (sin transporte)
+  - Tlaxco (sin transporte)
+  - Huapalcalco (sin transporte)
+  - Amixtlan (sin transporte)
+  - Tlapacoya (sin transporte)
+  - Chiconcuautla (sin transporte)
+  - Hermenegildo Galeana (sin transporte)
+
+REGION 5: MIXTECA AMPLIADA (10 mas, lengua: Mixteco/Nahuatl)
+  Buscar 10 comunidades mas de los municipios de:
+  Chinantla, Petlalcingo, Chila de la Sal, San Pedro Yeloixtlahuaca,
+  Ahuehuetitla, Chietla (mas comunidades del municipio)
+
+TOTAL OBJETIVO: 85 comunidades (15 que tenemos + 70 nuevas)
+
+DATOS DE LENGUAS POR REGION:
+  Usar "lengua" como el idioma predominante de esa comunidad:
+  - Sierra Norte/Totonacapan -> "Totonaco"
+  - Huasteca -> "Nahuatl"
+  - Mixteca -> "Mixteco" o "Nahuatl"
+  - Tehuacan-Sierra Negra -> "Nahuatl" o "Popoloca"
+  - Chignautla/Zacapoaxtla -> "Nahuatl"
+
+FUENTE para lenguas por municipio:
+  INALI (inali.gob.mx) -> Catalogo de Lenguas -> filtrar por Puebla
+  Wikipedia: buscar "[municipio] Puebla" -> seccion de lenguas
+
+================================================================================
+TAREA 2 - TRADUCCIONES EN NAHUATL Y TOTONACO
+================================================================================
+
+Estas frases son las que aparecen en la app. Consigue la traduccion de CADA
+frase en Nahuatl y Totonaco. Entrega en el formato .txt o .json que quieras,
+Miguel lo convierte.
+
+FRASES A TRADUCIR (espanol -> nahuatl -> totonaco):
+
+NAVEGACION:
+  "Buscar transporte" -> ? -> ?
+  "Ver mapa" -> ? -> ?
+  "Panel gobierno" -> ? -> ?
+  "Soy transportista" -> ? -> ?
+
+BUSQUEDA:
+  "Origen" -> ? -> ?
+  "Destino" -> ? -> ?
+  "De donde sales?" -> ? -> ?
+  "A donde vas?" -> ? -> ?
+  "Buscar" -> ? -> ?
+  "Di el nombre de tu comunidad" -> ? -> ?
+
+RESULTADOS:
+  "Transportista verificado" -> ? -> ?
+  "Calificacion" -> ? -> ?
+  "Precio por persona" -> ? -> ?
+  "Horarios" -> ? -> ?
+  "Dias de servicio" -> ? -> ?
+  "Reservar viaje" -> ? -> ?
+  "Tiempo estimado" -> ? -> ?
+
+HERO LANDING:
+  "Conecta tu comunidad" -> ? -> ?
+  "Muevete con confianza" -> ? -> ?
+  "Buscar transporte ahora" -> ? -> ?
+
+MAPA:
+  "Con cobertura" -> ? -> ?
+  "Sin cobertura" -> ? -> ?
+  "Toca donde estas tu" -> ? -> ?
+  "Toca a donde quieres ir" -> ? -> ?
+
+GENERAL:
+  "Bienvenido" -> ? -> ?
+  "Gratis" -> ? -> ?
+  "Verificado" -> ? -> ?
+  "Comunidades conectadas" -> ? -> ?
+  "Sin transporte formal" -> ? -> ?
+
+FUENTES PARA TRADUCIR:
+  1. INALI: inali.gob.mx -> Recursos -> Diccionarios
+  2. Google "diccionario nahuatl espanol en linea" -> varios sitios
+  3. "Vocabulario nahuatl basico" en YouTube (canales educativos)
+  4. Para Totonaco: buscar "vocabulario totonaco puebla"
+  5. Si tienes contacto con alguien de las comunidades: pregunta directo
+  6. ChatGPT sabe algunas frases en nahuatl (verificar que suenen bien)
+
+NOTA IMPORTANTE: No importa si la traduccion no es perfecta academicamente.
+Lo que importa es que el esfuerzo sea visible para los jueces. Mostrar que
+ChulaVia piensa en las personas de las comunidades como usuarios reales.
+
+================================================================================
+SUMAYRA - PITCH + VIDEO
+================================================================================
+
+TAREA 1 - APOYAR A MONICA CON TRADUCCIONES (primeras 3 horas)
+  Monica necesita apoyo para las 80 comunidades. Dividirse las regiones:
+  Monica -> Mixteca + Sierra Negra + Tehuacan (regiones del sur)
+  Sumayra -> Sierra Norte + Totonacapan + Huasteca (regiones del norte)
+
+  Ambas buscan en INEGI AGEEML y Google Maps.
+
+TAREA 2 - GUION DEFINITIVO DEL PITCH (5 minutos exactos)
+  Cronometrar cada seccion. Practicar con el celular/computadora mostrando
+  la app EN VIVO. No slideshows solos - demo en vivo.
+
+  [0:00-0:30] GANCHO
+  "La Auditoria Superior de la Federacion reporto que el gobierno no sabe
+  cuantas comunidades rurales estan desconectadas. Hoy tenemos esos datos
+  y la solucion. Esto es ChulaVia."
+  [Mostrar: Landing page con stats 6,082 localidades]
+
+  [0:30-1:30] EL PROBLEMA (mostrar /mapa)
+  - Abrir el mapa en proyector
+  - "Los puntos rojos son comunidades sin transporte formal. En la Sierra Norte,
+    el Totonaco es la lengua materna. En la Mixteca, el Nahuatl. Estas personas
+    no solo no tienen transporte: la app que podria ayudarlas no les habla."
+  - Activar el idioma Nahuatl en la app -> mostrar la interfaz traducida
+  - "ChulaVia habla en su idioma."
+
+  [1:30-2:30] LA SOLUCION (mostrar /buscar con voz)
+  - "Una abuela de Cuetzalan no sabe escribir. Hace esto:"
+  - [Demo en vivo]: hacer clic en el microfono, hablar "Cuetzalan"
+  - La app lo entiende y llena el campo
+  - "Sin leer, sin escribir, solo hablando."
+  - Mostrar resultados de ruta con tiempo de viaje, foto del conductor
+  - Clic en "Reservar" -> confirmacion
+
+  [2:30-3:00] WHATSAPP (mostrar bot en telefono)
+  - "Para quien no tiene ni datos para abrir la app, solo WhatsApp:"
+  - Enviar "hola" al bot, mostrar la respuesta con seleccion de idioma
+  - Elegir Nahuatl, mostrar la busqueda de ruta
+  - "Funciona con 2G. En cualquier telefono viejo."
+
+  [3:00-3:30] GOBIERNO (mostrar /gobierno)
+  - "Por primera vez, el gobierno ve donde hay demanda sin oferta."
+  - Mostrar el dashboard con graficas
+  - "Esto alimenta el Plan Maestro que el PED 4.3.1.4 requiere construir."
+
+  [3:30-4:00] ALINEACION CON PED
+  "Lineas 4.3.1.1: reordenar transporte informal. 4.3.1.4: instrumentos
+  origen-destino. Eje transversal: atencion a pueblos indigenas. ChulaVia
+  implementa las tres. Hoy. Funcionando."
+
+  [4:00-4:30] IMPACTO
+  "6,082 localidades rurales. 86 municipios con alta marginacion.
+  8 lenguas originarias. El 90% de su transporte es informal.
+  ChulaVia los conecta. En su idioma. Sin dejar a nadie atras."
+
+  [4:30-5:00] CIERRE
+  "ChulaVia. La primera plataforma de movilidad rural que habla Nahuatl,
+  Totonaco y Espanol. Porque moverse en Puebla es un derecho, no un privilegio.
+  Gracias."
+
+TAREA 3 - VIDEO DE FONDO PARA EL PITCH
+  Grabar (screenrecording del celular):
+  - La app abierta en el mapa con muchos puntos (pedir a Miguel cuando suba
+    las 80+ comunidades, aproximadamente a las 7am)
+  - El selector de idioma cambiando de ES a NAH -> la interfaz se transforma
+  - El microfono de voz en accion
+  - El bot de WhatsApp respondiendo en Nahuatl
+  - Paisajes de Puebla rural de Pexels/Unsplash (buscar: "sierra norte puebla",
+    "comunidad indigena mexico", "totonacapan puebla")
+  Duracion: 5 minutos con musica de fondo suave (instrumental, sin copyright)
+  Herramienta: CapCut (gratis en telefono) o Canva Pro (video)
+
+================================================================================
+TIMELINE CONSOLIDADO - ULTIMAS 13 HORAS
+================================================================================
+
+HORA     MIGUEL+CLAUDE          ISABEL                MONICA+SUMAYRA
+------   ----------------       ----------------      ----------------
+11pm     Tiempo de viaje        Fix Bug 1 y 2         Empezar Sierra Norte
+         en mapa popup          en devIsa             en INEGI AGEEML
+
+12am     Foto conductor         WhatsApp bot          Continuar Sierra Norte
+         en panel mapa          idioma ES/NAH/TOT     + Totonacapan (15 com)
+
+1am      Flujo buscar           Bot completo          Tehuacan-Sierra Negra
+         por mapa tap           + push devIsa         (12 comunidades)
+
+2am      Botones de voz         Verificar endpoints   Huasteca + Sierra Alta
+         en SearchPage          POST /transportistas  (18 comunidades)
+
+3am      Text-to-speech         Descanso              Traducciones NAH/TOT
+         en RouteCards
+
+4am      Descanso               Descanso              Traducciones + revisar
+                                                      80 comunidades listas
+
+5am      Selector idioma        Descanso              Entregar JSON a Miguel
+         en Navbar (espera                            comunidades + traducciones
+         datos de Sumayra)
+
+6am      Importar datos         Actualizar seed.py    Video del pitch
+         Monica a comunidades.js con 80 comunidades
+         Modo accesible
+
+7am      PWA manifest           Redeploy Railway      Ensayo pitch con
+         + index.html           con datos nuevos      cronometro
+
+8am      Merge devIsa           Done                  Segundo ensayo
+         (cherry-pick 4 files)
+
+9am      Deploy final           Verificar produccion  Tercer ensayo pitch
+
+10am     Testing movil          Done                  Ajustes finales
+         Verificar todo OK
+
+11am     Ultimo commit          Done                  Preparar material
+         + push + Vercel                              para la presentacion
+
+12pm     DEADLINE - PRESENTACION
+
+================================================================================
+DEFINICION DE EXITO PARA CADA ENTREGABLE
+================================================================================
+
+MAPA:
+  [ ] Mas de 50 comunidades visibles en el estado de Puebla
+  [ ] Puntos verdes y rojos correctamente clasificados
+  [ ] Al tocar un punto: aparece panel con nombre, poblacion, lengua originaria
+  [ ] Al tocar dos puntos consecutivos: aparecen rutas disponibles
+  [ ] Tiempo estimado de viaje en cada ruta
+  [ ] Foto/avatar del conductor en el panel de ruta
+
+IDIOMAS:
+  [ ] Boton ES/NAH/TOT visible en navbar
+  [ ] Al cambiar idioma: textos principales se traducen
+  [ ] Traduccion persiste si cierras y abres la app (localStorage)
+
+VOZ:
+  [ ] Boton de microfono en SearchPage
+  [ ] Al hacer clic: pide permiso de microfono
+  [ ] Al hablar: el campo de origen se llena automaticamente
+  [ ] Si no entiende: mensaje amable pidiendo intentar de nuevo
+  [ ] Boton de altavoz en RouteCard lee la ruta en voz alta
+
+ACCESIBILIDAD:
+  [ ] Boton flotante para modo accesible (letra grande, contraste alto)
+  [ ] Todas las imagenes tienen alt text
+  [ ] Todos los botones tienen aria-label
+
+PWA:
+  [ ] manifest.json en /public
+  [ ] Chrome en Android muestra "Instalar ChulaVia"
+  [ ] theme-color azul ChulaVia en la barra del navegador
+
+WHATSAPP BOT:
+  [ ] Funciona: hola -> seleccion idioma -> origen -> destino -> rutas -> confirmar
+  [ ] Responde en espanol, nahuatl y totonaco
+  [ ] Si no hay ruta: registra la solicitud y avisa al usuario
+
+PITCH:
+  [ ] 5 minutos exactos (cronometrado 3 veces)
+  [ ] Demo en vivo funciona sin errores
+  [ ] Se menciona el PED con numeros de linea de accion
+  [ ] Se muestra el mapa con 80+ comunidades
+  [ ] Se muestra el selector de idioma (NAH)
+  [ ] Se demuestra la busqueda por voz
+
+================================================================================
+NOTAS PARA EL DIA DE LA PRESENTACION
+================================================================================
+
+1. DATOS EN PRODUCCION: Isabel tiene que verificar que el backend de Railway
+   tiene los 80+ comunidades cargados ANTES de las 16:00 del domingo.
+
+2. WHATSAPP DEMO: Miguel usa SU telefono para mostrar el bot. Escribir "hola"
+   al sandbox antes de que empiecen para que la sesion este activa.
+
+3. INTERNET EN EL LUGAR: Llevar datos moviles de respaldo. El WiFi del evento
+   puede fallar. La app debe funcionar con datos de 4G.
+
+4. PANTALLA COMPARTIDA: Abrir la app de Vercel en el navegador del laptop
+   (no en el movil) para que el proyector la muestre grande. Tener el movil
+   a la mano solo para el demo de WhatsApp.
+
+5. FRASE CLAVE PARA LOS JUECES:
+   "El PED establece en 4.3.1.4 que se necesitan instrumentos para trazar
+   rutas origen-destino y desarrollar el Plan Maestro de Movilidad. El eje
+   transversal pide atencion a pueblos indigenas. ChulaVia implementa AMBAS
+   cosas hoy, funcionando, en Nahuatl y Totonaco."
+
+6. SI PREGUNTAN POR LA VOZ: "Usamos Web Speech API que viene integrada en
+   todos los navegadores modernos. Cero costo adicional, funciona sin conexion
+   a servidores de terceros."
+
+7. SI PREGUNTAN POR ESCALABILIDAD: "La misma arquitectura cubre los 217
+   municipios de Puebla. Railway y Supabase escalan automaticamente.
+   El modelo de datos ya soporta cualquier numero de comunidades."
+
+================================================================================
+FIN DEL PLAN FASE 2 - CHULAVIA
+Generado: 25 de abril 2026
+Proxima actualizacion: cuando Monica entregue los datos del mapa
+================================================================================
