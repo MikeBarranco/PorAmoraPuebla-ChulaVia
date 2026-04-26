@@ -87,9 +87,9 @@ function Counter({ to, suffix = '' }) {
 
 /* ── Data ── */
 const STATS = [
-  { to: 15,  suffix: '',  label: 'Comunidades conectadas',  icon: MapPin  },
-  { to: 5,   suffix: '',  label: 'Transportistas verificados', icon: Shield },
-  { to: 234, suffix: '+', label: 'Viajes realizados',        icon: Route   },
+  { to: 6082, suffix: '',  label: 'Localidades rurales en Puebla',       icon: MapPin  },
+  { to: 86,   suffix: '',  label: 'Municipios con alta marginacion',      icon: Shield  },
+  { to: 90,   suffix: '%', label: 'Transporte informal en zonas rurales', icon: Route   },
 ]
 
 const STEPS = [
@@ -255,6 +255,9 @@ export default function Landing() {
             </div>
           ))}
         </div>
+        <p style={{ textAlign: 'center', fontSize: 11, color: '#9ca3af', marginTop: 16 }}>
+          Fuente: INEGI Censo 2020 · CONAPO Indices de Marginacion 2020 · Instituto Mexicano del Transporte
+        </p>
       </section>
 
       {/* ══ COMO FUNCIONA ══ */}
