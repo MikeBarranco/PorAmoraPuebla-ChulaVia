@@ -119,25 +119,10 @@ function Counter({ to, suffix = '' }) {
   return <span ref={ref}>{n}{suffix}</span>
 }
 
-/* ── Data ── */
-const STATS = [
-  { to: 6082, suffix: '',  label: 'Localidades rurales en Puebla',       icon: MapPin  },
-  { to: 86,   suffix: '',  label: 'Municipios con alta marginacion',      icon: Shield  },
-  { to: 90,   suffix: '%', label: 'Transporte informal en zonas rurales', icon: Route   },
-]
-
-const STEPS = [
-  { n: '01', icon: Search,        title: 'Busca tu ruta',         desc: 'Escribe de donde sales y a donde vas. Encontramos los transportistas disponibles cerca de ti.' },
-  { n: '02', icon: Shield,        title: 'Elige con confianza',   desc: 'Ve horarios, precios y calificaciones de transportistas verificados por tu propia comunidad.' },
-  { n: '03', icon: MessageCircle, title: 'Confirma por WhatsApp', desc: 'Sin app que instalar. Solo WhatsApp. Funciona con cualquier telefono y conexion basica.' },
-]
-
-const REASONS = [
-  { icon: Shield,        title: 'Transportistas verificados', desc: 'INE confirmado, placa registrada y calificaciones reales de pasajeros.' },
-  { icon: MessageCircle, title: 'Solo necesitas WhatsApp',    desc: 'Funciona con 2G. Sin smartphone caro ni internet rapido.' },
-  { icon: BarChart2,     title: 'Datos para el gobierno',     desc: 'Primera base de datos de movilidad rural de Puebla.' },
-  { icon: Users,         title: 'Hecho para comunidades',     desc: 'Para zonas donde el transporte formal no llega.' },
-]
+/* ── Iconos fijos (no cambian con idioma) ── */
+const STATS_ICONS = [MapPin, Shield, Route]
+const STEPS_ICONS = [Search, Shield, MessageCircle]
+const REASONS_ICONS = [Shield, MessageCircle, BarChart2, Users]
 
 const TEAM = [
   { nombre: 'Miguel Barranco', rol: 'Frontend & UX',        tech: 'React · Leaflet · Vite',          foto: '/equipo/Miguel-Barranco.jpeg',  iniciales: 'MB' },
@@ -212,6 +197,23 @@ export default function Landing() {
   const [stepsRef, stepsOn] = useFade()
   const [whyRef,   whyOn]   = useFade()
   const heroRef = useRef(null)
+
+  const STATS = [
+    { to: 6082, suffix: '',  label: t('estadisticas','stat1'), icon: STATS_ICONS[0] },
+    { to: 86,   suffix: '',  label: t('estadisticas','stat2'), icon: STATS_ICONS[1] },
+    { to: 90,   suffix: '%', label: t('estadisticas','stat3'), icon: STATS_ICONS[2] },
+  ]
+  const STEPS = [
+    { n: '01', icon: STEPS_ICONS[0], title: t('como_funciona','paso1_titulo'), desc: t('como_funciona','paso1_desc') },
+    { n: '02', icon: STEPS_ICONS[1], title: t('como_funciona','paso2_titulo'), desc: t('como_funciona','paso2_desc') },
+    { n: '03', icon: STEPS_ICONS[2], title: t('como_funciona','paso3_titulo'), desc: t('como_funciona','paso3_desc') },
+  ]
+  const REASONS = [
+    { icon: REASONS_ICONS[0], title: t('razones','r1_titulo'), desc: t('razones','r1_desc') },
+    { icon: REASONS_ICONS[1], title: t('razones','r2_titulo'), desc: t('razones','r2_desc') },
+    { icon: REASONS_ICONS[2], title: t('razones','r3_titulo'), desc: t('razones','r3_desc') },
+    { icon: REASONS_ICONS[3], title: t('razones','r4_titulo'), desc: t('razones','r4_desc') },
+  ]
 
   const handleMouseMove = (e) => {
     if (!heroRef.current) return
@@ -620,7 +622,7 @@ export default function Landing() {
             <Users size={28} color="#1B3A6B" aria-hidden="true" />
           </div>
           <h2 style={{ fontSize: 'clamp(1.7rem,3vw,2.3rem)', fontWeight: 800, margin: '0 0 16px', letterSpacing: '-0.02em' }}>
-            {t('navegacion','soy_transportista')} · {t('general','gratis')}
+            {t('navegacion','soy_transportista')}
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.68)', fontSize: 16, lineHeight: 1.72, margin: '0 0 40px' }}>
             Llega a mas pasajeros, optimiza tus rutas y forma parte de la primera

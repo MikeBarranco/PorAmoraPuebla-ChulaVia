@@ -59,15 +59,17 @@ export default function WhatsAppDemo() {
     }
   }, [lang])
 
+
+  const idiomaActivo = CONVERSACIONES[lang] ? lang : 'es'
+
   function reiniciar() {
-    const id = CONVERSACIONES[lang] ? lang : 'es'
-    setVisible([CONVERSACIONES[id][0]])
+    setVisible([CONVERSACIONES[idiomaActivo][0]])
     setStep(0)
     setTyping(false)
   }
 
   function advance() {
-    const pasos = CONVERSACIONES[idioma]
+    const pasos = CONVERSACIONES[idiomaActivo]
     const nextUser = pasos[step + 1]
     if (!nextUser) return
     setVisible(v => [...v, nextUser])
@@ -80,11 +82,9 @@ export default function WhatsAppDemo() {
     }, 900)
   }
 
-  const idiomaActivo = CONVERSACIONES[lang] ? lang : 'es'
   const pasos    = CONVERSACIONES[idiomaActivo]
   const nextUser = pasos[step + 1]
   const finished = !nextUser
-
   const idiomaLabel = IDIOMAS.find(i => i.id === idiomaActivo)?.label ?? 'Español'
 
   return (

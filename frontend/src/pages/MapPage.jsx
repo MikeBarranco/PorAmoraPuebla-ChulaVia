@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { MapPin, AlertCircle, CheckCircle, X, Navigation } from 'lucide-react'
 import { comunidades, rutas } from '../data/comunidades'
+import comunidadesMapa from '../data/comunidades_mapa.json'
 import { useT } from '../context/LangContext.jsx'
 
-/* leaflet se importa dinamicamente para evitar errores de SSR */
 let L = null
 
 const BLUE   = '#1B3A6B'
@@ -11,27 +11,45 @@ const YELLOW = '#F4C430'
 const RED    = '#C1440E'
 const GREEN  = '#2A6049'
 
+/* Foto por nombre de comunidad (seed communities de Sumayra) */
+const FOTOS = {
+  'Tehuitzingo':          '/zonas/Tehuitzingo.png',
+  'Acatlan de Osorio':    '/zonas/Acatlan_de_Osorio.png',
+  'Chiautla de Tapia':    '/zonas/Chiautla_de_Tapia.png',
+  'Izucar de Matamoros':  '/zonas/Izucar_de_Matamoros.jpeg',
+  'Coatzingo':            '/zonas/Coatzingo.jpg',
+  'Piaxtla':              '/zonas/Piaxtla.png',
+  'Xayacatlan de Bravo':  '/zonas/Xayacatlan_de_Bravo.png',
+  'San Pablo Anicano':    '/zonas/San_Pablo_Anicano.png',
+  'Huehuetlan el Grande': '/zonas/Huehuetlan_el_Grande.png',
+  'Tulcingo del Valle':   '/zonas/Tulcingo.png',
+}
+
 function createIcon(color) {
   if (!L) return null
   const svg = `
-    <svg width="32" height="40" viewBox="0 0 32 40" xmlns="http://www.w3.org/2000/svg">
+    <svg width="28" height="36" viewBox="0 0 32 40" xmlns="http://www.w3.org/2000/svg">
       <path d="M16 0C7.163 0 0 7.163 0 16c0 10 16 24 16 24s16-14 16-24C32 7.163 24.837 0 16 0z"
         fill="${color}" stroke="white" stroke-width="2"/>
       <circle cx="16" cy="16" r="6" fill="white"/>
     </svg>`
   return L.divIcon({
     html: svg,
-    iconSize: [32, 40],
-    iconAnchor: [16, 40],
-    popupAnchor: [0, -42],
+    iconSize: [28, 36],
+    iconAnchor: [14, 36],
+    popupAnchor: [0, -38],
     className: '',
   })
 }
+
+const sinCobertura = comunidadesMapa.filter(c => !c.tieneTransporte).length
+const conCobertura = comunidadesMapa.filter(c =>  c.tieneTransporte).length
 
 export default function MapPage() {
   const t = useT()
   const mapRef   = useRef(null)
   const mapObj   = useRef(null)
+  const layersRef = useRef({ todos: [], con: [], sin: [] })
   const [selected, setSelected] = useState(null)
   const [filter, setFilter]     = useState('todas')
   const [loaded, setLoaded]     = useState(false)
@@ -46,8 +64,8 @@ export default function MapPage() {
       if (!mounted || !mapRef.current) return
 
       const map = L.map(mapRef.current, {
-        center: [18.28, -98.25],
-        zoom: 10,
+        center: [18.5, -97.8],
+        zoom: 8,
         zoomControl: false,
       })
 
@@ -58,44 +76,62 @@ export default function MapPage() {
         maxZoom: 18,
       }).addTo(map)
 
+      /* ── Nombres de seed communities para lookup rápido ── */
+      const seedNombres = new Set(comunidades.map(c => c.nombre))
+
+      /* ── Todas las comunidades del JSON (691) como circle markers uniformes ── */
+      comunidadesMapa.forEach(c => {
+        const color = c.tieneTransporte ? GREEN : RED
+        const esSeed = seedNombres.has(c.nombre)
+        const circle = L.circleMarker([c.lat, c.lng], {
+          radius:      esSeed ? 8 : 5,
+          fillColor:   color,
+          color:       'white',
+          weight:      esSeed ? 2 : 1,
+          fillOpacity: esSeed ? 0.95 : 0.75,
+        }).bindTooltip(`<strong>${c.nombre}</strong><br>${c.municipio}`, {
+          sticky: true,
+          className: 'cv-tooltip',
+        })
+        circle.addTo(map)
+        layersRef.current.todos.push(circle)
+        if (c.tieneTransporte) layersRef.current.con.push(circle)
+        else layersRef.current.sin.push(circle)
+      })
+
+      /* ── Comunidades seed: círculo invisible encima solo para capturar click → panel ── */
       comunidades.forEach(c => {
         const color = c.tieneTransporte ? GREEN : RED
-        const marker = L.marker([c.lat, c.lng], { icon: createIcon(color) })
+        const marker = L.circleMarker([c.lat, c.lng], {
+          radius: 10, fillOpacity: 0, color: 'transparent', weight: 0,
+        })
 
         const rutasComunidad = rutas.filter(
           r => r.origen === c.nombre || r.destino === c.nombre
         )
 
+        const fotoHtml = FOTOS[c.nombre]
+          ? `<img src="${FOTOS[c.nombre]}" alt="${c.nombre}" style="width:100%;height:90px;object-fit:cover;border-radius:6px;margin-bottom:8px;"/>`
+          : ''
+
         marker.bindPopup(`
           <div style="font-family:'Inter',sans-serif;min-width:200px;">
-            <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
-              <span style="
-                display:inline-block;width:10px;height:10px;border-radius:50%;
-                background:${color};flex-shrink:0;
-              "></span>
+            ${fotoHtml}
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+              <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${color};flex-shrink:0;"></span>
               <strong style="color:${BLUE};font-size:15px;">${c.nombre}</strong>
             </div>
-            <p style="color:#6b7280;font-size:13px;margin:0 0 4px;">
-              Municipio: ${c.municipio}
-            </p>
-            <p style="color:#6b7280;font-size:13px;margin:0 0 10px;">
-              Poblacion: ${c.poblacion.toLocaleString()} hab.
-            </p>
-            <span style="
-              display:inline-block;padding:3px 10px;border-radius:100px;font-size:12px;font-weight:600;
-              background:${c.tieneTransporte ? 'rgba(42,96,73,0.12)' : 'rgba(193,68,14,0.12)'};
-              color:${c.tieneTransporte ? GREEN : RED};
-            ">
+            <p style="color:#6b7280;font-size:13px;margin:0 0 4px;">Municipio: ${c.municipio}</p>
+            <p style="color:#6b7280;font-size:13px;margin:0 0 10px;">Población: ${c.poblacion.toLocaleString()} hab.</p>
+            <span style="display:inline-block;padding:3px 10px;border-radius:100px;font-size:12px;font-weight:600;background:${c.tieneTransporte ? 'rgba(42,96,73,0.12)' : 'rgba(193,68,14,0.12)'};color:${c.tieneTransporte ? GREEN : RED};">
               ${c.tieneTransporte ? 'Con transporte' : 'Sin transporte formal'}
             </span>
             ${rutasComunidad.length > 0 ? `
-              <div style="margin-top:12px;border-top:1px solid #f0f0f0;padding-top:10px;">
-                <p style="color:${BLUE};font-size:12px;font-weight:600;margin:0 0 6px;">
-                  Rutas disponibles (${rutasComunidad.length})
-                </p>
+              <div style="margin-top:10px;border-top:1px solid #f0f0f0;padding-top:8px;">
+                <p style="color:${BLUE};font-size:12px;font-weight:600;margin:0 0 5px;">Rutas (${rutasComunidad.length})</p>
                 ${rutasComunidad.map(r => `
                   <div style="font-size:12px;color:#4b5563;margin-bottom:3px;">
-                    ${r.origen} &rarr; ${r.destino}
+                    ${r.origen} → ${r.destino}
                     <span style="color:#9ca3af;"> $${r.precio}</span>
                   </div>
                 `).join('')}
@@ -108,7 +144,7 @@ export default function MapPage() {
         marker.addTo(map)
       })
 
-      /* dibujar lineas de rutas */
+      /* ── Líneas de rutas ── */
       rutas.forEach(r => {
         const origen  = comunidades.find(c => c.nombre === r.origen)
         const destino = comunidades.find(c => c.nombre === r.destino)
@@ -127,12 +163,20 @@ export default function MapPage() {
     return () => { mounted = false }
   }, [])
 
-  const sinCobertura  = comunidades.filter(c => !c.tieneTransporte).length
-  const conCobertura  = comunidades.filter(c =>  c.tieneTransporte).length
+  /* Aplicar filtro cuando cambia */
+  useEffect(() => {
+    if (!mapObj.current) return
+    const { todos, con, sin } = layersRef.current
+    todos.forEach(l => { try { mapObj.current.removeLayer(l) } catch {} })
+    const toShow = filter === 'con' ? con : filter === 'sin' ? sin : todos
+    toShow.forEach(l => l.addTo(mapObj.current))
+  }, [filter])
 
   const rutasComunidadSeleccionada = selected
     ? rutas.filter(r => r.origen === selected.nombre || r.destino === selected.nombre)
     : []
+
+  const foto = selected ? FOTOS[selected.nombre] : null
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 68px)' }}>
@@ -141,33 +185,59 @@ export default function MapPage() {
       <div className="cv-flowers-bg" style={{
         backgroundColor: '#fff',
         borderBottom: '1px solid #e8edf5',
-        padding: '16px 24px',
+        padding: '14px 20px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        flexWrap: 'wrap', gap: 12,
+        flexWrap: 'wrap', gap: 10,
         flexShrink: 0,
       }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: BLUE }}>
+          <h1 style={{ margin: 0, fontSize: 19, fontWeight: 700, color: BLUE }}>
             Mapa de movilidad rural
           </h1>
           <p style={{ margin: '2px 0 0', fontSize: 13, color: '#6b7280' }}>
-            Region Mixteca &bull; Puebla, Mexico
+            Puebla, México · {comunidadesMapa.length.toLocaleString()} comunidades registradas
           </p>
         </div>
 
-        {/* Leyenda + stats */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#374151' }}>
-            <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: GREEN, display: 'inline-block' }} />
-            {t('mapa','con_cobertura')} ({conCobertura})
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+          {/* Leyenda */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 12, color: '#374151' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: GREEN, display: 'inline-block' }} />
+              {t('mapa','con_cobertura')} ({conCobertura})
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: RED, display: 'inline-block' }} />
+              {t('mapa','sin_cobertura')} ({sinCobertura})
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <span style={{ width: 24, height: 2, borderTop: `2px dashed ${BLUE}`, display: 'inline-block', opacity: 0.6 }} />
+              Rutas ({rutas.length})
+            </span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#374151' }}>
-            <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: RED, display: 'inline-block' }} />
-            {t('mapa','sin_cobertura')} ({sinCobertura})
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#374151' }}>
-            <span style={{ width: 24, height: 2, borderTop: `2px dashed ${BLUE}`, display: 'inline-block', opacity: 0.6 }} />
-            Ruta activa ({rutas.length})
+
+          {/* Filtro */}
+          <div style={{ display: 'flex', gap: 4 }}>
+            {[
+              { id: 'todas', label: 'Todas' },
+              { id: 'con',   label: 'Con cobertura' },
+              { id: 'sin',   label: 'Sin cobertura' },
+            ].map(f => (
+              <button
+                key={f.id}
+                onClick={() => setFilter(f.id)}
+                style={{
+                  padding: '4px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600,
+                  border: `1.5px solid ${filter === f.id ? BLUE : '#e0e7ef'}`,
+                  backgroundColor: filter === f.id ? BLUE : '#fff',
+                  color: filter === f.id ? '#fff' : '#6b7280',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s',
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -175,7 +245,6 @@ export default function MapPage() {
       {/* ── Mapa + Panel ── */}
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
 
-        {/* Mapa */}
         <div ref={mapRef} style={{ flex: 1, minHeight: 0 }} />
 
         {!loaded && (
@@ -190,7 +259,7 @@ export default function MapPage() {
           </div>
         )}
 
-        {/* Panel lateral — comunidad seleccionada */}
+        {/* Panel lateral */}
         {selected && (
           <div style={{
             width: 300, flexShrink: 0,
@@ -198,8 +267,22 @@ export default function MapPage() {
             borderLeft: '1px solid #e8edf5',
             overflowY: 'auto',
             padding: '20px',
-            display: 'flex', flexDirection: 'column', gap: 16,
+            display: 'flex', flexDirection: 'column', gap: 14,
           }}>
+            {/* Foto */}
+            {foto && (
+              <img
+                src={foto}
+                alt={selected.nombre}
+                style={{
+                  width: '100%', height: 140,
+                  objectFit: 'cover', borderRadius: 12,
+                  border: '1px solid #e8edf5',
+                }}
+              />
+            )}
+
+            {/* Header */}
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
               <div>
                 <h2 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: BLUE }}>{selected.nombre}</h2>
@@ -208,11 +291,7 @@ export default function MapPage() {
               <button
                 onClick={() => setSelected(null)}
                 aria-label="Cerrar panel"
-                style={{
-                  border: 'none', background: 'none', cursor: 'pointer',
-                  padding: 4, color: '#9ca3af',
-                  display: 'flex', alignItems: 'center',
-                }}
+                style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 4, color: '#9ca3af', display: 'flex', alignItems: 'center' }}
               >
                 <X size={18} />
               </button>
@@ -222,8 +301,7 @@ export default function MapPage() {
             <div style={{
               display: 'flex', alignItems: 'center', gap: 8,
               padding: '10px 14px', borderRadius: 10,
-              backgroundColor: selected.tieneTransporte
-                ? 'rgba(42,96,73,0.08)' : 'rgba(193,68,14,0.08)',
+              backgroundColor: selected.tieneTransporte ? 'rgba(42,96,73,0.08)' : 'rgba(193,68,14,0.08)',
             }}>
               {selected.tieneTransporte
                 ? <CheckCircle size={18} color={GREEN} />
@@ -233,26 +311,21 @@ export default function MapPage() {
                   {selected.tieneTransporte ? t('mapa','con_cobertura') : t('mapa','sin_cobertura')}
                 </p>
                 <p style={{ margin: '2px 0 0', fontSize: 12, color: '#6b7280' }}>
-                  {selected.tieneTransporte
-                    ? 'Cuenta con ruta registrada'
-                    : 'Solo transporte informal'}
+                  {selected.tieneTransporte ? 'Cuenta con ruta registrada' : 'Solo transporte informal'}
                 </p>
               </div>
             </div>
 
-            {/* Info */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            {/* Info grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
               {[
-                { label: 'Poblacion', value: selected.poblacion.toLocaleString() + ' hab.' },
-                { label: 'Municipio', value: selected.municipio },
-                { label: 'Latitud',   value: selected.lat.toFixed(4) },
-                { label: 'Longitud',  value: selected.lng.toFixed(4) },
+                { label: 'Población', value: selected.poblacion.toLocaleString() + ' hab.' },
+                { label: 'Municipio',  value: selected.municipio },
+                { label: 'Latitud',    value: selected.lat.toFixed(4) },
+                { label: 'Longitud',   value: selected.lng.toFixed(4) },
               ].map(({ label, value }) => (
-                <div key={label} style={{
-                  backgroundColor: '#f8f9fb', borderRadius: 10,
-                  padding: '10px 12px',
-                }}>
-                  <p style={{ margin: 0, fontSize: 11, color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{label}</p>
+                <div key={label} style={{ backgroundColor: '#f8f9fb', borderRadius: 10, padding: '10px 12px' }}>
+                  <p style={{ margin: 0, fontSize: 10, color: '#9ca3af', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{label}</p>
                   <p style={{ margin: '4px 0 0', fontSize: 13, color: BLUE, fontWeight: 600 }}>{value}</p>
                 </div>
               ))}
@@ -260,7 +333,7 @@ export default function MapPage() {
 
             {/* Rutas */}
             <div>
-              <h3 style={{ margin: '0 0 10px', fontSize: 14, fontWeight: 700, color: BLUE }}>
+              <h3 style={{ margin: '0 0 8px', fontSize: 14, fontWeight: 700, color: BLUE }}>
                 Rutas disponibles ({rutasComunidadSeleccionada.length})
               </h3>
               {rutasComunidadSeleccionada.length === 0 ? (
@@ -283,11 +356,10 @@ export default function MapPage() {
                   {rutasComunidadSeleccionada.map(r => (
                     <div key={r.id} style={{
                       padding: '12px 14px', borderRadius: 10,
-                      backgroundColor: '#f8f9fb',
-                      border: '1px solid #e8edf5',
+                      backgroundColor: '#f8f9fb', border: '1px solid #e8edf5',
                     }}>
                       <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: BLUE }}>
-                        {r.origen} &rarr; {r.destino}
+                        {r.origen} → {r.destino}
                       </p>
                       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                         <span style={{ fontSize: 12, color: '#6b7280' }}>{r.transportista}</span>
@@ -303,7 +375,6 @@ export default function MapPage() {
               )}
             </div>
 
-            {/* Boton buscar */}
             <a
               href="/buscar"
               style={{
@@ -316,7 +387,7 @@ export default function MapPage() {
               onMouseEnter={e => e.currentTarget.style.backgroundColor = '#142d55'}
               onMouseLeave={e => e.currentTarget.style.backgroundColor = BLUE}
             >
-              <MapPin size={15} /> Buscar transporte aqui
+              <MapPin size={15} /> Buscar transporte aquí
             </a>
           </div>
         )}
@@ -326,17 +397,31 @@ export default function MapPage() {
       <div style={{
         backgroundColor: '#fff',
         borderTop: '1px solid #e8edf5',
-        padding: '10px 24px',
+        padding: '10px 20px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexShrink: 0, flexWrap: 'wrap', gap: 8,
       }}>
         <p style={{ margin: 0, fontSize: 12, color: '#9ca3af' }}>
-          {comunidades.length} comunidades &bull; {rutas.length} rutas &bull; Datos: ChulaVia 2026
+          {comunidadesMapa.length.toLocaleString()} comunidades · {rutas.length} rutas activas · Datos: INEGI 2020 / ChulaVía 2026
         </p>
         <p style={{ margin: 0, fontSize: 12, color: '#9ca3af' }}>
-          Mapa: &copy; OpenStreetMap / CARTO
+          Mapa: © OpenStreetMap / CARTO
         </p>
       </div>
+
+      <style>{`
+        .cv-tooltip {
+          background: white;
+          border: 1px solid #e8edf5;
+          border-radius: 6px;
+          padding: 4px 8px;
+          font-family: 'Inter', sans-serif;
+          font-size: 12px;
+          color: #1B3A6B;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .cv-tooltip::before { display: none; }
+      `}</style>
     </div>
   )
 }
