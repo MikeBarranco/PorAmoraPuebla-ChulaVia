@@ -104,20 +104,11 @@ export default function GovDashboard() {
   ]
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 68px)', backgroundColor: '#f4f6fb' }}>
+    <div className="cv-flowers-bg" style={{ minHeight: 'calc(100vh - 68px)', backgroundColor: '#f4f6fb' }}>
 
       {/* ── Header ── */}
-      <div style={{ backgroundColor: BLUE, padding: '40px 24px 56px', position: 'relative', overflow: 'hidden' }}>
-        <svg width="180" height="180" viewBox="0 0 120 120" fill="none"
-          style={{ position: 'absolute', right: -20, top: -20, opacity: 0.06, pointerEvents: 'none' }}
-          aria-hidden="true">
-          <ellipse cx="60" cy="22" rx="11" ry="20" fill="white"/>
-          <ellipse cx="60" cy="98" rx="11" ry="20" fill="white"/>
-          <ellipse cx="22" cy="60" rx="20" ry="11" fill="white"/>
-          <ellipse cx="98" cy="60" rx="20" ry="11" fill="white"/>
-          <circle cx="60" cy="60" r="13" fill="white"/>
-          <rect x="8" y="8" width="104" height="104" rx="6" stroke="white" strokeWidth="1.5" fill="none"/>
-        </svg>
+      <div className="cv-cyber-bg" style={{ backgroundColor: '#1B3A6B', padding: '40px 24px 56px', position: 'relative', overflow: 'hidden' }}>
+
 
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>

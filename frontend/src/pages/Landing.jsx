@@ -20,37 +20,86 @@ const CSS = `
   0%,100% { background-position: 0% 50%; }
   50%      { background-position: 100% 50%; }
 }
+@keyframes panGrid {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-100px, -100px); }
+}
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.1); }
+}
+.gradient-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(27,58,107,0.12) 20%, rgba(244,196,48,0.3) 50%, rgba(27,58,107,0.12) 80%, transparent);
+  border: none;
+  margin: 0;
+}
 `
 
-/* ── Talavera decorative corner (una sola pieza, esquina) ── */
-function TalavераCorner() {
+/* ── Cyber-Talavera Spotlight Background ── */
+function CyberTalaveraBackground() {
   return (
-    <svg
-      width="420" height="420"
-      viewBox="0 0 120 120"
-      fill="none"
-      style={{
-        position: 'absolute',
-        bottom: -40,
-        right: -40,
-        opacity: 0.08,
-        pointerEvents: 'none',
-      }}
-      aria-hidden="true"
-    >
-      {/* Talavera flower tile */}
-      <ellipse cx="60" cy="22" rx="11" ry="20" fill="white"/>
-      <ellipse cx="60" cy="98" rx="11" ry="20" fill="white"/>
-      <ellipse cx="22" cy="60" rx="20" ry="11" fill="white"/>
-      <ellipse cx="98" cy="60" rx="20" ry="11" fill="white"/>
-      <circle  cx="60" cy="60" r="13" fill="white"/>
-      <rect x="60" y="4" width="14" height="14" transform="rotate(45 60 11)" fill="white"/>
-      <rect x="60" y="95" width="14" height="14" transform="rotate(45 60 109)" fill="white"/>
-      <rect x="4" y="60" width="14" height="14" transform="rotate(45 11 60)" fill="white"/>
-      <rect x="95" y="60" width="14" height="14" transform="rotate(45 109 60)" fill="white"/>
-      <rect x="8" y="8" width="104" height="104" rx="6" stroke="white" strokeWidth="1.5" fill="none"/>
-      <rect x="18" y="18" width="84" height="84" rx="4" stroke="white" strokeWidth="0.8" fill="none"/>
-    </svg>
+    <div style={{
+      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+      overflow: 'hidden', pointerEvents: 'none',
+      background: 'linear-gradient(135deg, #12284C 0%, #0d1e38 100%)',
+    }}>
+      {/* 1. Capa Base Oscura (siempre visible) */}
+      <svg width="200%" height="200%" style={{ position: 'absolute', opacity: 0.08, animation: 'panGrid 40s linear infinite' }}>
+        <defs>
+          <pattern id="cyber-talavera" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+            <path d="M50 0 L100 50 L50 100 L0 50 Z" fill="none" stroke="#F4C430" strokeWidth="0.5" strokeDasharray="4 4" />
+            <path d="M50 15 L85 50 L50 85 L15 50 Z" fill="none" stroke="white" strokeWidth="1" />
+            <path d="M50 30 L70 50 L50 70 L30 50 Z" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="0.5" />
+            <circle cx="50" cy="50" r="3" fill="#F4C430" />
+            <circle cx="0" cy="0" r="1.5" fill="white" />
+            <circle cx="100" cy="0" r="1.5" fill="white" />
+            <circle cx="0" cy="100" r="1.5" fill="white" />
+            <circle cx="100" cy="100" r="1.5" fill="white" />
+            <line x1="0" y1="50" x2="15" y2="50" stroke="white" strokeWidth="0.5" />
+            <line x1="100" y1="50" x2="85" y2="50" stroke="white" strokeWidth="0.5" />
+            <line x1="50" y1="0" x2="50" y2="15" stroke="white" strokeWidth="0.5" />
+            <line x1="50" y1="100" x2="50" y2="85" stroke="white" strokeWidth="0.5" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#cyber-talavera)" />
+      </svg>
+
+      {/* 2. Capa Brillante Interactiva (revelada por el mouse) */}
+      <svg className="cyber-spotlight" width="200%" height="200%" style={{
+        position: 'absolute', opacity: 0.7, animation: 'panGrid 40s linear infinite',
+        maskImage: 'radial-gradient(300px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px), black 0%, transparent 100%)',
+        WebkitMaskImage: 'radial-gradient(300px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px), black 0%, transparent 100%)',
+        transition: 'mask-image 0.2s ease',
+      }}>
+        <defs>
+          <pattern id="cyber-talavera-glow" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+            {/* Solo tonos blancos muy sutiles y elegantes */}
+            <path d="M50 0 L100 50 L50 100 L0 50 Z" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
+            <path d="M50 15 L85 50 L50 85 L15 50 Z" fill="none" stroke="white" strokeWidth="1.2" />
+            <path d="M50 30 L70 50 L50 70 L30 50 Z" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.7)" strokeWidth="0.8" />
+            <circle cx="50" cy="50" r="3" fill="white" />
+            <circle cx="0" cy="0" r="2" fill="white" />
+            <circle cx="100" cy="0" r="2" fill="white" />
+            <circle cx="0" cy="100" r="2" fill="white" />
+            <circle cx="100" cy="100" r="2" fill="white" />
+            <line x1="0" y1="50" x2="15" y2="50" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+            <line x1="100" y1="50" x2="85" y2="50" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+            <line x1="50" y1="0" x2="50" y2="15" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+            <line x1="50" y1="100" x2="50" y2="85" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#cyber-talavera-glow)" />
+      </svg>
+      
+      {/* Esferas ambientales */}
+      <div style={{
+          position: 'absolute', top: '-10%', left: '10%',
+          width: '50vw', height: '50vw', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(244,196,48,0.06) 0%, rgba(0,0,0,0) 70%)',
+          animation: 'floatOrb 12s ease-in-out infinite alternate',
+      }} />
+    </div>
   )
 }
 
@@ -110,34 +159,35 @@ export default function Landing() {
   const [statsRef, statsOn] = useFade()
   const [stepsRef, stepsOn] = useFade()
   const [whyRef,   whyOn]   = useFade()
+  const heroRef = useRef(null)
+
+  const handleMouseMove = (e) => {
+    if (!heroRef.current) return
+    const rect = heroRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    heroRef.current.style.setProperty('--mouse-x', `${x}px`)
+    heroRef.current.style.setProperty('--mouse-y', `${y}px`)
+  }
 
   return (
     <main style={{ fontFamily: "'Inter', sans-serif" }}>
       <style>{CSS}</style>
 
       {/* ══ HERO ══ */}
-      <section className="cv-hero" style={{
+      <section 
+        className="cv-hero"
+        ref={heroRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={() => { if(heroRef.current) { heroRef.current.style.setProperty('--mouse-x', '-1000px'); heroRef.current.style.setProperty('--mouse-y', '-1000px'); } }}
+        style={{
         position: 'relative',
         overflow: 'hidden',
         backgroundColor: '#1B3A6B',
         color: '#FAFAFA',
         padding: '100px 24px 120px',
       }}>
-        <TalavераCorner />
-
-        {/* Segundo adorno arriba-izquierda, muy sutil */}
-        <div style={{
-          position: 'absolute', top: -60, left: -60,
-          width: 280, height: 280, borderRadius: '50%',
-          border: '1px solid rgba(255,255,255,0.06)',
-          pointerEvents: 'none',
-        }} />
-        <div style={{
-          position: 'absolute', top: -20, left: -20,
-          width: 180, height: 180, borderRadius: '50%',
-          border: '1px solid rgba(255,255,255,0.04)',
-          pointerEvents: 'none',
-        }} />
+        <CyberTalaveraBackground />
 
         <div style={{ maxWidth: '72rem', margin: '0 auto', position: 'relative', zIndex: 1 }}>
 
@@ -222,6 +272,7 @@ export default function Landing() {
 
       {/* ══ STATS ══ */}
       <section style={{ backgroundColor: '#FAFAFA', padding: '0 24px' }}>
+
         <div
           ref={statsRef}
           className="cv-stats-grid"
@@ -261,8 +312,11 @@ export default function Landing() {
         </p>
       </section>
 
+      <hr className="gradient-divider" />
+
       {/* ══ COMO FUNCIONA ══ */}
-      <section ref={stepsRef} style={{ padding: '8px 24px 96px', backgroundColor: '#FAFAFA' }}>
+      <section ref={stepsRef} className="cv-flowers-bg" style={{ padding: '72px 24px 96px', backgroundColor: '#FAFAFA' }}>
+
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
@@ -276,13 +330,14 @@ export default function Landing() {
           <div className="cv-steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 24 }}>
             {STEPS.map(({ n, icon: Icon, title, desc }, i) => (
               <div key={n}
+                
                 style={{
-                  backgroundColor: '#fff', border: '1px solid #e8edf5',
+                  backgroundColor: 'rgba(255,255,255,0.75)', border: '1px solid rgba(27,58,107,0.08)',
                   borderRadius: 18, padding: '36px 28px',
                   position: 'relative', overflow: 'hidden',
                   opacity: stepsOn ? 1 : 0,
                   transform: stepsOn ? 'translateY(0)' : 'translateY(28px)',
-                  transition: `opacity 0.5s ease ${i * 0.12}s, transform 0.5s ease ${i * 0.12}s`,
+                  transition: `opacity 0.5s ease ${i * 0.12}s, transform 0.5s ease ${i * 0.12}s, background 0.3s ease, border-color 0.3s ease`,
                   cursor: 'default',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 12px 36px rgba(27,58,107,0.1)'; e.currentTarget.style.transform = 'translateY(-4px)' }}
@@ -314,15 +369,18 @@ export default function Landing() {
         </div>
       </section>
 
+      <hr className="gradient-divider" />
+
       {/* ══ POR QUE ══ */}
       <section
         ref={whyRef}
+        className="cv-flowers-bg"
         style={{
           padding: '96px 24px',
-          backgroundColor: '#f4f6fb',
-          borderTop: '1px solid #dde3f0',
+          backgroundColor: '#f0f3fa',
         }}
       >
+
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div className="cv-why-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
 
@@ -364,10 +422,11 @@ export default function Landing() {
             }}>
               {REASONS.map(({ icon: Icon, title, desc }) => (
                 <div key={title}
+                  
                   style={{
-                    backgroundColor: '#fff', border: '1px solid #e0e7f0',
+                    backgroundColor: 'rgba(255,255,255,0.75)', border: '1px solid rgba(27,58,107,0.08)',
                     borderRadius: 16, padding: '24px 20px',
-                    transition: 'box-shadow 0.2s ease, transform 0.2s ease',
+                    transition: 'box-shadow 0.3s ease, transform 0.3s ease, background 0.3s ease, border-color 0.3s ease',
                   }}
                   onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 28px rgba(27,58,107,0.09)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
                   onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
@@ -388,8 +447,11 @@ export default function Landing() {
         </div>
       </section>
 
+      <hr className="gradient-divider" />
+
       {/* ══ ROADMAP ══ */}
-      <section style={{ padding: '96px 24px', backgroundColor: '#fff' }}>
+      <section className="cv-flowers-bg" style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
+
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
@@ -427,11 +489,11 @@ export default function Landing() {
                 items: ['217 municipios de Puebla', 'Alianza con SMOT para datos oficiales', 'Comision por viaje confirmado', 'API publica para investigadores'],
               },
             ].map(({ fase, badge, badgeColor, badgeText, title, items }) => (
-              <div key={fase} style={{
-                backgroundColor: '#FAFAFA', border: '1.5px solid #e0e7f0',
+              <div key={fase}  style={{
+                backgroundColor: 'rgba(255,255,255,0.75)', border: '1.5px solid rgba(27,58,107,0.08)',
                 borderRadius: 20, padding: '32px 28px',
                 position: 'relative',
-                transition: 'box-shadow 0.2s, transform 0.2s',
+                transition: 'box-shadow 0.3s, transform 0.3s, background 0.3s, border-color 0.3s',
               }}
                 onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(27,58,107,0.1)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
                 onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
@@ -464,8 +526,11 @@ export default function Landing() {
         </div>
       </section>
 
+      <hr className="gradient-divider" />
+
       {/* ══ EQUIPO ══ */}
-      <section style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
+      <section className="cv-flowers-bg" style={{ padding: '96px 24px', backgroundColor: '#f0f3fa' }}>
+
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
@@ -483,10 +548,10 @@ export default function Landing() {
               { nombre: 'Monica', rol: 'Investigacion & Datos', tech: 'INEGI · CONAPO · Canva', iniciales: 'MO' },
               { nombre: 'Sumayra', rol: 'Pitch & Estrategia', tech: 'PED 2024-2030 · Impacto Social', iniciales: 'SU' },
             ].map(({ nombre, rol, tech, iniciales }) => (
-              <div key={nombre} style={{
-                backgroundColor: '#fff', border: '1.5px solid #e0e7f0',
+              <div key={nombre}  style={{
+                backgroundColor: 'rgba(255,255,255,0.75)', border: '1.5px solid rgba(27,58,107,0.08)',
                 borderRadius: 20, padding: '32px 24px', textAlign: 'center',
-                transition: 'box-shadow 0.2s, transform 0.2s',
+                transition: 'box-shadow 0.3s, transform 0.3s, background 0.3s, border-color 0.3s',
               }}
                 onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 28px rgba(27,58,107,0.1)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
                 onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
@@ -521,23 +586,12 @@ export default function Landing() {
       </section>
 
       {/* ══ CTA FINAL ══ */}
-      <section style={{
+      <section className="cv-cyber-bg" style={{
         padding: '100px 24px',
-        backgroundColor: '#1B3A6B',
+        background: 'linear-gradient(135deg, #1B3A6B 0%, #12284C 100%)',
         textAlign: 'center', color: '#FAFAFA',
         position: 'relative', overflow: 'hidden',
       }}>
-        {/* Talavera corner decorativo en la sección CTA también */}
-        <div style={{ position: 'absolute', top: -60, left: -60, pointerEvents: 'none' }}>
-          <svg width="300" height="300" viewBox="0 0 120 120" fill="none" aria-hidden="true" style={{ opacity: 0.07 }}>
-            <ellipse cx="60" cy="22" rx="11" ry="20" fill="white"/>
-            <ellipse cx="60" cy="98" rx="11" ry="20" fill="white"/>
-            <ellipse cx="22" cy="60" rx="20" ry="11" fill="white"/>
-            <ellipse cx="98" cy="60" rx="20" ry="11" fill="white"/>
-            <circle  cx="60" cy="60" r="13" fill="white"/>
-            <rect x="8" y="8" width="104" height="104" rx="6" stroke="white" strokeWidth="1.5" fill="none"/>
-          </svg>
-        </div>
 
         <div style={{ maxWidth: 520, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div style={{

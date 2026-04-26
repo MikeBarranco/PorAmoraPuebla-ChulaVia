@@ -12,6 +12,7 @@ export default function Navbar() {
 
   return (
     <nav
+      className="cv-cyber-bg"
       aria-label="Navegacion principal"
       style={{
         backgroundColor: '#1B3A6B',
@@ -25,13 +26,12 @@ export default function Navbar() {
       <div
         className="cv-nav-inner"
         style={{
-          maxWidth: '72rem',
-          margin: '0 auto',
-          padding: '0 1.5rem',
+          width: '100%',
+          padding: '0 4vw',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '68px',
+          height: '80px',
         }}
       >
         <Link
@@ -42,7 +42,7 @@ export default function Navbar() {
           <img
             src="/logo.png"
             alt="ChulaVia"
-            style={{ height: '52px', width: 'auto' }}
+            style={{ height: '64px', width: 'auto', filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))' }}
           />
         </Link>
 
