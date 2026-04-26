@@ -387,6 +387,138 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ══ ROADMAP ══ */}
+      <section style={{ padding: '96px 24px', backgroundColor: '#fff' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
+              Hacia donde vamos
+            </h2>
+            <p style={{ color: '#6b7280', fontSize: 16, maxWidth: 440, margin: '0 auto', lineHeight: 1.65 }}>
+              ChulaVia es el primer paso de una plataforma de movilidad que puede escalar a todo Puebla.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24, position: 'relative' }}>
+            {[
+              {
+                fase: '01',
+                badge: 'En curso',
+                badgeColor: '#F4C430',
+                badgeText: '#1B3A6B',
+                title: 'MVP — Hoy',
+                items: ['Plataforma web + mapa interactivo', 'Bot de WhatsApp para reservas', 'Dashboard de datos para el gobierno', '15 comunidades de la Mixteca'],
+              },
+              {
+                fase: '02',
+                badge: 'Proximo',
+                badgeColor: '#e8edf5',
+                badgeText: '#6b7280',
+                title: '3 meses',
+                items: ['PWA instalable sin app store', 'Sistema de reportes de infraestructura', 'Paradas intermedias en rutas', 'SMS fallback para sin WhatsApp'],
+              },
+              {
+                fase: '03',
+                badge: 'Futuro',
+                badgeColor: '#e8edf5',
+                badgeText: '#6b7280',
+                title: '6 meses',
+                items: ['217 municipios de Puebla', 'Alianza con SMOT para datos oficiales', 'Comision por viaje confirmado', 'API publica para investigadores'],
+              },
+            ].map(({ fase, badge, badgeColor, badgeText, title, items }) => (
+              <div key={fase} style={{
+                backgroundColor: '#FAFAFA', border: '1.5px solid #e0e7f0',
+                borderRadius: 20, padding: '32px 28px',
+                position: 'relative',
+                transition: 'box-shadow 0.2s, transform 0.2s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(27,58,107,0.1)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                  <div style={{
+                    width: 48, height: 48, borderRadius: '50%',
+                    backgroundColor: '#1B3A6B',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 16, fontWeight: 800, color: '#F4C430',
+                  }}>{fase}</div>
+                  <span style={{
+                    padding: '4px 12px', borderRadius: 100,
+                    backgroundColor: badgeColor, color: badgeText,
+                    fontSize: 11, fontWeight: 700,
+                  }}>{badge}</span>
+                </div>
+                <h3 style={{ fontSize: 18, fontWeight: 800, color: '#1B3A6B', margin: '0 0 16px' }}>{title}</h3>
+                <ul style={{ margin: 0, paddingLeft: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {items.map(item => (
+                    <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14, color: '#4b5563', lineHeight: 1.5 }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#1B3A6B', marginTop: 7, flexShrink: 0 }} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ EQUIPO ══ */}
+      <section style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
+              El equipo
+            </h2>
+            <p style={{ color: '#6b7280', fontSize: 16, maxWidth: 380, margin: '0 auto', lineHeight: 1.65 }}>
+              Cuatro especialidades, un solo objetivo: conectar a las comunidades rurales de Puebla.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24, marginBottom: 40 }}>
+            {[
+              { nombre: 'Miguel Barranco', rol: 'Frontend & UX', tech: 'React · Leaflet · Vite', iniciales: 'MB' },
+              { nombre: 'Isabel', rol: 'Backend & API', tech: 'Django · Railway · Supabase', iniciales: 'IS' },
+              { nombre: 'Monica', rol: 'Investigacion & Datos', tech: 'INEGI · CONAPO · Canva', iniciales: 'MO' },
+              { nombre: 'Sumayra', rol: 'Pitch & Estrategia', tech: 'PED 2024-2030 · Impacto Social', iniciales: 'SU' },
+            ].map(({ nombre, rol, tech, iniciales }) => (
+              <div key={nombre} style={{
+                backgroundColor: '#fff', border: '1.5px solid #e0e7f0',
+                borderRadius: 20, padding: '32px 24px', textAlign: 'center',
+                transition: 'box-shadow 0.2s, transform 0.2s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 28px rgba(27,58,107,0.1)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                <div style={{
+                  width: 72, height: 72, borderRadius: '50%',
+                  backgroundColor: '#1B3A6B',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  margin: '0 auto 20px',
+                  fontSize: 22, fontWeight: 800, color: '#F4C430',
+                  letterSpacing: '0.05em',
+                }}>{iniciales}</div>
+                <h3 style={{ fontSize: 16, fontWeight: 800, color: '#1B3A6B', margin: '0 0 6px' }}>{nombre}</h3>
+                <p style={{ fontSize: 13, fontWeight: 600, color: '#2A6049', margin: '0 0 10px' }}>{rol}</p>
+                <p style={{ fontSize: 12, color: '#9ca3af', margin: 0, lineHeight: 1.5 }}>{tech}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center' }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '8px 20px', borderRadius: 100,
+              backgroundColor: '#f0f4ff', border: '1px solid #dde3f0',
+              fontSize: 12, fontWeight: 600, color: '#1B3A6B',
+              letterSpacing: '0.03em',
+            }}>
+              Metodologia Scrum &bull; Sprint de 24 horas &bull; Backlog priorizado
+            </span>
+          </div>
+        </div>
+      </section>
+
       {/* ══ CTA FINAL ══ */}
       <section style={{
         padding: '100px 24px',
