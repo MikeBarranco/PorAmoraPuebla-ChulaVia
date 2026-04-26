@@ -136,7 +136,7 @@ export default function MapPage() {
     <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 68px)' }}>
 
       {/* ── Header ── */}
-      <div style={{
+      <div className="cv-flowers-bg" style={{
         backgroundColor: '#fff',
         borderBottom: '1px solid #e8edf5',
         padding: '16px 24px',
