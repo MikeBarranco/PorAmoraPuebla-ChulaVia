@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { User, Phone, Truck, MapPin, Clock, CheckCircle, Shield, Star, ChevronDown, ArrowRight } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { User, Phone, Truck, MapPin, Clock, CheckCircle, Shield, Star, ChevronDown, ArrowRight, Camera } from 'lucide-react'
 import { comunidades } from '../data/comunidades'
+import { api } from '../data/api'
 
 const BLUE   = '#1B3A6B'
 const YELLOW = '#F4C430'
@@ -104,6 +105,10 @@ export default function JoinPage() {
   const [tipo,      setTipo]      = useState('')
   const [capacidad, setCapacidad] = useState('')
   const [placa,     setPlaca]     = useState('')
+  const [fotoBase64, setFotoBase64] = useState('')
+  const [fotoPreview, setFotoPreview] = useState('')
+  const [fotoLoading, setFotoLoading] = useState(false)
+  const fotoRef = useRef(null)
   const [origen,    setOrigen]    = useState('')
   const [destinos,  setDestinos]  = useState([])
   const [precio,    setPrecio]    = useState('')
@@ -111,6 +116,21 @@ export default function JoinPage() {
   const [horarios,  setHorarios]  = useState([])
 
   const comunidadesOpc = comunidades.map(c => c.nombre)
+
+  async function handleFoto(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    setFotoPreview(URL.createObjectURL(file))
+    setFotoLoading(true)
+    try {
+      const { foto_vehiculo_base64 } = await api.subirFoto(file)
+      setFotoBase64(foto_vehiculo_base64 ?? '')
+    } catch {
+      setFotoBase64('')
+    } finally {
+      setFotoLoading(false)
+    }
+  }
 
   function toggleDia(d) {
     setDias(prev => prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d])
@@ -266,6 +286,39 @@ export default function JoinPage() {
                   <div>
                     <Label required>Placa del vehiculo</Label>
                     <Input value={placa} onChange={v => setPlaca(v.toUpperCase())} placeholder="Ej. PBL-123" icon={Truck} />
+                  </div>
+                </div>
+
+                {/* Foto del vehiculo */}
+                <div style={{ marginTop: 20 }}>
+                  <p style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 600, color: BLUE }}>
+                    Foto del vehiculo <span style={{ fontWeight: 400, color: GRAY }}>(opcional)</span>
+                  </p>
+                  <input ref={fotoRef} type="file" accept="image/*" onChange={handleFoto} style={{ display: 'none' }} aria-label="Subir foto del vehiculo" />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                    <button
+                      type="button"
+                      onClick={() => fotoRef.current?.click()}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 8,
+                        padding: '10px 18px', borderRadius: 10,
+                        border: '1.5px dashed #dde3f0', backgroundColor: '#f9fafc',
+                        fontSize: 13, fontWeight: 600, color: BLUE, cursor: 'pointer',
+                        transition: 'border-color 0.2s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = BLUE}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = '#dde3f0'}
+                    >
+                      <Camera size={15} />
+                      {fotoLoading ? 'Subiendo...' : fotoPreview ? 'Cambiar foto' : 'Subir foto'}
+                    </button>
+                    {fotoPreview && (
+                      <img
+                        src={fotoPreview}
+                        alt="Vista previa del vehiculo"
+                        style={{ width: 64, height: 64, borderRadius: 10, objectFit: 'cover', border: '2px solid #e0e7f0' }}
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -444,7 +497,16 @@ export default function JoinPage() {
                 </button>
               ) : (
                 <button
-                  onClick={() => step3OK && setDone(true)}
+                  onClick={() => {
+                    if (!step3OK) return
+                    api.registrarTransportista({
+                      nombre, telefono, ine_ultimos_4: ine,
+                      tipo_vehiculo: tipo.toLowerCase().replace(/ /g, '_').replace('-', '_'),
+                      capacidad: parseInt(capacidad),
+                      placa, foto_vehiculo_url: fotoBase64,
+                    }).catch(() => {})
+                    setDone(true)
+                  }}
                   disabled={!step3OK}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8,
