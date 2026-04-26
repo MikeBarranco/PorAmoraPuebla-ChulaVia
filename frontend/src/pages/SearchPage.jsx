@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Search, MapPin, Clock, Star, Shield, ChevronDown, X, CheckCircle, MessageCircle, Users, Timer, ChevronUp } from 'lucide-react'
+import { Search, MapPin, Clock, Star, Shield, ChevronDown, X, CheckCircle, MessageCircle, Users, Timer, ChevronUp, Navigation } from 'lucide-react'
 import { comunidades, rutas } from '../data/comunidades'
 import { api } from '../data/api'
 import { useT } from '../context/LangContext.jsx'
@@ -293,7 +293,7 @@ function BookingModal({ ruta, onClose }) {
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
               }}
             >
-              🎬 Simular el viaje en tiempo real
+              <Navigation size={18} /> Simular el viaje en tiempo real
             </button>
             <button onClick={onClose} style={{
               width: '100%', backgroundColor: BLUE, color: '#fff',

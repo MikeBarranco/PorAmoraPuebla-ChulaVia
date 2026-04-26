@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { X, Star } from 'lucide-react'
+import { X, Star, Navigation, Users, Shield } from 'lucide-react'
 import { api } from '../data/api'
 
 const BLUE   = '#1B3A6B'
@@ -11,8 +11,8 @@ const GRAY   = '#6b7280'
 const SCRIPT = [
   { delay: 300,  from: 'bot',  text: (r) => `✅ ¡Reservación confirmada!\n\n${r.transportista} te espera a las ${r.horarios[0]}.\nContacto: 222-134-5678\nPrecio: $${r.precio} por persona` },
   { delay: 2200, from: 'bot',  text: () => '🚐 Tu viaje ha iniciado. El transportista ya está en camino.' },
-  { delay: 4500, from: 'bot',  text: (r) => `📍 A la mitad del trayecto.\nTodo va bien — llegada estimada en unos minutos.` },
-  { delay: 7500, from: 'bot',  text: (r) => `✅ ¡Has llegado a ${r.destino}!\n\nGracias por viajar con ChulaVía. 🙌` },
+  { delay: 4500, from: 'bot',  text: (r) => `Ruta en progreso.\nTodo va bien — llegada estimada en unos minutos.` },
+  { delay: 7500, from: 'bot',  text: (r) => `✅ ¡Has llegado a ${r.destino}!\n\nGracias por viajar con ChulaVía.` },
   { delay: 9000, from: 'bot',  text: (r) => `⭐ ¿Cómo estuvo el servicio de ${r.transportista}?\n\nResponde para calificar tu experiencia:` },
 ]
 
@@ -119,13 +119,16 @@ export default function TripSimulator({ ruta, solicitudId, onClose }) {
           padding: '16px 24px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <div>
-            <h2 style={{ margin: 0, fontSize: 17, fontWeight: 700 }}>
-              🎬 Simulación de viaje — ChulaVía
-            </h2>
-            <p style={{ margin: '2px 0 0', fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>
-              {ruta.origen} → {ruta.destino} · {ruta.transportista}
-            </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <Navigation size={20} color={YELLOW} />
+            <div>
+              <h2 style={{ margin: 0, fontSize: 17, fontWeight: 700 }}>
+                Simulación de viaje — ChulaVía
+              </h2>
+              <p style={{ margin: '2px 0 0', fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>
+                {ruta.origen} → {ruta.destino} · {ruta.transportista}
+              </p>
+            </div>
           </div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff', display: 'flex', padding: 4 }}>
             <X size={20} />
@@ -149,8 +152,8 @@ export default function TripSimulator({ ruta, solicitudId, onClose }) {
             padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: 16,
             backgroundColor: '#f8f9fb',
           }}>
-            <h3 style={{ margin: 0, fontSize: 13, fontWeight: 700, color: BLUE, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              📍 Ruta en tiempo real
+            <h3 style={{ margin: 0, fontSize: 13, fontWeight: 700, color: BLUE, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Navigation size={14} /> Ruta en tiempo real
             </h3>
 
             {/* Route visual */}
@@ -186,7 +189,7 @@ export default function TripSimulator({ ruta, solicitudId, onClose }) {
               </div>
 
               {/* Destination */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, alignSelf: 'stretch' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, alignSelf: 'stretch', marginTop: 12 }}>
                 <div style={{
                   width: 14, height: 14, borderRadius: '50%',
                   backgroundColor: progress >= 100 ? YELLOW : '#dde3f0',
@@ -242,7 +245,14 @@ export default function TripSimulator({ ruta, solicitudId, onClose }) {
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
             {/* WA Header */}
             <div style={{ backgroundColor: '#075E54', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 34, height: 34, borderRadius: '50%', backgroundColor: '#25D366', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>🚐</div>
+              <div style={{ 
+                width: 36, height: 36, borderRadius: '50%', 
+                backgroundColor: '#fff', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                overflow: 'hidden', border: '1px solid rgba(0,0,0,0.1)'
+              }}>
+                <img src="/logo.png" alt="Bot" style={{ width: '85%', height: 'auto' }} />
+              </div>
               <div>
                 <p style={{ margin: 0, color: '#fff', fontWeight: 700, fontSize: 13 }}>ChulaVía Bot</p>
                 <p style={{ margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: 11 }}>pasajero</p>
@@ -313,7 +323,14 @@ export default function TripSimulator({ ruta, solicitudId, onClose }) {
           <div style={{ width: 240, flexShrink: 0, borderLeft: '1px solid #e8edf5', display: 'flex', flexDirection: 'column' }}>
             {/* WA Header */}
             <div style={{ backgroundColor: '#075E54', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 34, height: 34, borderRadius: '50%', backgroundColor: '#1B3A6B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>👨‍✈️</div>
+              <div style={{ 
+                width: 36, height: 36, borderRadius: '50%', 
+                backgroundColor: '#fff', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                overflow: 'hidden', border: '1px solid rgba(0,0,0,0.1)'
+              }}>
+                <img src="/logo.png" alt="Bot" style={{ width: '85%', height: 'auto' }} />
+              </div>
               <div>
                 <p style={{ margin: 0, color: '#fff', fontWeight: 700, fontSize: 12 }}>ChulaVía Bot</p>
                 <p style={{ margin: 0, color: 'rgba(255,255,255,0.7)', fontSize: 10 }}>transportista</p>
