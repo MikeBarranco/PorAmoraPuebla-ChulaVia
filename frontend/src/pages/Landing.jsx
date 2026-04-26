@@ -406,7 +406,7 @@ export default function Landing() {
       <hr className="gradient-divider" />
 
       {/* ══ WHATSAPP DEMO ══ */}
-      <section className="cv-flowers-bg" style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
+      <section style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div className="cv-why-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
 
@@ -443,7 +443,7 @@ export default function Landing() {
       <hr className="gradient-divider" />
 
       {/* ══ ROADMAP ══ */}
-      <section className="cv-flowers-bg" style={{ padding: '96px 24px', backgroundColor: '#f0f3fa' }}>
+      <section style={{ padding: '96px 24px', backgroundColor: '#f0f3fa' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
@@ -455,21 +455,21 @@ export default function Landing() {
           </div>
 
           <div className="cv-roadmap-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
-            [
+            {[
               {
-                fase: '01', badge: '✓ Hoy', badgeColor: '#dcfce7', badgeText: '#15803d',
-                title: 'MVP — Hackathon',
-                items: ['App web + PWA instalable en tu celular', 'Bot WhatsApp Español, Nahuatl y Totonaco', 'Dashboard de datos en tiempo real para el gobierno', 'Transportistas verificados: INE + placa + calificaciones'],
+                fase: '01', badge: 'En curso', badgeColor: '#F4C430', badgeText: '#1B3A6B',
+                title: 'Hoy — Hackathon',
+                items: ['App web + mapa de comunidades rurales', 'Bot WhatsApp en Español, Nahuatl y Totonaco', 'Dashboard de datos para el gobierno', 'Transportistas verificados: INE + placa + calificaciones'],
               },
               {
-                fase: '02', badge: '30 días', badgeColor: '#FEF9C3', badgeText: '#854D0E',
+                fase: '02', badge: '30-90 dias', badgeColor: '#e8edf5', badgeText: '#6b7280',
                 title: 'Expansion Regional',
-                items: ['80+ comunidades en 5 regiones de Puebla', 'Sistema de reportes de infraestructura vial', 'Paradas intermedias y rutas compartidas', 'SMS fallback para telefonos sin internet'],
+                items: ['80+ comunidades en 5 regiones de Puebla', 'PWA instalable sin necesidad de app store', 'Voz: busca tu ruta sin leer ni escribir', 'SMS fallback para telefono sin datos'],
               },
               {
-                fase: '03', badge: '60-90 días', badgeColor: '#e8edf5', badgeText: '#6b7280',
+                fase: '03', badge: '6 meses', badgeColor: '#e8edf5', badgeText: '#6b7280',
                 title: 'Escala Estatal',
-                items: ['217 municipios de Puebla cubiertos', 'Alianza con SMOT y CONAPO para datos oficiales', 'Voz: busca tu ruta sin leer ni escribir', 'API publica de movilidad rural para investigadores'],
+                items: ['217 municipios de Puebla cubiertos', 'Alianza con SMOT y CONAPO para datos oficiales', 'Validacion de traducciones con Instituto Poblano de Pueblos Indigenas', 'API publica de movilidad rural para investigadores'],
               },
             ].map(({ fase, badge, badgeColor, badgeText, title, items }) => (
               <div key={fase} style={{
@@ -502,7 +502,7 @@ export default function Landing() {
       <hr className="gradient-divider" />
 
       {/* ══ EQUIPO ══ */}
-      <section className="cv-flowers-bg" style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
+      <section style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
