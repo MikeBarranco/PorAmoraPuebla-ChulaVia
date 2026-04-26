@@ -1,0 +1,605 @@
+PLAN DE TRABAJO CHULAVÍA - HACKATHON POR AMOR A PUEBLA 2026
+EJE: MOVILIDAD | RETO: RURAL INTERCOMUNITARIO
+DEADLINE: Domingo 26 de abril, 12:00pm | Presentacion: 17:00
+EQUIPO: Miguel (Frontend/Lider), Isabel (Backend/Django), Monica (Investigacion), Sumayra (Pitch)
+
+SI CONTINUAS CON GEMINI: Pega este documento completo como contexto y dile:
+"Este es el plan de ChulaVia para el hackathon. Estamos en hora [X]. [Nombre] necesita ayuda con [tarea]."
+
+===========================================
+POR QUE RURAL ES LA IDEA GANADORA
+===========================================
+
+El documento de investigacion confirma tres hechos clave:
+
+1. El gobierno no tiene estos datos.
+   La Auditoria Superior de la Federacion (ASF) documento que las secretarias de Estado
+   no pueden cuantificar el numero exacto de localidades desconectadas porque no existe
+   censo alguno. ChulaVia CREA ese censo.
+
+2. El 90% del transporte en comunidades de alta marginacion es informal (Instituto
+   Mexicano del Transporte). No hay nada digitalizado para este segmento en Puebla.
+
+3. Lo urbano ya existe. SIMPUEBLA, Yankuilotl, RUTA, Cablebus — todo eso ya existe o
+   esta siendo construido por el gobierno. Si hacemos urbano, competimos con lo que ya
+   hay. Si hacemos rural, llenamos el unico vacio real que el propio PED reconoce.
+
+LA FRASE QUE GANA CON LOS JUECES:
+"El PED 2024-2030 pide en la linea 4.3.1.4 instrumentos para trazar rutas origen-destino.
+La ASF reporto que el gobierno no sabe cuantas comunidades estan desconectadas porque
+no hay datos. ChulaVia genera esos datos por primera vez."
+
+===========================================
+LA IDEA: CHULAVÍA
+===========================================
+
+Primera plataforma de datos y orquestacion de movilidad rural de Puebla.
+Digitaliza el transporte informal intercomunitario con:
+- Web app (React) para zonas con conectividad
+- Bot de WhatsApp (Twilio) para zonas con datos limitados
+- Dashboard para el gobierno (Django Admin = gratis y funcional)
+
+Tres capas:
+1. Para el ciudadano: busca y solicita transporte entre comunidades
+2. Para el transportista: registra su ruta, recibe solicitudes, crece su negocio
+3. Para el gobierno: datos de demanda, deficit, cobertura — informa politica publica
+
+Diferenciadores (nada de esto existe en Puebla):
+- Primera base de datos geoespacial de rutas informales rurales del estado
+- Bot WhatsApp: funciona con 2G, accesible para todos
+- Algoritmo DRT (Demand Responsive Transport): optimiza rutas segun demanda
+- Panel de reportes: le dice al gobierno donde falta transporte y cuanto
+- Accesibilidad universal desde el primer dia
+
+===========================================
+COLORES: TALAVERA POBLANA
+===========================================
+
+Azul Talavera: #1B3A6B
+Amarillo ceramica: #F4C430
+Blanco: #FAFAFA
+Terracota: #C1440E
+Verde hoja: #2A6049
+Tipografia: Inter (Google Fonts)
+
+===========================================
+ALINEACION CON EL PED 2024-2030 (MEMORIZAR PARA EL PITCH)
+===========================================
+
+Objetivo 4.3.1: "Impulsar la movilidad sostenible y accesible"
+-> ChulaVia hace accesible el transporte rural informal, el 90% del transporte en zonas marginadas
+
+Accion 4.3.1.1: "Reordenamiento y modernizacion del transporte publico"
+-> ChulaVia digitaliza y ordena rutas informales existentes sin eliminar los medios de vida
+
+Accion 4.3.1.4: "Instrumentos que tracen rutas origen-destino"
+-> El planificador de ChulaVia ES ese instrumento
+
+Accion 4.3.1.4: "Desarrollar el Plan Maestro de Transporte y Movilidad"
+-> El dashboard de ChulaVia alimenta ese Plan con datos reales, por primera vez
+
+Proyectos Transformadores 16 y 17 (Circuitos Mixteca y Sierra Nororiental)
+-> ChulaVia es la capa digital que activa esos circuitos carreteros
+
+Eje Transversal "Por Amor a Puebla": atencion a pueblos indigenas y vulnerables
+-> Comunidades rurales = grupos mas vulnerables. WhatsApp bot incluye a todos
+
+Dato de indicador: El indice de movilidad estatal en 2023 fue 88.32, meta 2030: 91.32.
+ChulaVia genera los datos para medir ese indice correctamente.
+
+===========================================
+ACCESIBILIDAD
+===========================================
+
+Usuarios ciegos: aria-label en todos los elementos. Bot WhatsApp = 100% texto puro.
+Usuarios sordos: interfaz 100% visual/texto. Sin audio. Iconos con texto descriptivo.
+Bajo alfabetismo: bot con respuestas numeradas simples ("1. Si / 2. No").
+Sin smartphone caro: WhatsApp funciona en cualquier telefono con datos basicos.
+Modo alto contraste: toggle en la app web.
+Texto grande: minimo 16px, botones minimo 44px touch target.
+
+===========================================
+VERIFICACION DE SEGURIDAD
+===========================================
+
+Capa 1: Registro verificado
+- Nombre completo + numero de INE (solo ultimos 4 digitos)
+- Placa del vehiculo
+- Telefono verificado via OTP SMS (Twilio)
+
+Capa 2: Reputacion comunitaria
+- Sistema de calificaciones 1-5 estrellas
+- Badge "verificado por la comunidad" con 10+ viajes y 4.0+ estrellas
+- Reportes de usuarios
+
+Capa 3: Datos para el gobierno
+- Dashboard en tiempo real de transportistas activos
+- Gobierno puede remover transportistas con reportes graves
+- Mas seguro que el sistema actual donde no hay registro de nada
+
+===========================================
+STACK TECNICO
+===========================================
+
+FRONTEND (Miguel):
+- React + Vite
+- TailwindCSS
+- shadcn/ui (componentes)
+- Leaflet.js (mapas)
+- Recharts (graficas)
+- Deploy: Vercel (gratis)
+
+BACKEND (Isabel):
+- Django 4.2 + Django REST Framework
+- PostgreSQL via Supabase (gratis)
+- Twilio (WhatsApp bot, SMS OTP)
+- Django Admin = panel gobierno GRATIS
+- Deploy: Railway (gratis con trial)
+
+VARIABLES DE ENTORNO (.env de Isabel):
+DB_NAME=postgres
+DB_USER=postgres.xxxx
+DB_PASSWORD=tu_password
+DB_HOST=aws-0-us-east-1.pooler.supabase.com
+TWILIO_ACCOUNT_SID=ACxxxxx
+TWILIO_AUTH_TOKEN=xxxxx
+TWILIO_WHATSAPP_FROM=whatsapp:+14155238886
+SECRET_KEY=clave-random-larga
+
+VARIABLE DE ENTORNO FRONTEND (.env de Miguel):
+VITE_API_URL=https://chulavía-backend.railway.app
+
+===========================================
+MODELOS DE BASE DE DATOS (Django — Isabel)
+===========================================
+
+Copiar exactamente en api/models.py:
+
+from django.db import models
+
+class Comunidad(models.Model):
+    nombre = models.CharField(max_length=200)
+    municipio = models.CharField(max_length=200)
+    lat = models.DecimalField(max_digits=10, decimal_places=8)
+    lng = models.DecimalField(max_digits=11, decimal_places=8)
+    poblacion = models.IntegerField(default=0)
+    tiene_transporte_formal = models.BooleanField(default=False)
+    def __str__(self):
+        return f"{self.nombre}, {self.municipio}"
+    class Meta:
+        ordering = ['municipio', 'nombre']
+
+class Transportista(models.Model):
+    TIPO_CHOICES = [('combi','Combi'),('camioneta','Camioneta'),('mototaxi','Mototaxi'),('autobus','Autobus')]
+    nombre = models.CharField(max_length=200)
+    telefono = models.CharField(max_length=15, unique=True)
+    tipo_vehiculo = models.CharField(max_length=20, choices=TIPO_CHOICES)
+    capacidad = models.IntegerField(default=8)
+    placa = models.CharField(max_length=10)
+    ine_ultimos_4 = models.CharField(max_length=4)
+    foto_vehiculo_url = models.URLField(blank=True)
+    calificacion = models.DecimalField(max_digits=3, decimal_places=2, default=5.00)
+    total_viajes = models.IntegerField(default=0)
+    verificado = models.BooleanField(default=False)
+    activo = models.BooleanField(default=True)
+    fecha_registro = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.nombre} ({self.tipo_vehiculo})"
+
+class Ruta(models.Model):
+    transportista = models.ForeignKey(Transportista, on_delete=models.CASCADE, related_name='rutas')
+    origen = models.ForeignKey(Comunidad, on_delete=models.CASCADE, related_name='rutas_origen')
+    destino = models.ForeignKey(Comunidad, on_delete=models.CASCADE, related_name='rutas_destino')
+    precio = models.DecimalField(max_digits=8, decimal_places=2)
+    horarios = models.JSONField(default=list)
+    dias = models.JSONField(default=list)
+    activa = models.BooleanField(default=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.origen.nombre} -> {self.destino.nombre}"
+
+class Solicitud(models.Model):
+    ESTADO = [('pendiente','Pendiente'),('confirmada','Confirmada'),('completada','Completada'),('cancelada','Cancelada')]
+    origen_texto = models.CharField(max_length=200)
+    destino_texto = models.CharField(max_length=200)
+    ruta = models.ForeignKey(Ruta, on_delete=models.SET_NULL, null=True, blank=True, related_name='solicitudes')
+    pasajeros = models.IntegerField(default=1)
+    telefono_whatsapp = models.CharField(max_length=20)
+    fecha_viaje = models.DateField()
+    estado = models.CharField(max_length=20, choices=ESTADO, default='pendiente')
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.origen_texto} -> {self.destino_texto} ({self.estado})"
+
+class Calificacion(models.Model):
+    ruta = models.ForeignKey(Ruta, on_delete=models.CASCADE, related_name='calificaciones')
+    solicitud = models.ForeignKey(Solicitud, on_delete=models.CASCADE)
+    puntuacion = models.IntegerField()
+    comentario = models.TextField(blank=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+===========================================
+ENDPOINTS API (Django REST Framework — Isabel)
+===========================================
+
+GET  /api/comunidades/                  - Lista de comunidades con lat/lng
+GET  /api/rutas/?origen=X&destino=Y    - Busca rutas disponibles
+POST /api/rutas/                        - Registrar nueva ruta
+POST /api/solicitudes/                  - Crear solicitud de viaje
+POST /api/transportistas/               - Registrar transportista
+POST /api/whatsapp/webhook/             - Webhook de Twilio
+GET  /api/analytics/resumen/            - Datos para dashboard
+GET  /api/analytics/deficit/           - Comunidades sin cobertura
+GET  /api/analytics/rutas-populares/   - Top rutas mas solicitadas
+
+===========================================
+PLAN POR HORA — MIGUEL (Frontend)
+===========================================
+
+00:00-00:45  Setup: npm create vite, tailwind, leaflet, recharts, axios, shadcn
+             tailwind.config.js con colores Talavera (#1B3A6B, #F4C430, etc.)
+
+00:45-02:30  Landing page (/)
+             - Navbar con logo ChulaVia
+             - Hero: titulo + problema en 2 lineas + boton buscar
+             - Stats: X comunidades, X transportistas, X viajes
+             - HowItWorks: 3 pasos con iconos
+             - Footer
+
+02:30-05:00  Mapa interactivo (/mapa)
+             - MapContainer con Leaflet + OpenStreetMap tiles
+             - Marcadores de comunidades (rojo=sin cobertura, verde=con cobertura)
+             - Polylines entre comunidades con ruta activa
+             - Click en comunidad: popup con rutas disponibles
+             - Llamar GET /api/comunidades/ para datos
+
+05:00-07:30  Buscador (/buscar)
+             - SearchForm: dropdown origen, dropdown destino (datos de API)
+             - Al buscar: GET /api/rutas/?origen=X&destino=Y
+             - RouteCard: nombre transportista, tipo, horarios, precio, estrellas
+             - BookingModal: form con telefono para confirmar viaje
+
+07:30-09:00  Registro transportista (/unirse)
+             - Form: nombre, telefono, tipo vehiculo, placa, origen habitual
+             - Dropdowns de horarios y dias
+             - POST /api/transportistas/
+
+09:00-11:00  Dashboard gobierno (/gobierno)
+             - BarChart: rutas mas solicitadas
+             - PieChart: tipos de vehiculo
+             - Mapa con comunidades en deficit (mas solicitudes sin ruta)
+             - Counters: total viajes, transportistas, comunidades
+             - Llamar GET /api/analytics/resumen/ y /deficit/ y /rutas-populares/
+
+11:00-12:00  Deploy Vercel + aria-labels + verificar en movil + cargar demo data
+
+ACCESIBILIDAD (hacerlo en cada componente):
+- Todos los botones: aria-label="descripcion clara"
+- Formularios: label asociado a cada input con htmlFor
+- Imagenes: alt="descripcion"
+- Contraste: azul #1B3A6B sobre blanco = suficiente
+- Botones minimo 44px de alto
+
+===========================================
+PLAN POR HORA — ISABEL (Backend Django)
+===========================================
+
+PASO 1 (00:00-01:30): Setup Django
+pip install django djangorestframework django-cors-headers psycopg2-binary twilio python-dotenv gunicorn
+django-admin startproject backend .
+python manage.py startapp api
+
+En settings.py agregar:
+INSTALLED_APPS = [..., 'rest_framework', 'corsheaders', 'api']
+MIDDLEWARE = ['corsheaders.middleware.CorsMiddleware', ...el resto...]
+CORS_ALLOW_ALL_ORIGINS = True
+(configurar DATABASES con datos de Supabase)
+
+PASO 2 (01:30-02:30): Crear cuenta Supabase
+1. supabase.com -> New Project
+2. Copiar host, user, password, dbname
+3. Guardar en .env
+4. python manage.py migrate
+
+PASO 3 (02:30-03:30): Modelos y Admin
+Copiar modelos del plan a api/models.py
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser (usuario: admin, password: chulavía2026)
+
+En api/admin.py registrar todos los modelos (ver plan completo en el plan .md)
+
+PASO 4 (03:30-05:00): Serializers
+En api/serializers.py:
+- ComunidadSerializer (fields='__all__')
+- TransportistaSerializer (excluir ine_ultimos_4)
+- RutaSerializer (transportista y comunidades anidados como read_only)
+- SolicitudSerializer (fields='__all__')
+
+PASO 5 (05:00-07:00): Views y endpoints
+En api/views.py implementar:
+- ComunidadList(generics.ListAPIView)
+- RutaList(generics.ListCreateAPIView) con filtro por origen y destino
+- SolicitudCreate(generics.CreateAPIView)
+- TransportistaCreate(generics.CreateAPIView)
+- analytics_resumen (api_view GET)
+- analytics_deficit (api_view GET)
+- analytics_rutas_populares (api_view GET)
+
+PASO 6 (07:00-09:30): Bot WhatsApp
+1. Ir a console.twilio.com
+2. Messaging -> Try WhatsApp -> Sandbox
+3. Configurar webhook: URL_BACKEND/api/whatsapp/webhook/
+4. Implementar whatsapp_webhook en views.py
+   - usar diccionario CONVERSACIONES en memoria para el estado
+   - flujo: inicio -> pedir origen -> pedir destino -> mostrar opciones -> confirmar
+   - crear Solicitud en base de datos cuando se confirma
+
+FLUJO DEL BOT:
+"hola" -> pedir origen
+[origen] -> guardar, pedir destino
+[destino] -> buscar rutas, mostrar opciones numeradas
+"1" o "2" o "3" -> confirmar, crear Solicitud, mandar datos del conductor
+cualquier otro -> "Escribe hola para empezar"
+
+PASO 7 (09:30-10:30): URLs
+backend/urls.py:
+from django.contrib import admin
+from django.urls import path
+from api import views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/comunidades/', views.ComunidadList.as_view()),
+    path('api/rutas/', views.RutaList.as_view()),
+    path('api/solicitudes/', views.SolicitudCreate.as_view()),
+    path('api/transportistas/', views.TransportistaCreate.as_view()),
+    path('api/whatsapp/webhook/', views.whatsapp_webhook),
+    path('api/analytics/resumen/', views.analytics_resumen),
+    path('api/analytics/deficit/', views.analytics_deficit),
+    path('api/analytics/rutas-populares/', views.analytics_rutas_populares),
+]
+
+PASO 8 (10:30-11:00): Seed de datos
+Crear seed.py y correr: python manage.py shell < seed.py
+(Datos de comunidades y rutas en la seccion de Seed abajo)
+
+PASO 9 (11:00-12:00): Deploy en Railway
+1. railway.app -> New Project -> Deploy from GitHub
+2. Agregar variables de entorno
+3. Crear Procfile: web: gunicorn backend.wsgi --log-file -
+4. En settings.py agregar ALLOWED_HOSTS = ['*'] para el hackathon
+5. Dar URL a Miguel
+
+EL PANEL ADMIN (/admin) ES EL DASHBOARD DEL GOBIERNO PARA LA DEMO.
+No necesitas construir nada extra — Django Admin ya muestra todos los datos.
+
+===========================================
+PLAN POR HORA — MONICA (Investigacion)
+===========================================
+
+00:00-02:00  Datos de comunidades para el mapa (CRITICO — entregar a Miguel a las 02:00)
+             Ir a: inegi.org.mx/app/ageeml/
+             Filtrar: Estado=Puebla, Ambito=Rural
+             Exportar y convertir a JSON con: nombre, municipio, lat, lng, poblacion
+             Meta: minimo 15 comunidades de la Mixteca Poblana o Tehuacan-Sierra Negra
+
+02:00-04:00  Estadisticas para el pitch (googlear con INEGI, IMT, ASF):
+             - Total comunidades rurales Puebla sin transporte formal
+             - Municipios de alta marginacion en Puebla (cuantos)
+             - Porcentaje transporte informal en Mexico rural (dato: 90% segun IMT)
+             - Accidentes de transporte informal (dato clave para impacto)
+             - Costo promedio viaje rural vs formal
+
+04:00-06:00  Fotografias para el pitch (Unsplash/Pexels — sin derechos):
+             - Comunidades rurales de Puebla/Mexico
+             - Personas esperando combi/camioneta
+             - Paisajes de Puebla
+             - Ceramica Talavera para identidad visual
+             Descargar 15-20 fotos en alta resolucion
+
+06:00-08:00  Assets de la marca ChulaVia:
+             - Logo en Canva Pro (azul #1B3A6B + amarillo #F4C430)
+             - Iconos de transporte: combi, camioneta, mototaxi
+             - Mockup de la app en telefono (Canva tiene plantillas)
+             - Iconos de accesibilidad
+
+08:00-12:00  Pitch deck en Canva Pro (10-12 slides):
+             1. Portada con logo ChulaVia
+             2. El problema (mapa, datos, fotos)
+             3. La solucion (mockup de la app)
+             4. Como funciona (3 pasos)
+             5. Para el gobierno (mockup del dashboard)
+             6. Impacto (numeros)
+             7. Alineacion con el PED (tabla)
+             8. Modelo de negocio
+             9. Tecnologia (stack)
+             10. Cierre con tagline
+
+===========================================
+PLAN POR HORA — SUMAYRA (Pitch + Datos)
+===========================================
+
+00:00-02:00  Wireframes de pantallas principales (Figma free):
+             1. Landing page
+             2. Pantalla de busqueda
+             3. Mapa
+             4. Dashboard gobierno
+             Entregar a Miguel a las 02:00
+
+02:00-04:00  Investigar diferencia con competidores:
+             - InDriver/Uber: on-demand, no rutas fijas, no rural
+             - Moovit: planeacion urbana, sin transporte informal
+             - SIMPUEBLA/RUTA: solo zona metropolitana
+             - Google Maps: no cubre rutas informales rurales
+             Documentar para la pregunta "ya existe"
+
+04:00-06:00  Guion del pitch (ver estructura en seccion de Pitch)
+             Escribirlo en tarjetas para Miguel
+
+06:00-09:00  Datos de demo (archivo seed.py):
+             20 comunidades reales de Puebla con lat/lng
+             5 transportistas con nombres realistas
+             8-10 rutas con horarios y precios reales de la region
+             Solicitudes pre-cargadas para mostrar actividad
+
+09:00-12:00  Preguntas de jueces y ensayo del pitch con Miguel (3 veces completas)
+
+===========================================
+DATOS SEED (comunidades reales de Puebla)
+===========================================
+
+Para Isabel (seed.py) y para el mapa de Miguel:
+
+Tehuitzingo: lat=18.3617, lng=-98.2828, poblacion=4500, sin transporte formal
+Acatlan de Osorio: lat=18.2050, lng=-98.0506, poblacion=12000, CON transporte
+Chiautla de Tapia: lat=18.2994, lng=-98.5683, poblacion=6800, CON transporte
+Izucar de Matamoros: lat=18.5989, lng=-98.4661, poblacion=45000, CON transporte
+Coatzingo: lat=18.2717, lng=-98.2128, poblacion=3200, sin transporte
+Piaxtla: lat=18.1683, lng=-98.2289, poblacion=2100, sin transporte
+Xayacatlan de Bravo: lat=18.2261, lng=-98.2472, poblacion=2800, sin transporte
+San Pablo Anicano: lat=18.3453, lng=-98.3012, poblacion=680, sin transporte
+San Jeronimo Xayacatlan: lat=18.2100, lng=-98.2600, poblacion=520, sin transporte
+Santa Ana Coatlichan: lat=18.3200, lng=-98.3400, poblacion=340, sin transporte
+Chietla: lat=18.4439, lng=-98.6619, poblacion=5600, CON transporte
+Tilapa: lat=18.3389, lng=-98.3667, poblacion=890, sin transporte
+San Pablo Ahuatempan: lat=18.2778, lng=-97.9719, poblacion=1200, sin transporte
+Huehuetlan el Grande: lat=18.3856, lng=-98.0928, poblacion=3400, sin transporte
+Tulcingo del Valle: lat=18.0631, lng=-98.2278, poblacion=4100, CON transporte
+
+Transportistas de muestra:
+1. Ernesto Garcia Lopez | combi | placa PBL-123 | calificacion 4.8 | ruta: Tehuitzingo-Acatlan $35
+2. Maria Guadalupe Flores | camioneta | placa PUE-456 | calificacion 4.6 | ruta: Chiautla-Izucar $45
+3. Jose Antonio Reyes | mototaxi | placa MT-789 | calificacion 4.9 | ruta: Coatzingo-Acatlan $20
+4. Transportes Rivera e Hijos | camioneta | placa PUE-012 | calificacion 4.5 | ruta: Piaxtla-Tehuitzingo $25
+
+===========================================
+ESTRUCTURA DEL PITCH (5 MINUTOS EXACTOS)
+===========================================
+
+[0:00-0:30] GANCHO
+"La Auditoria Superior de la Federacion reporto que el gobierno mexicano no sabe
+cuantas comunidades rurales estan desconectadas del transporte... porque no existen
+los datos. Hoy, nosotros tenemos esos datos. Esto es ChulaVia."
+
+[0:30-1:30] EL PROBLEMA (mostrar mapa en pantalla)
+- Abrir la app en /mapa
+- "Las comunidades en rojo no tienen transporte formal. Su unica opcion es un pick-up
+  informal, sin seguro, sin horario fijo."
+- Dato: 90% del transporte en zonas de alta marginacion es informal (IMT)
+- "Son invisibles para el SIMPUEBLA, para el RUTA, para el gobierno."
+
+[1:30-2:30] LA SOLUCION — demo en vivo (mostrar /buscar)
+- "Maria vive en Tehuitzingo. Necesita ir a Acatlan."
+- Usar el buscador: Tehuitzingo -> Acatlan de Osorio -> ver resultados
+- "Encuentra opciones, horarios, precio, calificacion del conductor."
+- Mostrar WhatsApp bot en el telefono
+
+[2:30-3:00] PARA EL GOBIERNO (mostrar /gobierno)
+- "Por primera vez el gobierno ve donde hay demanda sin oferta."
+- Mostrar grafica de deficit
+- "Esto alimenta directamente el Plan Maestro de Transporte del PED."
+
+[3:00-3:30] ALINEACION CON EL PED
+"ChulaVia implementa las lineas de accion 4.3.1.1 y 4.3.1.4 del PED 2024-2030.
+La 4.3.1.1 pide reordenar el transporte informal. La 4.3.1.4 pide instrumentos de
+rutas origen-destino y el Plan Maestro de Movilidad. ChulaVia es ese instrumento."
+
+[3:30-4:00] IMPACTO Y SEGURIDAD
+- X comunidades conectadas, X transportistas verificados
+- INE verificado, placa registrada, calificaciones
+- "Mas seguro que el sistema actual donde no hay registro de nada"
+- Accesible para todos: WhatsApp, sin internet rapido, pantalla de alto contraste
+
+[4:00-4:30] MODELO DE NEGOCIO
+- Gratis para el ciudadano
+- Transportista: tarifa mensual de 300 pesos
+- Gobierno licencia el panel de datos
+- Escalable: los 217 municipios de Puebla, mismo codigo
+
+[4:30-5:00] CIERRE
+"ChulaVia. Porque moverse en Puebla es un derecho, no un privilegio.
+Conectamos a las comunidades que el sistema formal ha dejado atras.
+Le damos al gobierno los datos que nunca tuvo.
+Por amor a Puebla. Gracias."
+
+===========================================
+PREGUNTAS DE JUECES Y RESPUESTAS
+===========================================
+
+P: Ya existe algo similar / no es original
+R: No en Puebla rural. Google Maps no cubre rutas informales. SIMPUEBLA es urbano.
+   La ASF confirmo que el gobierno no puede cuantificar las comunidades desconectadas
+   porque no existe ese censo. ChulaVia lo crea.
+
+P: Como hacen que los transportistas se registren?
+R: El beneficio es inmediato: mas pasajeros, menos viajes vacios. Empezamos con
+   5-10 transportistas piloto en la Mixteca y crecemos por boca a boca.
+
+P: Y si no tienen internet?
+R: WhatsApp funciona con 2G. Tambien soportamos SMS basico. El transportista no
+   necesita smartphone caro, solo telefono con WhatsApp.
+
+P: Como garantizan la seguridad?
+R: INE verificado, placa registrada, OTP por SMS, calificaciones. Infinitamente mas
+   seguro que el sistema actual donde el pasajero sube a un pick-up sin ningun registro.
+
+P: Como se financia?
+R: Tarifa mensual al transportista (300 pesos — menos que lo que gana en un viaje).
+   El gobierno licencia el dashboard. En fase 2: comision por viaje.
+
+P: Es escalable?
+R: Si. Mismos modelos para los 217 municipios de Puebla. Railway y Supabase escalan
+   automaticamente sin cambios de arquitectura.
+
+P: Y personas con discapacidad?
+R: El bot WhatsApp es texto puro, 100% accesible para ciegos. La app web tiene
+   aria-labels completos. No depende de audio. Botones grandes touch-friendly.
+
+P: Por que es relevante para el Plan Estatal?
+R: Implementamos literalmente las lineas 4.3.1.1 y 4.3.1.4. El objetivo 4.3.1 pide
+   movilidad sostenible y accesible — nosotros lo hacemos para el 90% que el sistema
+   formal no atiende.
+
+===========================================
+PRESUPUESTO — TODO GRATIS
+===========================================
+
+Supabase (PostgreSQL): Gratis — 500MB, 50k requests/mes
+Twilio: Gratis — $15 trial credit + WhatsApp Sandbox
+Vercel (frontend): Gratis — ilimitado
+Railway (backend): Gratis — $5 trial credit
+OpenStreetMap / Leaflet: Gratis — sin limite
+Django + DRF: Gratis — open source
+shadcn/ui + Tailwind: Gratis — open source
+Canva Pro: Ya lo tienen
+
+===========================================
+COMMITS PARA MIGUEL
+===========================================
+
+git commit -m "setup: vite react tailwind chulavía base project"
+git commit -m "feat: landing page hero stats and how it works sections"
+git commit -m "feat: interactive leaflet map with puebla rural communities"
+git commit -m "feat: transport search form with origin destination selector"
+git commit -m "feat: route results cards with booking modal"
+git commit -m "feat: transporter registration form with validation"
+git commit -m "feat: government analytics dashboard with charts"
+git commit -m "fix: accessibility aria labels and contrast improvements"
+git commit -m "deploy: vercel production build chulavía"
+
+===========================================
+NOTAS CRITICAS
+===========================================
+
+1. DEMO EN VIVO: Cargar seed data en produccion ANTES de las 16:00.
+2. EL MAPA: Monica entrega coordenadas a Miguel antes de las 02:00am.
+3. WHATSAPP BOT: Miguel lo muestra en su propio telefono. No pedir a los jueces.
+4. PITCH: 5 minutos exactos. Practicar con cronometro 3+ veces.
+5. MENCIONAR el PED con numeros: "lineas 4.3.1.1 y 4.3.1.4".
+6. NO decir "app". Decir "plataforma digital de movilidad".
+7. DATO CLAVE: "La ASF reporto que el gobierno no sabe cuantas comunidades estan
+   desconectadas. ChulaVia resuelve eso."
+
+El panel /admin de Django ES el dashboard del gobierno. No construir uno extra.
+
+FIN DEL PLAN — CHULAVÍA — HACKATHON POR AMOR A PUEBLA 2026
