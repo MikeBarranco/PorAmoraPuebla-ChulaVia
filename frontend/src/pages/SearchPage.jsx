@@ -521,8 +521,14 @@ export default function SearchPage() {
                 {resultados.length} ruta{resultados.length !== 1 ? 's' : ''} encontrada{resultados.length !== 1 ? 's' : ''}
                 {origen && destino ? ` · ${origen} → ${destino}` : ''}
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: GRAY }}>
-                <Users size={14} /> Capacidad disponible
+              <div style={{ 
+                display: 'flex', alignItems: 'center', gap: 8, 
+                fontSize: 14, fontWeight: 600, color: '#fff',
+                backgroundColor: 'rgba(255,255,255,0.12)',
+                padding: '6px 14px', borderRadius: 10,
+                backdropFilter: 'blur(4px)',
+              }}>
+                <Users size={16} color={YELLOW} /> Capacidad disponible
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
