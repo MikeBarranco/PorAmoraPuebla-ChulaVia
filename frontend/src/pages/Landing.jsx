@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
-import { MapPin, Search, Shield, BarChart2, MessageCircle, ArrowRight, Users, Route } from 'lucide-react'
+import { MapPin, Search, Shield, BarChart2, MessageCircle, ArrowRight, Users, Route, Mail } from 'lucide-react'
+import WhatsAppDemo from '../components/WhatsAppDemo'
 
 /* ── Keyframes ── */
 const CSS = `
@@ -12,45 +13,77 @@ const CSS = `
   0%,100% { opacity: 1; }
   50%      { opacity: 0.3; }
 }
-@keyframes tile-drift {
-  from { transform: translate(0, 0); }
-  to   { transform: translate(120px, 120px); }
+@keyframes panGrid {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(-100px, -100px); }
 }
-@keyframes gradient-text {
-  0%,100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
+@keyframes floatOrb {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.1); }
+}
+.gradient-divider {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(27,58,107,0.12) 20%, rgba(244,196,48,0.3) 50%, rgba(27,58,107,0.12) 80%, transparent);
+  border: none;
+  margin: 0;
 }
 `
 
-/* ── Talavera decorative corner (una sola pieza, esquina) ── */
-function TalavераCorner() {
+/* ── Cyber-Talavera Spotlight Background ── */
+function CyberTalaveraBackground() {
   return (
-    <svg
-      width="420" height="420"
-      viewBox="0 0 120 120"
-      fill="none"
-      style={{
-        position: 'absolute',
-        bottom: -40,
-        right: -40,
-        opacity: 0.08,
-        pointerEvents: 'none',
-      }}
-      aria-hidden="true"
-    >
-      {/* Talavera flower tile */}
-      <ellipse cx="60" cy="22" rx="11" ry="20" fill="white"/>
-      <ellipse cx="60" cy="98" rx="11" ry="20" fill="white"/>
-      <ellipse cx="22" cy="60" rx="20" ry="11" fill="white"/>
-      <ellipse cx="98" cy="60" rx="20" ry="11" fill="white"/>
-      <circle  cx="60" cy="60" r="13" fill="white"/>
-      <rect x="60" y="4" width="14" height="14" transform="rotate(45 60 11)" fill="white"/>
-      <rect x="60" y="95" width="14" height="14" transform="rotate(45 60 109)" fill="white"/>
-      <rect x="4" y="60" width="14" height="14" transform="rotate(45 11 60)" fill="white"/>
-      <rect x="95" y="60" width="14" height="14" transform="rotate(45 109 60)" fill="white"/>
-      <rect x="8" y="8" width="104" height="104" rx="6" stroke="white" strokeWidth="1.5" fill="none"/>
-      <rect x="18" y="18" width="84" height="84" rx="4" stroke="white" strokeWidth="0.8" fill="none"/>
-    </svg>
+    <div style={{
+      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+      overflow: 'hidden', pointerEvents: 'none',
+      background: 'linear-gradient(135deg, #12284C 0%, #0d1e38 100%)',
+    }}>
+      <svg width="200%" height="200%" style={{ position: 'absolute', opacity: 0.08, animation: 'panGrid 40s linear infinite' }}>
+        <defs>
+          <pattern id="cyber-talavera" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+            <path d="M50 0 L100 50 L50 100 L0 50 Z" fill="none" stroke="#F4C430" strokeWidth="0.5" strokeDasharray="4 4" />
+            <path d="M50 15 L85 50 L50 85 L15 50 Z" fill="none" stroke="white" strokeWidth="1" />
+            <path d="M50 30 L70 50 L50 70 L30 50 Z" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="0.5" />
+            <circle cx="50" cy="50" r="3" fill="#F4C430" />
+            <circle cx="0" cy="0" r="1.5" fill="white" /><circle cx="100" cy="0" r="1.5" fill="white" />
+            <circle cx="0" cy="100" r="1.5" fill="white" /><circle cx="100" cy="100" r="1.5" fill="white" />
+            <line x1="0" y1="50" x2="15" y2="50" stroke="white" strokeWidth="0.5" />
+            <line x1="100" y1="50" x2="85" y2="50" stroke="white" strokeWidth="0.5" />
+            <line x1="50" y1="0" x2="50" y2="15" stroke="white" strokeWidth="0.5" />
+            <line x1="50" y1="100" x2="50" y2="85" stroke="white" strokeWidth="0.5" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#cyber-talavera)" />
+      </svg>
+
+      <svg width="200%" height="200%" style={{
+        position: 'absolute', opacity: 0.7, animation: 'panGrid 40s linear infinite',
+        maskImage: 'radial-gradient(300px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px), black 0%, transparent 100%)',
+        WebkitMaskImage: 'radial-gradient(300px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px), black 0%, transparent 100%)',
+      }}>
+        <defs>
+          <pattern id="cyber-talavera-glow" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+            <path d="M50 0 L100 50 L50 100 L0 50 Z" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
+            <path d="M50 15 L85 50 L50 85 L15 50 Z" fill="none" stroke="white" strokeWidth="1.2" />
+            <path d="M50 30 L70 50 L50 70 L30 50 Z" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.7)" strokeWidth="0.8" />
+            <circle cx="50" cy="50" r="3" fill="white" />
+            <circle cx="0" cy="0" r="2" fill="white" /><circle cx="100" cy="0" r="2" fill="white" />
+            <circle cx="0" cy="100" r="2" fill="white" /><circle cx="100" cy="100" r="2" fill="white" />
+            <line x1="0" y1="50" x2="15" y2="50" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+            <line x1="100" y1="50" x2="85" y2="50" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+            <line x1="50" y1="0" x2="50" y2="15" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+            <line x1="50" y1="100" x2="50" y2="85" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#cyber-talavera-glow)" />
+      </svg>
+
+      <div style={{
+        position: 'absolute', top: '-10%', left: '10%',
+        width: '50vw', height: '50vw', borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(244,196,48,0.06) 0%, rgba(0,0,0,0) 70%)',
+        animation: 'floatOrb 12s ease-in-out infinite alternate',
+      }} />
+    </div>
   )
 }
 
@@ -105,50 +138,70 @@ const REASONS = [
   { icon: Users,         title: 'Hecho para comunidades',     desc: 'Para zonas donde el transporte formal no llega.' },
 ]
 
+const TEAM = [
+  { nombre: 'Miguel Barranco', rol: 'Frontend & UX',        tech: 'React · Leaflet · Vite',          foto: '/equipo/Miguel-Barranco.jpeg',  iniciales: 'MB' },
+  { nombre: 'Isabel Ruiz',     rol: 'Backend & API',         tech: 'Django · Railway · Supabase',     foto: '/equipo/Isabel-Ruiz.jpeg',       iniciales: 'IR' },
+  { nombre: 'Monica Tapia',    rol: 'Investigacion & Datos', tech: 'INEGI · CONAPO · Canva',          foto: '/equipo/Monica-Tapia.jpeg',      iniciales: 'MT' },
+  { nombre: 'Sumayra Rivera',  rol: 'Pitch & Estrategia',    tech: 'PED 2024-2030 · Impacto Social',  foto: '/equipo/Sumayra-Rivera.jpeg',    iniciales: 'SR' },
+]
+
+/* ── SVG social icons ── */
+function IconInstagram() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+    </svg>
+  )
+}
+function IconFacebook() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+    </svg>
+  )
+}
+
 /* ── Component ── */
 export default function Landing() {
   const [statsRef, statsOn] = useFade()
   const [stepsRef, stepsOn] = useFade()
   const [whyRef,   whyOn]   = useFade()
+  const heroRef = useRef(null)
+
+  const handleMouseMove = (e) => {
+    if (!heroRef.current) return
+    const rect = heroRef.current.getBoundingClientRect()
+    heroRef.current.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`)
+    heroRef.current.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`)
+  }
 
   return (
     <main style={{ fontFamily: "'Inter', sans-serif" }}>
       <style>{CSS}</style>
 
       {/* ══ HERO ══ */}
-      <section style={{
-        position: 'relative',
-        overflow: 'hidden',
-        backgroundColor: '#1B3A6B',
-        color: '#FAFAFA',
-        padding: '100px 24px 120px',
-      }}>
-        <TalavераCorner />
-
-        {/* Segundo adorno arriba-izquierda, muy sutil */}
-        <div style={{
-          position: 'absolute', top: -60, left: -60,
-          width: 280, height: 280, borderRadius: '50%',
-          border: '1px solid rgba(255,255,255,0.06)',
-          pointerEvents: 'none',
-        }} />
-        <div style={{
-          position: 'absolute', top: -20, left: -20,
-          width: 180, height: 180, borderRadius: '50%',
-          border: '1px solid rgba(255,255,255,0.04)',
-          pointerEvents: 'none',
-        }} />
+      <section
+        className="cv-hero"
+        ref={heroRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={() => {
+          if (heroRef.current) {
+            heroRef.current.style.setProperty('--mouse-x', '-1000px')
+            heroRef.current.style.setProperty('--mouse-y', '-1000px')
+          }
+        }}
+        style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#1B3A6B', color: '#FAFAFA', padding: '100px 24px 120px' }}
+      >
+        <CyberTalaveraBackground />
 
         <div style={{ maxWidth: '72rem', margin: '0 auto', position: 'relative', zIndex: 1 }}>
 
           {/* Badge */}
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
-            backgroundColor: 'rgba(244,196,48,0.15)',
-            border: '1px solid rgba(244,196,48,0.3)',
+            backgroundColor: 'rgba(244,196,48,0.15)', border: '1px solid rgba(244,196,48,0.3)',
             borderRadius: 100, padding: '5px 16px',
-            fontSize: 12, fontWeight: 600,
-            letterSpacing: '0.06em', textTransform: 'uppercase',
+            fontSize: 12, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase',
             color: '#F4C430', marginBottom: 28,
             animation: 'fadeUp 0.6s ease both',
           }}>
@@ -156,25 +209,23 @@ export default function Landing() {
             Hackathon Por Amor a Puebla 2026
           </div>
 
-          {/* Headline */}
+          {/* Slogan — H1 */}
           <h1 style={{
-            fontSize: 'clamp(2.6rem, 5.5vw, 4rem)',
+            fontSize: 'clamp(2.4rem, 5.5vw, 4rem)',
             fontWeight: 800, lineHeight: 1.08,
-            margin: '0 0 22px', letterSpacing: '-0.03em',
-            maxWidth: 680,
+            margin: '0 0 16px', letterSpacing: '-0.03em',
+            maxWidth: 720,
             animation: 'fadeUp 0.7s ease 0.1s both',
           }}>
-            Conecta tu comunidad.{' '}
-            <span style={{ color: '#F4C430' }}>
-              Muevete con confianza.
-            </span>
+            La ciudad que todos{' '}
+            <span style={{ color: '#F4C430' }}>podemos recorrer.</span>
           </h1>
 
           {/* Subheadline */}
           <p style={{
             fontSize: '1.1rem', lineHeight: 1.72,
             color: 'rgba(255,255,255,0.72)',
-            margin: '0 0 48px', maxWidth: 500,
+            margin: '0 0 48px', maxWidth: 520,
             animation: 'fadeUp 0.7s ease 0.2s both',
           }}>
             La primera plataforma de transporte intercomunitario rural de Puebla.
@@ -183,10 +234,7 @@ export default function Landing() {
           </p>
 
           {/* CTAs */}
-          <div style={{
-            display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center',
-            animation: 'fadeUp 0.7s ease 0.3s both',
-          }}>
+          <div className="cv-hero-ctas" style={{ display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center', animation: 'fadeUp 0.7s ease 0.3s both' }}>
             <Link to="/buscar"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -196,11 +244,34 @@ export default function Landing() {
                 boxShadow: '0 4px 20px rgba(244,196,48,0.35)',
                 transition: 'all 0.2s ease',
               }}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(244,196,48,0.45)' }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F4C430'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(244,196,48,0.35)' }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F4C430'; e.currentTarget.style.transform = 'translateY(0)' }}
             >
               <Search size={17} /> Buscar transporte
             </Link>
+
+            <a
+              href="https://wa.me/14155238886?text=hola"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Reservar por WhatsApp"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                backgroundColor: '#25D366', color: '#fff',
+                padding: '14px 24px', borderRadius: 10,
+                fontWeight: 600, fontSize: 15, textDecoration: 'none',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#1fbe59'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#25D366'; e.currentTarget.style.transform = 'translateY(0)' }}
+            >
+              {/* WhatsApp icon */}
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.11.549 4.09 1.504 5.8L0 24l6.334-1.487A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.007-1.374l-.36-.214-3.727.875.908-3.63-.235-.373A9.818 9.818 0 1 1 12 21.818z"/>
+              </svg>
+              Reservar por WhatsApp
+            </a>
 
             <Link to="/mapa"
               style={{
@@ -224,6 +295,7 @@ export default function Landing() {
       <section style={{ backgroundColor: '#FAFAFA', padding: '0 24px' }}>
         <div
           ref={statsRef}
+          className="cv-stats-grid"
           style={{
             maxWidth: '72rem', margin: '0 auto',
             display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
@@ -241,10 +313,8 @@ export default function Landing() {
               borderRight: i < 2 ? '1px solid #f0f2f5' : 'none',
             }}>
               <div style={{
-                width: 48, height: 48, borderRadius: 12,
-                backgroundColor: '#1B3A6B',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                margin: '0 auto 16px',
+                width: 48, height: 48, borderRadius: 12, backgroundColor: '#1B3A6B',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px',
               }}>
                 <Icon size={21} color="#F4C430" aria-hidden="true" />
               </div>
@@ -260,8 +330,10 @@ export default function Landing() {
         </p>
       </section>
 
+      <hr className="gradient-divider" />
+
       {/* ══ COMO FUNCIONA ══ */}
-      <section ref={stepsRef} style={{ padding: '8px 24px 96px', backgroundColor: '#FAFAFA' }}>
+      <section ref={stepsRef} style={{ padding: '72px 24px 96px', backgroundColor: '#FAFAFA' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
@@ -272,39 +344,24 @@ export default function Landing() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 24 }}>
+          <div className="cv-steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 24 }}>
             {STEPS.map(({ n, icon: Icon, title, desc }, i) => (
-              <div key={n}
-                style={{
-                  backgroundColor: '#fff', border: '1px solid #e8edf5',
-                  borderRadius: 18, padding: '36px 28px',
-                  position: 'relative', overflow: 'hidden',
-                  opacity: stepsOn ? 1 : 0,
-                  transform: stepsOn ? 'translateY(0)' : 'translateY(28px)',
-                  transition: `opacity 0.5s ease ${i * 0.12}s, transform 0.5s ease ${i * 0.12}s`,
-                  cursor: 'default',
-                }}
+              <div key={n} style={{
+                backgroundColor: 'rgba(255,255,255,0.75)', border: '1px solid rgba(27,58,107,0.08)',
+                borderRadius: 18, padding: '36px 28px', position: 'relative', overflow: 'hidden',
+                opacity: stepsOn ? 1 : 0,
+                transform: stepsOn ? 'translateY(0)' : 'translateY(28px)',
+                transition: `opacity 0.5s ease ${i * 0.12}s, transform 0.5s ease ${i * 0.12}s`,
+              }}
                 onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 12px 36px rgba(27,58,107,0.1)'; e.currentTarget.style.transform = 'translateY(-4px)' }}
                 onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
               >
-                {/* número de fondo */}
-                <span style={{
-                  position: 'absolute', top: 12, right: 20,
-                  fontSize: '3.8rem', fontWeight: 900, lineHeight: 1,
-                  color: 'rgba(27,58,107,0.05)', userSelect: 'none',
-                }}>
+                <span style={{ position: 'absolute', top: 12, right: 20, fontSize: '3.8rem', fontWeight: 900, lineHeight: 1, color: 'rgba(27,58,107,0.05)', userSelect: 'none' }}>
                   {n}
                 </span>
-
-                {/* ícono */}
-                <div style={{
-                  width: 52, height: 52, borderRadius: 14,
-                  backgroundColor: '#1B3A6B',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 22,
-                }}>
+                <div style={{ width: 52, height: 52, borderRadius: 14, backgroundColor: '#1B3A6B', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 22 }}>
                   <Icon size={24} color="#F4C430" aria-hidden="true" />
                 </div>
-
                 <h3 style={{ fontSize: 17, fontWeight: 700, color: '#1B3A6B', margin: '0 0 10px' }}>{title}</h3>
                 <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.68, margin: 0 }}>{desc}</p>
               </div>
@@ -313,23 +370,13 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ══ POR QUE ══ */}
-      <section
-        ref={whyRef}
-        style={{
-          padding: '96px 24px',
-          backgroundColor: '#f4f6fb',
-          borderTop: '1px solid #dde3f0',
-        }}
-      >
-        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
+      <hr className="gradient-divider" />
 
-            <div style={{
-              opacity: whyOn ? 1 : 0,
-              transform: whyOn ? 'translateX(0)' : 'translateX(-24px)',
-              transition: 'all 0.7s ease',
-            }}>
+      {/* ══ POR QUE ══ */}
+      <section ref={whyRef} style={{ padding: '96px 24px', backgroundColor: '#f0f3fa' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
+          <div className="cv-why-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
+            <div style={{ opacity: whyOn ? 1 : 0, transform: whyOn ? 'translateX(0)' : 'translateX(-24px)', transition: 'all 0.7s ease' }}>
               <h2 style={{ fontSize: 'clamp(1.7rem,3vw,2.3rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 20px', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
                 Porque moverse en Puebla es un derecho, no un privilegio
               </h2>
@@ -342,12 +389,7 @@ export default function Landing() {
                 para el gobierno de Puebla.
               </p>
               <Link to="/mapa"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  color: '#1B3A6B', fontWeight: 700, fontSize: 15,
-                  textDecoration: 'none', borderBottom: '2px solid #1B3A6B',
-                  paddingBottom: 2, transition: 'gap 0.2s ease',
-                }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#1B3A6B', fontWeight: 700, fontSize: 15, textDecoration: 'none', borderBottom: '2px solid #1B3A6B', paddingBottom: 2, transition: 'gap 0.2s ease' }}
                 onMouseEnter={e => e.currentTarget.style.gap = '14px'}
                 onMouseLeave={e => e.currentTarget.style.gap = '8px'}
               >
@@ -355,27 +397,17 @@ export default function Landing() {
               </Link>
             </div>
 
-            <div style={{
-              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14,
-              opacity: whyOn ? 1 : 0,
-              transform: whyOn ? 'translateX(0)' : 'translateX(24px)',
-              transition: 'all 0.7s ease 0.15s',
-            }}>
+            <div className="cv-why-cards" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, opacity: whyOn ? 1 : 0, transform: whyOn ? 'translateX(0)' : 'translateX(24px)', transition: 'all 0.7s ease 0.15s' }}>
               {REASONS.map(({ icon: Icon, title, desc }) => (
-                <div key={title}
-                  style={{
-                    backgroundColor: '#fff', border: '1px solid #e0e7f0',
-                    borderRadius: 16, padding: '24px 20px',
-                    transition: 'box-shadow 0.2s ease, transform 0.2s ease',
-                  }}
+                <div key={title} style={{
+                  backgroundColor: 'rgba(255,255,255,0.75)', border: '1px solid rgba(27,58,107,0.08)',
+                  borderRadius: 16, padding: '24px 20px',
+                  transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+                }}
                   onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 28px rgba(27,58,107,0.09)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
                   onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
                 >
-                  <div style={{
-                    width: 42, height: 42, borderRadius: 11,
-                    backgroundColor: '#1B3A6B',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14,
-                  }}>
+                  <div style={{ width: 42, height: 42, borderRadius: 11, backgroundColor: '#1B3A6B', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
                     <Icon size={18} color="#F4C430" aria-hidden="true" />
                   </div>
                   <h3 style={{ fontSize: 13, fontWeight: 700, color: '#1B3A6B', margin: '0 0 7px' }}>{title}</h3>
@@ -387,35 +419,180 @@ export default function Landing() {
         </div>
       </section>
 
+      <hr className="gradient-divider" />
+
+      {/* ══ WHATSAPP DEMO ══ */}
+      <section style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
+          <div className="cv-why-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+
+            {/* Left: explanation */}
+            <div>
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                backgroundColor: '#dcfce7', border: '1px solid #bbf7d0',
+                borderRadius: 100, padding: '4px 14px',
+                fontSize: 11, fontWeight: 700, color: '#15803d',
+                letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 20,
+              }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#22c55e' }} />
+                Funciona con cualquier WhatsApp
+              </div>
+
+              <h2 style={{ fontSize: 'clamp(1.7rem,3vw,2.3rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 20px', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
+                Reserva sin salir de WhatsApp
+              </h2>
+              <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.78, margin: '0 0 16px' }}>
+                Sin descargar ninguna app. Funciona con <strong style={{ color: '#1B3A6B' }}>2G</strong> y en cualquier teléfono con WhatsApp instalado — incluyendo los más básicos.
+              </p>
+              <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.78, margin: '0 0 32px' }}>
+                Ideal para comunidades rurales donde el internet es limitado. Prueba la conversación del bot aquí mismo.
+              </p>
+
+              <a
+                href="https://wa.me/14155238886?text=hola"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 10,
+                  backgroundColor: '#25D366', color: '#fff',
+                  padding: '13px 26px', borderRadius: 10,
+                  fontWeight: 700, fontSize: 15, textDecoration: 'none',
+                  boxShadow: '0 4px 16px rgba(37,211,102,0.3)',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#1fbe59'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#25D366'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.11.549 4.09 1.504 5.8L0 24l6.334-1.487A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.007-1.374l-.36-.214-3.727.875.908-3.63-.235-.373A9.818 9.818 0 1 1 12 21.818z"/>
+                </svg>
+                Probar el bot en WhatsApp
+              </a>
+            </div>
+
+            {/* Right: phone simulator */}
+            <WhatsAppDemo />
+          </div>
+        </div>
+      </section>
+
+      <hr className="gradient-divider" />
+
+      {/* ══ ROADMAP ══ */}
+      <section style={{ padding: '96px 24px', backgroundColor: '#f0f3fa' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
+              Hacia donde vamos
+            </h2>
+            <p style={{ color: '#6b7280', fontSize: 16, maxWidth: 440, margin: '0 auto', lineHeight: 1.65 }}>
+              ChulaVia es el primer paso de una plataforma de movilidad que puede escalar a todo Puebla.
+            </p>
+          </div>
+
+          <div className="cv-roadmap-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
+            {[
+              {
+                fase: '01', badge: 'En curso', badgeColor: '#F4C430', badgeText: '#1B3A6B',
+                title: 'MVP — Hoy',
+                items: ['Plataforma web + mapa interactivo', 'Bot de WhatsApp para reservas', 'Dashboard de datos para el gobierno', '15 comunidades de la Mixteca'],
+              },
+              {
+                fase: '02', badge: 'Proximo', badgeColor: '#e8edf5', badgeText: '#6b7280',
+                title: '3 meses',
+                items: ['PWA instalable sin app store', 'Sistema de reportes de infraestructura', 'Paradas intermedias en rutas', 'SMS fallback para sin WhatsApp'],
+              },
+              {
+                fase: '03', badge: 'Futuro', badgeColor: '#e8edf5', badgeText: '#6b7280',
+                title: '6 meses',
+                items: ['217 municipios de Puebla', 'Alianza con SMOT para datos oficiales', 'Comision por viaje confirmado', 'API publica para investigadores'],
+              },
+            ].map(({ fase, badge, badgeColor, badgeText, title, items }) => (
+              <div key={fase} style={{
+                backgroundColor: 'rgba(255,255,255,0.75)', border: '1.5px solid rgba(27,58,107,0.08)',
+                borderRadius: 20, padding: '32px 28px',
+                transition: 'box-shadow 0.3s, transform 0.3s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(27,58,107,0.1)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                  <div style={{ width: 48, height: 48, borderRadius: '50%', backgroundColor: '#1B3A6B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 800, color: '#F4C430' }}>{fase}</div>
+                  <span style={{ padding: '4px 12px', borderRadius: 100, backgroundColor: badgeColor, color: badgeText, fontSize: 11, fontWeight: 700 }}>{badge}</span>
+                </div>
+                <h3 style={{ fontSize: 18, fontWeight: 800, color: '#1B3A6B', margin: '0 0 16px' }}>{title}</h3>
+                <ul style={{ margin: 0, paddingLeft: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {items.map(item => (
+                    <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14, color: '#4b5563', lineHeight: 1.5 }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#1B3A6B', marginTop: 7, flexShrink: 0 }} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <hr className="gradient-divider" />
+
+      {/* ══ EQUIPO ══ */}
+      <section style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
+              El equipo
+            </h2>
+            <p style={{ color: '#6b7280', fontSize: 16, maxWidth: 380, margin: '0 auto', lineHeight: 1.65 }}>
+              Cuatro especialidades, un solo objetivo: conectar a las comunidades rurales de Puebla.
+            </p>
+          </div>
+
+          <div className="cv-team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24, marginBottom: 40 }}>
+            {TEAM.map(({ nombre, rol, tech, foto, iniciales }) => (
+              <div key={nombre} style={{
+                backgroundColor: 'rgba(255,255,255,0.75)', border: '1.5px solid rgba(27,58,107,0.08)',
+                borderRadius: 20, padding: '32px 24px', textAlign: 'center',
+                transition: 'box-shadow 0.3s, transform 0.3s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 28px rgba(27,58,107,0.1)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                <PhotoAvatar src={foto} iniciales={iniciales} />
+                <h3 style={{ fontSize: 16, fontWeight: 800, color: '#1B3A6B', margin: '0 0 6px' }}>{nombre}</h3>
+                <p style={{ fontSize: 13, fontWeight: 600, color: '#2A6049', margin: '0 0 10px' }}>{rol}</p>
+                <p style={{ fontSize: 12, color: '#9ca3af', margin: 0, lineHeight: 1.5 }}>{tech}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center' }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '8px 20px', borderRadius: 100,
+              backgroundColor: '#f0f4ff', border: '1px solid #dde3f0',
+              fontSize: 12, fontWeight: 600, color: '#1B3A6B', letterSpacing: '0.03em',
+            }}>
+              Metodologia Scrum &bull; Sprint de 24 horas &bull; Backlog priorizado
+            </span>
+          </div>
+        </div>
+      </section>
+
       {/* ══ CTA FINAL ══ */}
       <section style={{
         padding: '100px 24px',
-        backgroundColor: '#1B3A6B',
+        background: 'linear-gradient(135deg, #1B3A6B 0%, #12284C 100%)',
         textAlign: 'center', color: '#FAFAFA',
         position: 'relative', overflow: 'hidden',
       }}>
-        {/* Talavera corner decorativo en la sección CTA también */}
-        <div style={{ position: 'absolute', top: -60, left: -60, pointerEvents: 'none' }}>
-          <svg width="300" height="300" viewBox="0 0 120 120" fill="none" aria-hidden="true" style={{ opacity: 0.07 }}>
-            <ellipse cx="60" cy="22" rx="11" ry="20" fill="white"/>
-            <ellipse cx="60" cy="98" rx="11" ry="20" fill="white"/>
-            <ellipse cx="22" cy="60" rx="20" ry="11" fill="white"/>
-            <ellipse cx="98" cy="60" rx="20" ry="11" fill="white"/>
-            <circle  cx="60" cy="60" r="13" fill="white"/>
-            <rect x="8" y="8" width="104" height="104" rx="6" stroke="white" strokeWidth="1.5" fill="none"/>
-          </svg>
-        </div>
-
         <div style={{ maxWidth: 520, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          <div style={{
-            width: 64, height: 64, borderRadius: 18,
-            backgroundColor: '#F4C430',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 28px',
-          }}>
+          <div style={{ width: 64, height: 64, borderRadius: 18, backgroundColor: '#F4C430', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 28px' }}>
             <Users size={28} color="#1B3A6B" aria-hidden="true" />
           </div>
-
           <h2 style={{ fontSize: 'clamp(1.7rem,3vw,2.3rem)', fontWeight: 800, margin: '0 0 16px', letterSpacing: '-0.02em' }}>
             Eres transportista? Registrate gratis
           </h2>
@@ -432,8 +609,8 @@ export default function Landing() {
               boxShadow: '0 4px 20px rgba(244,196,48,0.35)',
               transition: 'all 0.2s ease',
             }}
-            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(244,196,48,0.45)' }}
-            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F4C430'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(244,196,48,0.35)' }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F4C430'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
             Registrarme como transportista <ArrowRight size={17} />
           </Link>
@@ -441,22 +618,76 @@ export default function Landing() {
       </section>
 
       {/* ══ FOOTER ══ */}
-      <footer style={{
-        backgroundColor: '#fff',
-        borderTop: '1px solid #e8edf5',
-        padding: '40px 24px',
-        textAlign: 'center',
-      }}>
-        <div style={{ maxWidth: '72rem', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+      <footer style={{ backgroundColor: '#fff', borderTop: '1px solid #e8edf5', padding: '40px 24px' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
           <img src="/logo.png" alt="ChulaVia" style={{ height: 52, width: 'auto' }} />
           <p style={{ margin: 0, color: '#4b5563', fontSize: 14, fontWeight: 500 }}>
-            Plataforma de movilidad rural intercomunitaria de Puebla
+            La ciudad que todos podemos recorrer
           </p>
           <p style={{ margin: 0, color: '#9ca3af', fontSize: 12 }}>
+            Plataforma de movilidad rural intercomunitaria de Puebla
+          </p>
+
+          {/* Social links */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginTop: 4 }}>
+            <a href="https://www.instagram.com/poramorapuebla.chulavia/" target="_blank" rel="noopener noreferrer"
+              aria-label="Instagram de ChulaVia"
+              style={{ color: '#6b7280', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#E1306C'}
+              onMouseLeave={e => e.currentTarget.style.color = '#6b7280'}
+            >
+              <IconInstagram />
+            </a>
+            <a href="https://web.facebook.com/profile.php?id=61560493651891" target="_blank" rel="noopener noreferrer"
+              aria-label="Facebook de ChulaVia"
+              style={{ color: '#6b7280', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#1877F2'}
+              onMouseLeave={e => e.currentTarget.style.color = '#6b7280'}
+            >
+              <IconFacebook />
+            </a>
+            <a href="mailto:poramorapuebla.chulavia@gmail.com"
+              aria-label="Correo de ChulaVia"
+              style={{ color: '#6b7280', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#1B3A6B'}
+              onMouseLeave={e => e.currentTarget.style.color = '#6b7280'}
+            >
+              <Mail size={20} aria-hidden="true" />
+            </a>
+          </div>
+
+          <p style={{ margin: 0, color: '#9ca3af', fontSize: 11 }}>
             Hackathon Por Amor a Puebla 2026 &bull; Eje Movilidad Rural
           </p>
         </div>
       </footer>
     </main>
+  )
+}
+
+/* ── Photo avatar with fallback ── */
+function PhotoAvatar({ src, iniciales }) {
+  const [err, setErr] = useState(false)
+  if (err) {
+    return (
+      <div style={{
+        width: 80, height: 80, borderRadius: '50%', backgroundColor: '#1B3A6B',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        margin: '0 auto 20px', fontSize: 24, fontWeight: 800, color: '#F4C430',
+      }}>{iniciales}</div>
+    )
+  }
+  return (
+    <img
+      src={src}
+      alt={iniciales}
+      onError={() => setErr(true)}
+      style={{
+        width: 80, height: 80, borderRadius: '50%',
+        objectFit: 'cover', objectPosition: 'center top',
+        margin: '0 auto 20px', display: 'block',
+        border: '3px solid #e8edf5',
+      }}
+    />
   )
 }
