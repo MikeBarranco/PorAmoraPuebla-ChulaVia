@@ -14,6 +14,11 @@ from django.http import HttpResponse
 class ComunidadList(generics.ListAPIView):
     queryset = Comunidad.objects.all().order_by('municipio')
     serializer_class = ComunidadSerializer
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['lang'] = self.request.query_params.get('lang', 'es')
+        return context
 
 class RutaList(generics.ListCreateAPIView):
     serializer_class = RutaSerializer
@@ -62,47 +67,93 @@ def analytics_rutas_populares(request):
     ).order_by('-num_solicitudes')[:5]
     return Response(RutaSerializer(rutas, many=True).data)
 
+# Diccionario de mensajes multi-idioma (Español, Nahuatl, Totonaco)
+MENSAJES = {
+    'bienvenido': {
+        'es':  '👋 ¡Bienvenido a ChulaVía!\n\nSelecciona tu idioma:\n1. Español\n2. Nahuatl\n3. Totonaco',
+        'nah': '👋 Ximopanolti ChulaVía!\n\nXikchoa motlatol:\n1. Español\n2. Nahuatl\n3. Totonaco',
+        'tot': '👋 Skalh tenk ChulaVía!\n\nKlhakgalhni xalakatsipi:\n1. Español\n2. Nahuatl\n3. Totonaco',
+    },
+    'pedir_origen': {
+        'es':  '¿De dónde sales? Escribe el nombre de tu comunidad.',
+        'nah': '¿Kampa tiwala? Xikijto itoka moaltepe.',
+        'tot': '¿Niku tsukuya? Kawani xkuini minkachikin.',
+    },
+    'pedir_destino': {
+        'es':  'Salida desde: {origen}\n¿A dónde vas?',
+        'nah': 'Pejkayotl: {origen}\n¿Kampa tiyow?',
+        'tot': 'Niku tsuku: {origen}\n¿Niku pina?',
+    },
+    'no_ruta': {
+        'es':  'Aún no tenemos ruta de {origen} a {destino}.\nRegistramos tu solicitud.\n\nEscribe "hola" para buscar otra ruta.',
+        'nah': 'Ayamo tikpia ojtli {origen} - {destino}.\nTikpixtok motlatlanilis.\n\nXikijto "hola" para xiktemo ocse.',
+        'tot': 'Nina kgalhi ojtli {origen} - {destino}.\nLhaqawa tlajan.\n\nKawani "hola" kaputsati.',
+    },
+    'confirmado': {
+        'es':  '✅ ¡Reservación confirmada!\n{nombre} te espera a las {hora}.\nContacto: {tel}\nPrecio: ${precio}',
+        'nah': '✅ Momachtilito moojtli!\n{nombre} mitzchiyaz ika {hora}.\nTekixtli: {tel}\nIpatiw: ${precio}',
+        'tot': '✅ Lhaqawa tlajan!\n{nombre} katchiya {hora}.\nTekil: {tel}\nXlakata: ${precio}',
+    },
+}
+
+# Estado de las conversaciones (en memoria para el prototipo)
+CONVERSACIONES = {}
+
 @csrf_exempt
 def whatsapp_webhook(request):
-    incoming_msg = request.POST.get('Body', '').lower()
+    mensaje = request.POST.get('Body', '').lower().strip()
+    numero = request.POST.get('From', '')
     resp = MessagingResponse()
     msg = resp.message()
 
-    if 'hola' in incoming_msg or 'menú' in incoming_msg or 'menu' in incoming_msg or 'inicio' in incoming_msg:
-        msg.body("👋 ¡Hola! Soy el asistente virtual de *ChulaVía* 🚐.\n\nPor favor, responde con el número de la opción que necesitas:\n\n1️⃣ Buscar viaje\n2️⃣ Cancelar/Modificar un viaje\n3️⃣ Ver rutas populares\n4️⃣ Pedir ayuda a soporte")
-    
-    elif '1' in incoming_msg and len(incoming_msg) < 3:
-        msg.body("Perfecto. Dime de dónde sales y a dónde vas.\n*(Ejemplo: De Tehuitzingo a Acatlán)*")
+    # Obtener el estado actual del usuario
+    estado = CONVERSACIONES.get(numero, {'paso': 'inicio'})
+
+    # 1. Inicio / Reiniciar
+    if mensaje in ['hola', 'hola!', 'hi', 'inicio', 'menu', 'menú']:
+        CONVERSACIONES[numero] = {'paso': 'elegir_idioma'}
+        msg.body(MENSAJES['bienvenido']['es'])
+
+    # 2. Elegir Idioma
+    elif estado['paso'] == 'elegir_idioma':
+        idioma_map = {'1': 'es', '2': 'nah', '3': 'tot'}
+        idioma = idioma_map.get(mensaje, 'es')
+        CONVERSACIONES[numero] = {'paso': 'pedir_origen', 'idioma': idioma}
+        msg.body(MENSAJES['pedir_origen'][idioma])
+
+    # 3. Pedir Origen
+    elif estado['paso'] == 'pedir_origen':
+        idioma = estado.get('idioma', 'es')
+        CONVERSACIONES[numero] = {
+            'paso': 'pedir_destino', 
+            'origen': mensaje, 
+            'idioma': idioma
+        }
+        msg.body(MENSAJES['pedir_destino'][idioma].format(origen=mensaje))
+
+    # 4. Pedir Destino y Simular Búsqueda
+    elif estado['paso'] == 'pedir_destino':
+        idioma = estado.get('idioma', 'es')
+        origen = estado.get('origen', '')
+        destino = mensaje
         
-    elif 'tehuitzingo' in incoming_msg and 'acatl' in incoming_msg:
-        msg.body("📅 ¿Qué día y a qué hora te gustaría viajar?\n*(Ejemplo: Hoy a las 5pm, Mañana en la mañana)*")
-        
-    elif 'hoy' in incoming_msg or 'mañana' in incoming_msg or 'pm' in incoming_msg or 'am' in incoming_msg:
-        msg.body("🔍 *Buscando disponibilidad...*\n\n✅ ¡Encontré un lugar perfecto para ti!\n\n👤 Conductor: *Ernesto García*\n🚐 Unidad: Combi (PBL-123)\n⭐ Calificación: 4.8 / 5.0\n🕒 Salida: 17:00\n💵 Costo: $35 MXN\n\nResponde *CONFIRMAR* para apartar tu lugar o *CANCELAR* para buscar otra opción.")
-        
-    elif 'confirmar' in incoming_msg:
-        msg.body("🎉 ¡Tu lugar está apartado exitosamente! Ernesto te espera en la base principal.\n\n🎫 *Folio de viaje:* CHV-9824\n\n¿Hay algo más en lo que te pueda ayudar hoy? Escribe *Menú* para regresar al inicio.")
-        
-    elif '2' in incoming_msg and len(incoming_msg) < 3:
-        msg.body("⚠️ Para cancelar o modificar un viaje, por favor escribe tu *Folio de viaje* (Ejemplo: CHV-9824).")
-        
-    elif 'chv' in incoming_msg:
-        msg.body("✅ Hemos encontrado tu viaje (Folio: CHV-9824).\n\nEscribe *CANCELAR VIAJE* si ya no vas a asistir, o *MODIFICAR* si quieres cambiar la hora.")
-        
-    elif 'cancelar viaje' in incoming_msg:
-        msg.body("🗑️ Tu viaje ha sido cancelado exitosamente. No se te hará ningún cobro.\n\nEscribe *Menú* si necesitas buscar otro viaje. ¡Gracias por usar ChulaVía!")
-        
-    elif 'modificar' in incoming_msg:
-        msg.body("✏️ Para modificar tu viaje, un asesor humano te contactará en los próximos 5 minutos. \n\nEscribe *Menú* para regresar a las opciones principales.")
-        
-    elif '3' in incoming_msg and len(incoming_msg) < 3:
-        msg.body("📍 *Rutas Populares de hoy:*\n- Chiautla -> Izúcar ($45)\n- Coatzingo -> Acatlán ($20)\n\nEscribe *1* para buscar un viaje.")
-        
-    elif '4' in incoming_msg and len(incoming_msg) < 3:
-        msg.body("📞 *Soporte ChulaVía*\nEn un momento te comunicaremos con un humano.\n\nSi quieres volver al inicio, escribe *Menú*.")
-        
+        # Simulación de respuesta fija para el demo
+        if 'puebla' in destino or 'izucar' in destino:
+            msg.body(MENSAJES['confirmado'][idioma].format(
+                nombre='Ernesto García',
+                hora='17:00',
+                tel='222-123-4567',
+                precio='35'
+            ))
+            CONVERSACIONES[numero] = {'paso': 'inicio'}
+        else:
+            msg.body(MENSAJES['no_ruta'][idioma].format(origen=origen, destino=destino))
+            CONVERSACIONES[numero] = {'paso': 'inicio'}
+
+    # 5. Fallback
     else:
-        msg.body("Lo siento, no entendí bien eso. 🤔\n\nPor favor, escribe la palabra *Hola* o *Menú* para ver las opciones principales.")
+        msg.body("Lo siento, no entendí bien eso. 🤔\n\nEscribe *Hola* para iniciar.")
+        CONVERSACIONES[numero] = {'paso': 'inicio'}
 
     return HttpResponse(str(resp), content_type='text/xml')
 

@@ -2,6 +2,8 @@ from django.db import models
 
 class Comunidad(models.Model):
     nombre = models.CharField(max_length=200)
+    nombre_nahuatl = models.CharField(max_length=200, blank=True, null=True)
+    nombre_totonaco = models.CharField(max_length=200, blank=True, null=True)
     municipio = models.CharField(max_length=200)
     lat = models.DecimalField(max_digits=10, decimal_places=8)
     lng = models.DecimalField(max_digits=11, decimal_places=8)
