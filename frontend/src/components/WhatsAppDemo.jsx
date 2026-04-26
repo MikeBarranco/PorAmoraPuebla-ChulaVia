@@ -15,9 +15,12 @@ export default function WhatsAppDemo() {
   const [step, setStep]       = useState(0)
   const [typing, setTyping]   = useState(false)
   const bottomRef             = useRef(null)
+  const chatRef               = useRef(null)
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight
+    }
   }, [visible, typing])
 
   function advance() {
@@ -68,7 +71,7 @@ export default function WhatsAppDemo() {
         </div>
 
         {/* Chat area */}
-        <div style={{
+        <div ref={chatRef} style={{
           height: 340,
           overflowY: 'auto',
           padding: '12px 10px',

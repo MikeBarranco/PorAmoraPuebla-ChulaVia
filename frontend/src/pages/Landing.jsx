@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
-import { MapPin, Search, Shield, BarChart2, MessageCircle, ArrowRight, Users, Route, Mail } from 'lucide-react'
+import { MapPin, Search, Shield, BarChart2, MessageCircle, ArrowRight, Users, Route } from 'lucide-react'
 import WhatsAppDemo from '../components/WhatsAppDemo'
 
 /* ── Keyframes ── */
@@ -144,22 +144,6 @@ const TEAM = [
   { nombre: 'Monica Tapia',    rol: 'Investigacion & Datos', tech: 'INEGI · CONAPO · Canva',          foto: '/equipo/Monica-Tapia.jpeg',      iniciales: 'MT' },
   { nombre: 'Sumayra Rivera',  rol: 'Pitch & Estrategia',    tech: 'PED 2024-2030 · Impacto Social',  foto: '/equipo/Sumayra-Rivera.jpeg',    iniciales: 'SR' },
 ]
-
-/* ── SVG social icons ── */
-function IconInstagram() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-    </svg>
-  )
-}
-function IconFacebook() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-    </svg>
-  )
-}
 
 /* ── Component ── */
 export default function Landing() {
@@ -617,50 +601,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ══ FOOTER ══ */}
-      <footer style={{ backgroundColor: '#fff', borderTop: '1px solid #e8edf5', padding: '40px 24px' }}>
-        <div style={{ maxWidth: '72rem', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-          <img src="/logo.png" alt="ChulaVia" style={{ height: 52, width: 'auto' }} />
-          <p style={{ margin: 0, color: '#4b5563', fontSize: 14, fontWeight: 500 }}>
-            La ciudad que todos podemos recorrer
-          </p>
-          <p style={{ margin: 0, color: '#9ca3af', fontSize: 12 }}>
-            Plataforma de movilidad rural intercomunitaria de Puebla
-          </p>
-
-          {/* Social links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginTop: 4 }}>
-            <a href="https://www.instagram.com/poramorapuebla.chulavia/" target="_blank" rel="noopener noreferrer"
-              aria-label="Instagram de ChulaVia"
-              style={{ color: '#6b7280', transition: 'color 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#E1306C'}
-              onMouseLeave={e => e.currentTarget.style.color = '#6b7280'}
-            >
-              <IconInstagram />
-            </a>
-            <a href="https://web.facebook.com/profile.php?id=61560493651891" target="_blank" rel="noopener noreferrer"
-              aria-label="Facebook de ChulaVia"
-              style={{ color: '#6b7280', transition: 'color 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#1877F2'}
-              onMouseLeave={e => e.currentTarget.style.color = '#6b7280'}
-            >
-              <IconFacebook />
-            </a>
-            <a href="mailto:poramorapuebla.chulavia@gmail.com"
-              aria-label="Correo de ChulaVia"
-              style={{ color: '#6b7280', transition: 'color 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#1B3A6B'}
-              onMouseLeave={e => e.currentTarget.style.color = '#6b7280'}
-            >
-              <Mail size={20} aria-hidden="true" />
-            </a>
-          </div>
-
-          <p style={{ margin: 0, color: '#9ca3af', fontSize: 11 }}>
-            Hackathon Por Amor a Puebla 2026 &bull; Eje Movilidad Rural
-          </p>
-        </div>
-      </footer>
     </main>
   )
 }
