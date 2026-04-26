@@ -68,18 +68,41 @@ def whatsapp_webhook(request):
     resp = MessagingResponse()
     msg = resp.message()
 
-    if 'hola' in incoming_msg or 'menú' in incoming_msg or 'menu' in incoming_msg:
-        msg.body("¡Hola! Soy el bot de *ChulaVía* 🚐.\n\nEscribe el número de tu opción:\n1️⃣ Buscar viaje\n2️⃣ Ver rutas populares\n3️⃣ Pedir ayuda")
-    elif '1' in incoming_msg:
+    if 'hola' in incoming_msg or 'menú' in incoming_msg or 'menu' in incoming_msg or 'inicio' in incoming_msg:
+        msg.body("👋 ¡Hola! Soy el asistente virtual de *ChulaVía* 🚐.\n\nPor favor, responde con el número de la opción que necesitas:\n\n1️⃣ Buscar viaje\n2️⃣ Cancelar/Modificar un viaje\n3️⃣ Ver rutas populares\n4️⃣ Pedir ayuda a soporte")
+    
+    elif '1' in incoming_msg and len(incoming_msg) < 3:
         msg.body("Perfecto. Dime de dónde sales y a dónde vas.\n*(Ejemplo: De Tehuitzingo a Acatlán)*")
+        
     elif 'tehuitzingo' in incoming_msg and 'acatl' in incoming_msg:
-        msg.body("🔍 *Buscando rutas de Tehuitzingo a Acatlán...*\n\n✅ Encontré a *Ernesto García*\n🚐 Combi (PBL-123)\n⭐ 4.8 / 5.0\n🕒 Próxima salida: 17:00\n💵 Costo: $35 MXN\n\nResponde *CONFIRMAR* para apartar tu lugar.")
+        msg.body("📅 ¿Qué día y a qué hora te gustaría viajar?\n*(Ejemplo: Hoy a las 5pm, Mañana en la mañana)*")
+        
+    elif 'hoy' in incoming_msg or 'mañana' in incoming_msg or 'pm' in incoming_msg or 'am' in incoming_msg:
+        msg.body("🔍 *Buscando disponibilidad...*\n\n✅ ¡Encontré un lugar perfecto para ti!\n\n👤 Conductor: *Ernesto García*\n🚐 Unidad: Combi (PBL-123)\n⭐ Calificación: 4.8 / 5.0\n🕒 Salida: 17:00\n💵 Costo: $35 MXN\n\nResponde *CONFIRMAR* para apartar tu lugar o *CANCELAR* para buscar otra opción.")
+        
     elif 'confirmar' in incoming_msg:
-        msg.body("🎉 ¡Tu lugar está apartado! Ernesto te espera en la base principal.\n\n*Folio de viaje:* CHV-9824\n¡Gracias por viajar seguro con ChulaVía! 💚")
-    elif '2' in incoming_msg:
-        msg.body("📍 *Rutas Populares hoy:*\n- Chiautla -> Izúcar ($45)\n- Coatzingo -> Acatlán ($20)\n\nEscribe *1* para buscar un viaje.")
+        msg.body("🎉 ¡Tu lugar está apartado exitosamente! Ernesto te espera en la base principal.\n\n🎫 *Folio de viaje:* CHV-9824\n\n¿Hay algo más en lo que te pueda ayudar hoy? Escribe *Menú* para regresar al inicio.")
+        
+    elif '2' in incoming_msg and len(incoming_msg) < 3:
+        msg.body("⚠️ Para cancelar o modificar un viaje, por favor escribe tu *Folio de viaje* (Ejemplo: CHV-9824).")
+        
+    elif 'chv' in incoming_msg:
+        msg.body("✅ Hemos encontrado tu viaje (Folio: CHV-9824).\n\nEscribe *CANCELAR VIAJE* si ya no vas a asistir, o *MODIFICAR* si quieres cambiar la hora.")
+        
+    elif 'cancelar viaje' in incoming_msg:
+        msg.body("🗑️ Tu viaje ha sido cancelado exitosamente. No se te hará ningún cobro.\n\nEscribe *Menú* si necesitas buscar otro viaje. ¡Gracias por usar ChulaVía!")
+        
+    elif 'modificar' in incoming_msg:
+        msg.body("✏️ Para modificar tu viaje, un asesor humano te contactará en los próximos 5 minutos. \n\nEscribe *Menú* para regresar a las opciones principales.")
+        
+    elif '3' in incoming_msg and len(incoming_msg) < 3:
+        msg.body("📍 *Rutas Populares de hoy:*\n- Chiautla -> Izúcar ($45)\n- Coatzingo -> Acatlán ($20)\n\nEscribe *1* para buscar un viaje.")
+        
+    elif '4' in incoming_msg and len(incoming_msg) < 3:
+        msg.body("📞 *Soporte ChulaVía*\nEn un momento te comunicaremos con un humano.\n\nSi quieres volver al inicio, escribe *Menú*.")
+        
     else:
-        msg.body("Lo siento, no entendí eso. Escribe *Hola* para ver el menú principal.")
+        msg.body("Lo siento, no entendí bien eso. 🤔\n\nPor favor, escribe la palabra *Hola* o *Menú* para ver las opciones principales.")
 
     return HttpResponse(str(resp), content_type='text/xml')
 
