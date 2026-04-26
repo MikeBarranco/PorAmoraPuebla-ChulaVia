@@ -197,6 +197,7 @@ export default function Landing() {
   const [stepsRef, stepsOn] = useFade()
   const [whyRef,   whyOn]   = useFade()
   const heroRef = useRef(null)
+  const ctaRef = useRef(null)
 
   const STATS = [
     { to: 6082, suffix: '',  label: t('estadisticas','stat1'), icon: STATS_ICONS[0] },
@@ -220,6 +221,13 @@ export default function Landing() {
     const rect = heroRef.current.getBoundingClientRect()
     heroRef.current.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`)
     heroRef.current.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`)
+  }
+
+  const handleCTAMouseMove = (e) => {
+    if (!ctaRef.current) return
+    const rect = ctaRef.current.getBoundingClientRect()
+    ctaRef.current.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`)
+    ctaRef.current.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`)
   }
 
   return (
@@ -609,12 +617,24 @@ export default function Landing() {
       </section>
 
       {/* ══ CTA FINAL ══ */}
-      <section style={{
-        padding: '100px 24px',
-        background: 'linear-gradient(135deg, #1B3A6B 0%, #12284C 100%)',
-        textAlign: 'center', color: '#FAFAFA',
-        position: 'relative', overflow: 'hidden',
-      }}>
+      <section 
+        ref={ctaRef}
+        onMouseMove={handleCTAMouseMove}
+        onMouseLeave={() => {
+          if (ctaRef.current) {
+            ctaRef.current.style.setProperty('--mouse-x', '-1000px')
+            ctaRef.current.style.setProperty('--mouse-y', '-1000px')
+          }
+        }}
+        style={{
+          padding: '100px 24px',
+          background: 'linear-gradient(135deg, #1B3A6B 0%, #12284C 100%)',
+          textAlign: 'center', color: '#FAFAFA',
+          position: 'relative', overflow: 'hidden',
+        }}
+      >
+        <CyberTalaveraBackground />
+        
         <div style={{ maxWidth: 520, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div style={{ width: 64, height: 64, borderRadius: 18, backgroundColor: '#F4C430', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 28px' }}>
             <Users size={28} color="#1B3A6B" aria-hidden="true" />
@@ -634,7 +654,7 @@ export default function Landing() {
               boxShadow: '0 4px 20px rgba(244,196,48,0.35)',
               transition: 'all 0.2s ease',
             }}
-            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-3px)' }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F4C430'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
             {t('landing','cta_btn')} <ArrowRight size={17} />
