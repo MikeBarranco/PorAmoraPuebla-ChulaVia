@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Search, MapPin, Clock, Star, Shield, ChevronDown, X, CheckCircle, MessageCircle, Users, Timer, ChevronUp } from 'lucide-react'
 import { comunidades, rutas } from '../data/comunidades'
 import { api } from '../data/api'
+import { useT } from '../context/LangContext.jsx'
 
 const BLUE   = '#1B3A6B'
 const YELLOW = '#F4C430'
@@ -53,6 +54,7 @@ function Select({ value, onChange, options, placeholder }) {
 
 function RouteCard({ ruta, onBook }) {
   const [showResenas, setShowResenas] = useState(false)
+  const t = useT()
   return (
     <div style={{
       backgroundColor: '#fff', border: '1.5px solid #e8edf5',
@@ -81,7 +83,7 @@ function RouteCard({ ruta, onBook }) {
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
         <Badge color={BLUE}>{ruta.tipo}</Badge>
         <Badge color={GREEN}>{ruta.capacidad} lugares</Badge>
-        {ruta.verificado && <Badge color={GREEN}>Verificado</Badge>}
+        {ruta.verificado && <Badge color={GREEN}>{t('general','verificado')}</Badge>}
         {ruta.eta && (
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: 4,
@@ -89,14 +91,14 @@ function RouteCard({ ruta, onBook }) {
             fontSize: 11, fontWeight: 600,
             backgroundColor: '#fef9c3', color: '#854d0e',
           }}>
-            <Timer size={11} /> ETA {ruta.eta}
+            <Timer size={11} /> {t('resultados','tiempo_estimado')} {ruta.eta}
           </span>
         )}
       </div>
 
       <div style={{ marginBottom: 16 }}>
         <p style={{ margin: '0 0 8px', fontSize: 12, fontWeight: 600, color: GRAY, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          Horarios
+          {t('resultados','horarios')}
         </p>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {ruta.horarios.map(h => (
@@ -114,7 +116,7 @@ function RouteCard({ ruta, onBook }) {
 
       <div style={{ marginBottom: 16 }}>
         <p style={{ margin: '0 0 8px', fontSize: 12, fontWeight: 600, color: GRAY, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          Dias de servicio
+          {t('resultados','dias_de_servicio')}
         </p>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {['Lun','Mar','Mie','Jue','Vie','Sab','Dom'].map(d => (
@@ -163,7 +165,7 @@ function RouteCard({ ruta, onBook }) {
           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-1px)' }}
           onMouseLeave={e => { e.currentTarget.style.backgroundColor = YELLOW; e.currentTarget.style.transform = 'translateY(0)' }}
         >
-          <MessageCircle size={15} /> Reservar
+          <MessageCircle size={15} /> {t('resultados','reservar_viaje')}
         </button>
       </div>
 
@@ -375,6 +377,7 @@ function BookingModal({ ruta, onClose }) {
 }
 
 export default function SearchPage() {
+  const t = useT()
   const [origen,   setOrigen]   = useState('')
   const [destino,  setDestino]  = useState('')
   const [searched, setSearched] = useState(false)
@@ -419,12 +422,12 @@ export default function SearchPage() {
             boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
           }}>
             <div style={{ flex: 1, minWidth: 180 }}>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Desde</label>
-              <Select value={origen} onChange={setOrigen} options={opciones} placeholder="Comunidad de origen" />
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('busqueda','origen')}</label>
+              <Select value={origen} onChange={setOrigen} options={opciones} placeholder={t('busqueda','de_donde_sales')} />
             </div>
             <div style={{ flex: 1, minWidth: 180 }}>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Hasta</label>
-              <Select value={destino} onChange={setDestino} options={opciones} placeholder="Comunidad de destino" />
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('busqueda','destino')}</label>
+              <Select value={destino} onChange={setDestino} options={opciones} placeholder={t('busqueda','a_donde_vas')} />
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <button onClick={buscar} disabled={!origen && !destino}
@@ -439,7 +442,7 @@ export default function SearchPage() {
                 onMouseEnter={e => { if (origen || destino) e.currentTarget.style.backgroundColor = '#e8b800' }}
                 onMouseLeave={e => { if (origen || destino) e.currentTarget.style.backgroundColor = YELLOW }}
               >
-                <Search size={17} /> Buscar
+                <Search size={17} /> {t('busqueda','buscar')}
               </button>
               {searched && (
                 <button onClick={limpiar} aria-label="Limpiar busqueda"
