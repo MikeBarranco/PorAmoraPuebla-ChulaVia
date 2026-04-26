@@ -477,21 +477,21 @@ export default function Landing() {
           </div>
 
           <div className="cv-roadmap-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
-            {[
+            [
               {
                 fase: '01', badge: 'En curso', badgeColor: '#F4C430', badgeText: '#1B3A6B',
-                title: 'MVP — Hoy',
-                items: ['Plataforma web + mapa interactivo', 'Bot de WhatsApp para reservas', 'Dashboard de datos para el gobierno', '15 comunidades de la Mixteca'],
+                title: 'Hoy — Hackathon',
+                items: ['App web + mapa de comunidades rurales', 'Bot WhatsApp en Español, Nahuatl y Totonaco', 'Dashboard de datos para el gobierno', 'Transportistas verificados: INE + placa + calificaciones'],
               },
               {
-                fase: '02', badge: 'Proximo', badgeColor: '#e8edf5', badgeText: '#6b7280',
-                title: '3 meses',
-                items: ['PWA instalable sin app store', 'Sistema de reportes de infraestructura', 'Paradas intermedias en rutas', 'SMS fallback para sin WhatsApp'],
+                fase: '02', badge: '30-90 dias', badgeColor: '#e8edf5', badgeText: '#6b7280',
+                title: 'Expansion Regional',
+                items: ['80+ comunidades en 5 regiones de Puebla', 'PWA instalable sin necesidad de app store', 'Voz: busca tu ruta sin leer ni escribir', 'SMS fallback para telefono sin datos'],
               },
               {
-                fase: '03', badge: 'Futuro', badgeColor: '#e8edf5', badgeText: '#6b7280',
-                title: '6 meses',
-                items: ['217 municipios de Puebla', 'Alianza con SMOT para datos oficiales', 'Comision por viaje confirmado', 'API publica para investigadores'],
+                fase: '03', badge: '6 meses', badgeColor: '#e8edf5', badgeText: '#6b7280',
+                title: 'Escala Estatal',
+                items: ['217 municipios de Puebla cubiertos', 'Alianza con SMOT y CONAPO para datos oficiales', 'Validacion de traducciones con Instituto Poblano de Pueblos Indigenas', 'API publica de movilidad rural para investigadores'],
               },
             ].map(({ fase, badge, badgeColor, badgeText, title, items }) => (
               <div key={fase} style={{
