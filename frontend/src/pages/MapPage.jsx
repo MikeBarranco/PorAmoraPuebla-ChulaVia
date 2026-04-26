@@ -84,12 +84,14 @@ export default function MapPage() {
         const color = c.tieneTransporte ? GREEN : RED
         const esSeed = seedNombres.has(c.nombre)
         const circle = L.circleMarker([c.lat, c.lng], {
-          radius:      esSeed ? 8 : 5,
+          radius:      esSeed ? 9 : 5,
           fillColor:   color,
-          color:       'white',
-          weight:      esSeed ? 2 : 1,
-          fillOpacity: esSeed ? 0.95 : 0.75,
-        }).bindTooltip(`<strong>${c.nombre}</strong><br>${c.municipio}`, {
+          color:       esSeed ? '#F4C430' : 'white',
+          weight:      esSeed ? 2.5 : 0.8,
+          fillOpacity: esSeed ? 1 : 0.72,
+        }).bindTooltip(esSeed
+          ? `<strong>⭐ ${c.nombre}</strong><br>${c.municipio}<br><em style="color:#2A6049">Haz clic para ver rutas</em>`
+          : `<strong>${c.nombre}</strong><br>${c.municipio}`, {
           sticky: true,
           className: 'cv-tooltip',
         })
@@ -155,6 +157,18 @@ export default function MapPage() {
         ).addTo(map)
       })
 
+      /* ── Zoom dinámico: ajusta tamaño de círculos al acercar ── */
+      function actualizarRadios() {
+        const z = map.getZoom()
+        const rNormal = z >= 12 ? 7  : z >= 10 ? 6  : 5
+        const rSeed   = z >= 12 ? 13 : z >= 10 ? 11 : 9
+        layersRef.current.todos.forEach(c => {
+          const esSeed = c.options.weight === 2.5
+          c.setRadius(esSeed ? rSeed : rNormal)
+        })
+      }
+      map.on('zoomend', actualizarRadios)
+
       mapObj.current = map
       if (mounted) setLoaded(true)
     }
@@ -202,6 +216,10 @@ export default function MapPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
           {/* Leyenda */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 12, color: '#374151' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <span style={{ width: 11, height: 11, borderRadius: '50%', backgroundColor: GREEN, border: '2px solid #F4C430', display: 'inline-block' }} />
+              Con rutas ({comunidades.length})
+            </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
               <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: GREEN, display: 'inline-block' }} />
               {t('mapa','con_cobertura')} ({conCobertura})
