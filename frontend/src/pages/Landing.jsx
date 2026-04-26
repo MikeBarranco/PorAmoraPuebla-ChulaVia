@@ -145,6 +145,65 @@ const TEAM = [
   { nombre: 'Sumayra Rivera',  rol: 'Pitch & Estrategia',    tech: 'PED 2024-2030 · Impacto Social',  foto: '/equipo/Sumayra-Rivera.jpeg',    iniciales: 'SR' },
 ]
 
+/* ── Sprint Accordion ── */
+const SPRINTS = [
+  {
+    label: 'Sprint 1 · Horas 0–8',
+    color: '#dcfce7', textColor: '#15803d',
+    tasks: ['Setup de proyecto: React + Vite + TailwindCSS', 'Landing page con hero, estadísticas INEGI y secciones', 'Backend Django: modelos, API REST, seed de 15 comunidades', 'Mapa interactivo con Leaflet y datos reales de Puebla'],
+  },
+  {
+    label: 'Sprint 2 · Horas 8–16',
+    color: '#FEF9C3', textColor: '#854D0E',
+    tasks: ['Buscador de transporte con resultados y reservación', 'Bot de WhatsApp (Twilio) con flujo origen → destino → confirmación', 'Dashboard de gobierno con gráficas Recharts', 'Panel de registro de transportistas con subida de foto'],
+  },
+  {
+    label: 'Sprint 3 · Horas 16–24',
+    color: '#e8edf5', textColor: '#1B3A6B',
+    tasks: ['PWA instalable: manifest.json + Service Worker', 'Internacionalización: Español, Nahuatl y Totonaco', 'Responsividad completa: móvil, tablet y escritorio', 'Deploy: Vercel (frontend) + Railway (backend) en producción'],
+  },
+]
+
+function SprintAccordion() {
+  const [open, setOpen] = useState(null)
+  return (
+    <div style={{ maxWidth: 680, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {SPRINTS.map((sprint, i) => {
+        const isOpen = open === i
+        return (
+          <div key={i} style={{ borderRadius: 14, border: '1.5px solid rgba(27,58,107,0.1)', overflow: 'hidden', backgroundColor: 'rgba(255,255,255,0.8)' }}>
+            <button
+              onClick={() => setOpen(isOpen ? null : i)}
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '14px 20px', background: 'none', border: 'none', cursor: 'pointer',
+                textAlign: 'left', gap: 12,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ padding: '3px 10px', borderRadius: 100, backgroundColor: sprint.color, color: sprint.textColor, fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' }}>
+                  {sprint.label}
+                </span>
+              </div>
+              <span style={{ fontSize: 18, color: '#1B3A6B', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', flexShrink: 0 }}>▾</span>
+            </button>
+            {isOpen && (
+              <ul style={{ margin: 0, padding: '0 20px 16px 20px', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {sprint.tasks.map(task => (
+                  <li key={task} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 13, color: '#374151', lineHeight: 1.55 }}>
+                    <span style={{ marginTop: 5, width: 6, height: 6, borderRadius: '50%', backgroundColor: '#1B3A6B', flexShrink: 0 }} />
+                    {task}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 /* ── Component ── */
 export default function Landing() {
   const [statsRef, statsOn] = useFade()
@@ -406,7 +465,7 @@ export default function Landing() {
       <hr className="gradient-divider" />
 
       {/* ══ WHATSAPP DEMO ══ */}
-      <section style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
+      <section className="cv-flowers-bg" style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div className="cv-why-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
 
@@ -443,7 +502,7 @@ export default function Landing() {
       <hr className="gradient-divider" />
 
       {/* ══ ROADMAP ══ */}
-      <section style={{ padding: '96px 24px', backgroundColor: '#f0f3fa' }}>
+      <section className="cv-flowers-bg" style={{ padding: '96px 24px', backgroundColor: '#f0f3fa' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
@@ -457,19 +516,19 @@ export default function Landing() {
           <div className="cv-roadmap-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
             {[
               {
-                fase: '01', badge: 'En curso', badgeColor: '#F4C430', badgeText: '#1B3A6B',
-                title: 'Hoy — Hackathon',
-                items: ['App web + mapa de comunidades rurales', 'Bot WhatsApp en Español, Nahuatl y Totonaco', 'Dashboard de datos para el gobierno', 'Transportistas verificados: INE + placa + calificaciones'],
+                fase: '01', badge: '✓ Hoy', badgeColor: '#dcfce7', badgeText: '#15803d',
+                title: 'MVP — Hackathon',
+                items: ['App web + PWA instalable en tu celular', 'Bot WhatsApp en Español, Nahuatl y Totonaco', 'Dashboard de datos en tiempo real para el gobierno', 'Transportistas verificados: INE + placa + calificaciones'],
               },
               {
-                fase: '02', badge: '30-90 dias', badgeColor: '#e8edf5', badgeText: '#6b7280',
+                fase: '02', badge: '30 días', badgeColor: '#FEF9C3', badgeText: '#854D0E',
                 title: 'Expansion Regional',
-                items: ['80+ comunidades en 5 regiones de Puebla', 'PWA instalable sin necesidad de app store', 'Voz: busca tu ruta sin leer ni escribir', 'SMS fallback para telefono sin datos'],
+                items: ['80+ comunidades en 5 regiones de Puebla', 'Sistema de reportes de infraestructura vial', 'Paradas intermedias y rutas compartidas', 'SMS fallback para telefonos sin internet'],
               },
               {
-                fase: '03', badge: '6 meses', badgeColor: '#e8edf5', badgeText: '#6b7280',
+                fase: '03', badge: '60-90 días', badgeColor: '#e8edf5', badgeText: '#6b7280',
                 title: 'Escala Estatal',
-                items: ['217 municipios de Puebla cubiertos', 'Alianza con SMOT y CONAPO para datos oficiales', 'Validacion de traducciones con Instituto Poblano de Pueblos Indigenas', 'API publica de movilidad rural para investigadores'],
+                items: ['217 municipios de Puebla cubiertos', 'Alianza con SMOT y CONAPO para datos oficiales', 'Voz: busca tu ruta sin leer ni escribir', 'API publica de movilidad rural para investigadores'],
               },
             ].map(({ fase, badge, badgeColor, badgeText, title, items }) => (
               <div key={fase} style={{
@@ -502,7 +561,7 @@ export default function Landing() {
       <hr className="gradient-divider" />
 
       {/* ══ EQUIPO ══ */}
-      <section style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
+      <section className="cv-flowers-bg" style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
@@ -531,7 +590,7 @@ export default function Landing() {
             ))}
           </div>
 
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '8px 20px', borderRadius: 100,
@@ -541,6 +600,9 @@ export default function Landing() {
               Metodologia Scrum &bull; Sprint de 24 horas &bull; Backlog priorizado
             </span>
           </div>
+
+          {/* Sprint accordion */}
+          <SprintAccordion />
         </div>
       </section>
 
