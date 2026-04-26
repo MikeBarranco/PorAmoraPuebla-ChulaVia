@@ -5,7 +5,7 @@
 # ChulaVía
 ### La primera plataforma digital de movilidad rural de Puebla
 
-[![Deploy Frontend](https://img.shields.io/badge/Frontend-Vercel-black?style=for-the-badge&logo=vercel)](https://chula-via.vercel.app)
+[![Deploy Frontend](https://img.shields.io/badge/Frontend-Vercel-black?style=for-the-badge&logo=vercel)](https://por-amora-puebla-chula-via.vercel.app/)
 [![Deploy Backend](https://img.shields.io/badge/Backend-Railway-7B2FBE?style=for-the-badge&logo=railway)](https://poramorapuebla-chulavia-production.up.railway.app/api/)
 [![WhatsApp Bot](https://img.shields.io/badge/Bot-WhatsApp-25D366?style=for-the-badge&logo=whatsapp)](https://wa.me/14155238886?text=hola)
 [![Hackathon](https://img.shields.io/badge/Hackathon-Por%20Amor%20a%20Puebla%202026-E63946?style=for-the-badge)](https://poramorapuebla.mx)
@@ -403,7 +403,7 @@ Este proyecto fue creado durante un hackathon de 24 horas pero está diseñado p
 
 *Hackathon Por Amor a Puebla 2026 · Equipo ChulaVía*
 
-[![Frontend](https://img.shields.io/badge/Ver%20App-chula--via.vercel.app-black?style=for-the-badge&logo=vercel)](https://chula-via.vercel.app)
+[![Frontend](https://img.shields.io/badge/Ver%20App-por--amora--puebla--chula--via.vercel.app-black?style=for-the-badge&logo=vercel)](https://por-amora-puebla-chula-via.vercel.app/)
 [![WhatsApp Bot](https://img.shields.io/badge/Probar%20Bot-WhatsApp-25D366?style=for-the-badge&logo=whatsapp)](https://wa.me/14155238886?text=hola)
 
 </div>
