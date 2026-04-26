@@ -2,6 +2,8 @@ from django.db import models
 
 class Comunidad(models.Model):
     nombre = models.CharField(max_length=200)
+    nombre_nahuatl = models.CharField(max_length=200, blank=True, null=True)
+    nombre_totonaco = models.CharField(max_length=200, blank=True, null=True)
     municipio = models.CharField(max_length=200)
     lat = models.DecimalField(max_digits=10, decimal_places=8)
     lng = models.DecimalField(max_digits=11, decimal_places=8)
@@ -28,7 +30,7 @@ class Transportista(models.Model):
     capacidad = models.IntegerField(default=8)
     placa = models.CharField(max_length=10)
     ine_ultimos_4 = models.CharField(max_length=4)
-    foto_vehiculo_url = models.URLField(blank=True)
+    foto_vehiculo_base64 = models.TextField(blank=True, help_text="Imagen comprimida en Base64")
     calificacion = models.DecimalField(max_digits=3, decimal_places=2, default=5.00)
     total_viajes = models.IntegerField(default=0)
     verificado = models.BooleanField(default=False)
@@ -53,8 +55,8 @@ class Ruta(models.Model):
     origen = models.ForeignKey(Comunidad, on_delete=models.CASCADE, related_name='rutas_origen')
     destino = models.ForeignKey(Comunidad, on_delete=models.CASCADE, related_name='rutas_destino')
     precio = models.DecimalField(max_digits=8, decimal_places=2)
-    horarios = models.JSONField(default=list)  # ["07:00", "12:00", "17:00"]
-    dias = models.JSONField(default=list)       # ["lunes", "miercoles", "viernes"]
+    horarios = models.JSONField(default=list)
+    dias = models.JSONField(default=list)
     activa = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     
@@ -73,7 +75,7 @@ class Solicitud(models.Model):
     destino_texto = models.CharField(max_length=200)
     ruta = models.ForeignKey(Ruta, on_delete=models.SET_NULL, null=True, blank=True, related_name='solicitudes')
     pasajeros = models.IntegerField(default=1)
-    telefono_whatsapp = models.CharField(max_length=20)
+    telefono_whatsapp = models.CharField(max_length=30)
     fecha_viaje = models.DateField()
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
@@ -84,6 +86,6 @@ class Solicitud(models.Model):
 class Calificacion(models.Model):
     ruta = models.ForeignKey(Ruta, on_delete=models.CASCADE, related_name='calificaciones')
     solicitud = models.ForeignKey(Solicitud, on_delete=models.CASCADE)
-    puntuacion = models.IntegerField()  # 1-5
+    puntuacion = models.IntegerField()
     comentario = models.TextField(blank=True)
     fecha = models.DateTimeField(auto_now_add=True)

@@ -264,8 +264,8 @@ export default function Landing() {
             maxWidth: 720,
             animation: 'fadeUp 0.7s ease 0.1s both',
           }}>
-            La ciudad que todos{' '}
-            <span style={{ color: '#F4C430' }}>podemos recorrer.</span>
+            {t('landing','hero_titulo').split(' ').slice(0,-2).join(' ')}{' '}
+            <span style={{ color: '#F4C430' }}>{t('landing','hero_titulo').split(' ').slice(-2).join(' ')}</span>
           </h1>
 
           {/* Subheadline */}
@@ -275,9 +275,7 @@ export default function Landing() {
             margin: '0 0 48px', maxWidth: 520,
             animation: 'fadeUp 0.7s ease 0.2s both',
           }}>
-            La primera plataforma de transporte intercomunitario rural de Puebla.
-            Conectamos pasajeros con transportistas verificados donde el transporte
-            formal no llega.
+            {t('landing','hero_subtitulo')}
           </p>
 
           {/* CTAs */}
@@ -483,17 +481,17 @@ export default function Landing() {
                 letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 20,
               }}>
                 <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#22c55e' }} />
-                Funciona con cualquier WhatsApp
+                {t('landing','wa_badge')}
               </div>
 
               <h2 style={{ fontSize: 'clamp(1.7rem,3vw,2.3rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 20px', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
-                Reserva sin salir de WhatsApp
+                {t('landing','wa_titulo')}
               </h2>
               <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.78, margin: '0 0 16px' }}>
-                Sin descargar ninguna app. Funciona con <strong style={{ color: '#1B3A6B' }}>2G</strong> y en cualquier teléfono con WhatsApp instalado — incluyendo los más básicos.
+                {t('landing','wa_desc1')}
               </p>
               <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.78, margin: 0 }}>
-                Ideal para comunidades rurales donde el internet es limitado. Prueba la conversación interactiva a la derecha.
+                {t('landing','wa_desc2')}
               </p>
             </div>
 
@@ -510,10 +508,10 @@ export default function Landing() {
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
-              Hacia donde vamos
+              {t('landing','roadmap_titulo')}
             </h2>
             <p style={{ color: '#6b7280', fontSize: 16, maxWidth: 440, margin: '0 auto', lineHeight: 1.65 }}>
-              ChulaVia es el primer paso de una plataforma de movilidad que puede escalar a todo Puebla.
+              {t('landing','roadmap_subtitulo')}
             </p>
           </div>
 
@@ -569,10 +567,10 @@ export default function Landing() {
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
-              El equipo
+              {t('landing','equipo_titulo')}
             </h2>
             <p style={{ color: '#6b7280', fontSize: 16, maxWidth: 380, margin: '0 auto', lineHeight: 1.65 }}>
-              Cuatro especialidades, un solo objetivo: conectar a las comunidades rurales de Puebla.
+              {t('landing','equipo_subtitulo')}
             </p>
           </div>
 
@@ -625,8 +623,7 @@ export default function Landing() {
             {t('navegacion','soy_transportista')}
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.68)', fontSize: 16, lineHeight: 1.72, margin: '0 0 40px' }}>
-            Llega a mas pasajeros, optimiza tus rutas y forma parte de la primera
-            red de transporte rural digital de Puebla.
+            {t('landing','cta_desc')}
           </p>
           <Link to="/unirse"
             style={{
@@ -640,7 +637,7 @@ export default function Landing() {
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-2px)' }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F4C430'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
-            Registrarme como transportista <ArrowRight size={17} />
+            {t('landing','cta_btn')} <ArrowRight size={17} />
           </Link>
         </div>
       </section>

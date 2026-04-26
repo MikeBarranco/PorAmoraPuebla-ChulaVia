@@ -199,6 +199,7 @@ function makeFolio() {
 }
 
 function BookingModal({ ruta, onClose }) {
+  const t = useT()
   const [phone, setPhone] = useState('')
   const [date,  setDate]  = useState('')
   const [pax,   setPax]   = useState(1)
@@ -255,20 +256,20 @@ function BookingModal({ ruta, onClose }) {
               <CheckCircle size={32} color={GREEN} />
             </div>
             <h2 style={{ margin: '0 0 10px', fontSize: 20, fontWeight: 800, color: BLUE }}>
-              Reservacion confirmada
+              {t('busqueda','modal_exito')}
             </h2>
             <div style={{
               display: 'inline-block', backgroundColor: '#1B3A6B', color: '#F4C430',
               padding: '4px 14px', borderRadius: 8, fontSize: 13, fontWeight: 700,
               letterSpacing: '0.08em', marginBottom: 14,
             }}>
-              Folio: {folio}
+              {t('busqueda','modal_folio')}: {folio}
             </div>
             <p style={{ margin: '0 0 6px', fontSize: 14, color: GRAY }}>
               {ruta.origen} → {ruta.destino}
             </p>
             <p style={{ margin: '0 0 24px', fontSize: 14, color: GRAY }}>
-              Te contactamos por WhatsApp al <strong style={{ color: BLUE }}>{phone}</strong>
+              {t('busqueda','modal_contacto')} <strong style={{ color: BLUE }}>{phone}</strong>
             </p>
             <div style={{ backgroundColor: '#f4f6fb', borderRadius: 12, padding: 16, marginBottom: 24, textAlign: 'left' }}>
               <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: BLUE }}>Resumen</p>
@@ -289,7 +290,7 @@ function BookingModal({ ruta, onClose }) {
           </div>
         ) : (
           <>
-            <h2 style={{ margin: '0 0 6px', fontSize: 20, fontWeight: 800, color: BLUE }}>Reservar viaje</h2>
+            <h2 style={{ margin: '0 0 6px', fontSize: 20, fontWeight: 800, color: BLUE }}>{t('busqueda','modal_titulo')}</h2>
             <p style={{ margin: '0 0 24px', fontSize: 14, color: GRAY }}>
               {ruta.origen} → {ruta.destino} &nbsp;·&nbsp; ${ruta.precio} por persona
             </p>
@@ -297,7 +298,7 @@ function BookingModal({ ruta, onClose }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
                 <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: BLUE, marginBottom: 6 }}>
-                  Numero de WhatsApp *
+                  {t('busqueda','modal_tel')} *
                 </label>
                 <input type="tel" value={phone} onChange={e => setPhone(e.target.value)}
                   placeholder="Ej. 2221234567"
@@ -366,7 +367,7 @@ function BookingModal({ ruta, onClose }) {
                   cursor: phone && date ? 'pointer' : 'not-allowed',
                   transition: 'all 0.2s',
                 }}>
-                Confirmar por WhatsApp
+                {t('busqueda','modal_btn')}
               </button>
             </div>
           </>
@@ -511,9 +512,9 @@ export default function SearchPage() {
             <div style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: 'rgba(27,58,107,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
               <MapPin size={28} color={BLUE} style={{ opacity: 0.4 }} />
             </div>
-            <h3 style={{ margin: '0 0 8px', fontSize: 17, fontWeight: 700, color: BLUE }}>No encontramos rutas disponibles</h3>
+            <h3 style={{ margin: '0 0 8px', fontSize: 17, fontWeight: 700, color: BLUE }}>{t('busqueda','sin_resultados')}</h3>
             <p style={{ margin: '0 0 24px', fontSize: 14, color: GRAY, maxWidth: 360, marginInline: 'auto' }}>
-              Aun no hay transportistas para esta ruta. Registramos tu solicitud para que la vean.
+              {t('busqueda','intenta')}
             </p>
             <button onClick={limpiar} style={{ backgroundColor: BLUE, color: '#fff', padding: '11px 24px', borderRadius: 10, border: 'none', fontWeight: 600, fontSize: 14, cursor: 'pointer' }}>
               Buscar otra ruta

@@ -1,3 +1,9 @@
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+django.setup()
+
 from api.models import Comunidad, Transportista, Ruta, Solicitud
 
 # Limpiar datos previos
@@ -6,21 +12,21 @@ Transportista.objects.all().delete()
 
 # Comunidades de Puebla
 comunidades_data = [
-    {"nombre": "Tehuitzingo", "municipio": "Tehuitzingo", "lat": 18.3617, "lng": -98.2828, "poblacion": 4500},
-    {"nombre": "Acatlan de Osorio", "municipio": "Acatlan", "lat": 18.2050, "lng": -98.0506, "poblacion": 12000, "tiene_transporte_formal": True},
-    {"nombre": "Chiautla de Tapia", "municipio": "Chiautla", "lat": 18.2994, "lng": -98.5683, "poblacion": 6800, "tiene_transporte_formal": True},
-    {"nombre": "Izucar de Matamoros", "municipio": "Izucar", "lat": 18.5989, "lng": -98.4661, "poblacion": 45000, "tiene_transporte_formal": True},
-    {"nombre": "Coatzingo", "municipio": "Coatzingo", "lat": 18.2717, "lng": -98.2128, "poblacion": 3200},
-    {"nombre": "Piaxtla", "municipio": "Piaxtla", "lat": 18.1683, "lng": -98.2289, "poblacion": 2100},
-    {"nombre": "Xayacatlan de Bravo", "municipio": "Xayacatlan", "lat": 18.2261, "lng": -98.2472, "poblacion": 2800},
+    {"nombre": "Tehuitzingo", "nombre_nahuatl": "Tehuitzinko", "nombre_totonaco": "Tehwitzin", "municipio": "Tehuitzingo", "lat": 18.3617, "lng": -98.2828, "poblacion": 4500},
+    {"nombre": "Acatlan de Osorio", "nombre_nahuatl": "Akatlan", "municipio": "Acatlan", "lat": 18.2050, "lng": -98.0506, "poblacion": 12000, "tiene_transporte_formal": True},
+    {"nombre": "Chiautla de Tapia", "nombre_nahuatl": "Chiauhtlan", "municipio": "Chiautla", "lat": 18.2994, "lng": -98.5683, "poblacion": 6800, "tiene_transporte_formal": True},
+    {"nombre": "Izucar de Matamoros", "nombre_nahuatl": "Itzokan", "municipio": "Izucar", "lat": 18.5989, "lng": -98.4661, "poblacion": 45000, "tiene_transporte_formal": True},
+    {"nombre": "Coatzingo", "nombre_nahuatl": "Koatzinko", "municipio": "Coatzingo", "lat": 18.2717, "lng": -98.2128, "poblacion": 3200},
+    {"nombre": "Piaxtla", "nombre_nahuatl": "Piyaxtlan", "municipio": "Piaxtla", "lat": 18.1683, "lng": -98.2289, "poblacion": 2100},
+    {"nombre": "Xayacatlan de Bravo", "nombre_nahuatl": "Xayakatlan", "municipio": "Xayacatlan", "lat": 18.2261, "lng": -98.2472, "poblacion": 2800},
     {"nombre": "San Pablo Anicano", "municipio": "Tehuitzingo", "lat": 18.3453, "lng": -98.3012, "poblacion": 680},
     {"nombre": "San Jeronimo Xayacatlan", "municipio": "Xayacatlan", "lat": 18.2100, "lng": -98.2600, "poblacion": 520},
     {"nombre": "Santa Ana Coatlichan", "municipio": "Tehuitzingo", "lat": 18.3200, "lng": -98.3400, "poblacion": 340},
-    {"nombre": "Chietla", "municipio": "Chietla", "lat": 18.4439, "lng": -98.6619, "poblacion": 5600, "tiene_transporte_formal": True},
-    {"nombre": "Tilapa", "municipio": "Tilapa", "lat": 18.3389, "lng": -98.3667, "poblacion": 890},
+    {"nombre": "Chietla", "nombre_nahuatl": "Chietlan", "municipio": "Chietla", "lat": 18.4439, "lng": -98.6619, "poblacion": 5600, "tiene_transporte_formal": True},
+    {"nombre": "Tilapa", "nombre_nahuatl": "Tilapan", "municipio": "Tilapa", "lat": 18.3389, "lng": -98.3667, "poblacion": 890},
     {"nombre": "San Pablo Ahuatempan", "municipio": "Ahuatempan", "lat": 18.2778, "lng": -97.9719, "poblacion": 1200},
-    {"nombre": "Huehuetlan el Grande", "municipio": "Huehuetlan", "lat": 18.3856, "lng": -98.0928, "poblacion": 3400},
-    {"nombre": "Tulcingo del Valle", "municipio": "Tulcingo", "lat": 18.0631, "lng": -98.2278, "poblacion": 4100, "tiene_transporte_formal": True},
+    {"nombre": "Huehuetlan el Grande", "nombre_nahuatl": "Huehuetlan", "municipio": "Huehuetlan", "lat": 18.3856, "lng": -98.0928, "poblacion": 3400},
+    {"nombre": "Tulcingo del Valle", "nombre_nahuatl": "Tultsinko", "municipio": "Tulcingo", "lat": 18.0631, "lng": -98.2278, "poblacion": 4100, "tiene_transporte_formal": True},
 ]
 
 comunidades = {}
