@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Search, MapPin, Clock, Star, Shield, ChevronDown, X, CheckCircle, MessageCircle, Users, Timer, ChevronUp } from 'lucide-react'
+import { useState, useRef, useCallback } from 'react'
+import { Search, MapPin, Clock, Star, Shield, ChevronDown, X, CheckCircle, MessageCircle, Users, Timer, ChevronUp, Mic, MicOff } from 'lucide-react'
 import { comunidades, rutas } from '../data/comunidades'
 import { api } from '../data/api'
 import { useT } from '../context/LangContext.jsx'
@@ -377,6 +377,65 @@ function BookingModal({ ruta, onClose }) {
   )
 }
 
+// ── Hook de búsqueda por voz ──────────────────────────────────────────────
+function useVoiceSearch(comunidadesList, onResult) {
+  const [escuchando, setEscuchando] = useState(null) // 'origen' | 'destino' | null
+  const [transcript, setTranscript] = useState('')
+  const recRef = useRef(null)
+
+  const iniciar = useCallback((campo) => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (!SR) { alert('Tu navegador no soporta búsqueda por voz. Usa Chrome o Edge.'); return }
+    if (recRef.current) recRef.current.stop()
+
+    const rec = new SR()
+    rec.lang = 'es-MX'
+    rec.interimResults = false
+    rec.maxAlternatives = 5
+    recRef.current = rec
+    setEscuchando(campo)
+    setTranscript('')
+
+    rec.onresult = (e) => {
+      const textos = Array.from(e.results[0]).map(r => r.transcript.toLowerCase().trim())
+      // Buscar la comunidad más parecida en la lista real
+      let mejor = null
+      let mejorScore = 0
+      comunidadesList.forEach(c => {
+        const nombre = c.nombre.toLowerCase()
+        textos.forEach(texto => {
+          // Coincidencia exacta
+          if (nombre === texto) { mejor = c.nombre; mejorScore = 100; return }
+          // Contiene el texto
+          if (nombre.includes(texto) && texto.length > 3 && texto.length > mejorScore) {
+            mejor = c.nombre; mejorScore = texto.length
+          }
+          // El texto contiene el nombre
+          if (texto.includes(nombre) && nombre.length > mejorScore) {
+            mejor = c.nombre; mejorScore = nombre.length
+          }
+        })
+      })
+      const resultado = mejor || textos[0]
+      setTranscript(resultado)
+      onResult(campo, resultado)
+      setEscuchando(null)
+    }
+
+    rec.onerror = () => setEscuchando(null)
+    rec.onend   = () => setEscuchando(null)
+    rec.start()
+  }, [comunidadesList, onResult])
+
+  const detener = useCallback(() => {
+    if (recRef.current) recRef.current.stop()
+    setEscuchando(null)
+  }, [])
+
+  return { escuchando, transcript, iniciar, detener }
+}
+// ──────────────────────────────────────────────────────────────────────────
+
 export default function SearchPage() {
   const t = useT()
   const [origen,   setOrigen]   = useState('')
@@ -385,6 +444,20 @@ export default function SearchPage() {
   const [booking,  setBooking]  = useState(null)
 
   const opciones = comunidades.map(c => ({ value: c.nombre, label: c.nombre }))
+
+  // Voz
+  const handleVozResultado = useCallback((campo, valor) => {
+    // Intentar encontrar la comunidad exacta en la lista
+    const match = comunidades.find(c =>
+      c.nombre.toLowerCase().includes(valor.toLowerCase()) ||
+      valor.toLowerCase().includes(c.nombre.toLowerCase())
+    )
+    const final = match ? match.nombre : valor
+    if (campo === 'origen')  setOrigen(final)
+    if (campo === 'destino') setDestino(final)
+  }, [])
+
+  const { escuchando, iniciar, detener } = useVoiceSearch(comunidades, handleVozResultado)
 
   const resultados = searched
     ? rutas.filter(r =>
@@ -422,13 +495,60 @@ export default function SearchPage() {
             display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'flex-end',
             boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
           }}>
+            {/* Origen con micrófono */}
             <div style={{ flex: 1, minWidth: 180 }}>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('busqueda','origen')}</label>
-              <Select value={origen} onChange={setOrigen} options={opciones} placeholder={t('busqueda','de_donde_sales')} />
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                {t('busqueda','origen')}
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Select value={origen} onChange={setOrigen} options={opciones} placeholder={t('busqueda','de_donde_sales')} />
+                <button
+                  onClick={() => escuchando === 'origen' ? detener() : iniciar('origen')}
+                  title={escuchando === 'origen' ? 'Detener' : 'Buscar por voz'}
+                  style={{
+                    position: 'absolute', right: 36, top: '50%', transform: 'translateY(-50%)',
+                    background: escuchando === 'origen' ? '#fee2e2' : 'rgba(27,58,107,0.07)',
+                    border: 'none', borderRadius: 7, padding: '5px 7px',
+                    cursor: 'pointer', display: 'flex', alignItems: 'center',
+                    color: escuchando === 'origen' ? '#dc2626' : BLUE,
+                    transition: 'all 0.2s',
+                    animation: escuchando === 'origen' ? 'cv-mic-pulse 1s infinite' : 'none',
+                  }}
+                >
+                  {escuchando === 'origen' ? <MicOff size={15} /> : <Mic size={15} />}
+                </button>
+              </div>
+              {escuchando === 'origen' && (
+                <p style={{ margin: '4px 0 0', fontSize: 12, color: '#dc2626', fontWeight: 600 }}>🎤 Escuchando... di el nombre de tu comunidad</p>
+              )}
             </div>
+
+            {/* Destino con micrófono */}
             <div style={{ flex: 1, minWidth: 180 }}>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('busqueda','destino')}</label>
-              <Select value={destino} onChange={setDestino} options={opciones} placeholder={t('busqueda','a_donde_vas')} />
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: GRAY, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                {t('busqueda','destino')}
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Select value={destino} onChange={setDestino} options={opciones} placeholder={t('busqueda','a_donde_vas')} />
+                <button
+                  onClick={() => escuchando === 'destino' ? detener() : iniciar('destino')}
+                  title={escuchando === 'destino' ? 'Detener' : 'Buscar por voz'}
+                  style={{
+                    position: 'absolute', right: 36, top: '50%', transform: 'translateY(-50%)',
+                    background: escuchando === 'destino' ? '#fee2e2' : 'rgba(27,58,107,0.07)',
+                    border: 'none', borderRadius: 7, padding: '5px 7px',
+                    cursor: 'pointer', display: 'flex', alignItems: 'center',
+                    color: escuchando === 'destino' ? '#dc2626' : BLUE,
+                    transition: 'all 0.2s',
+                    animation: escuchando === 'destino' ? 'cv-mic-pulse 1s infinite' : 'none',
+                  }}
+                >
+                  {escuchando === 'destino' ? <MicOff size={15} /> : <Mic size={15} />}
+                </button>
+              </div>
+              {escuchando === 'destino' && (
+                <p style={{ margin: '4px 0 0', fontSize: 12, color: '#dc2626', fontWeight: 600 }}>🎤 Escuchando... di el nombre de tu destino</p>
+              )}
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <button onClick={buscar} disabled={!origen && !destino}
