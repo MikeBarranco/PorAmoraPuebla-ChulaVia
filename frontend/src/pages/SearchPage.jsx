@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Search, MapPin, Clock, Star, Shield, ChevronDown, X, CheckCircle, MessageCircle, Users } from 'lucide-react'
 import { comunidades, rutas } from '../data/comunidades'
+import { api } from '../data/api'
 
 const BLUE   = '#1B3A6B'
 const YELLOW = '#F4C430'
@@ -155,6 +156,15 @@ function BookingModal({ ruta, onClose }) {
 
   function confirm() {
     if (!phone || !date) return
+    api.crearSolicitud({
+      origen_texto: ruta.origen,
+      destino_texto: ruta.destino,
+      ruta: ruta.id ?? null,
+      pasajeros: pax,
+      telefono_whatsapp: phone,
+      fecha_viaje: date,
+      estado: 'confirmada',
+    }).catch(() => {})
     setDone(true)
   }
 
