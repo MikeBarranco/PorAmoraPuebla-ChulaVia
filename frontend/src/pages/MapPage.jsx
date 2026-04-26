@@ -76,15 +76,19 @@ export default function MapPage() {
         maxZoom: 18,
       }).addTo(map)
 
-      /* ── Todas las comunidades del JSON (691) como circle markers ── */
+      /* ── Nombres de seed communities para lookup rápido ── */
+      const seedNombres = new Set(comunidades.map(c => c.nombre))
+
+      /* ── Todas las comunidades del JSON (691) como circle markers uniformes ── */
       comunidadesMapa.forEach(c => {
         const color = c.tieneTransporte ? GREEN : RED
+        const esSeed = seedNombres.has(c.nombre)
         const circle = L.circleMarker([c.lat, c.lng], {
-          radius: 4,
-          fillColor: color,
-          color: 'white',
-          weight: 0.8,
-          fillOpacity: 0.75,
+          radius:      esSeed ? 8 : 5,
+          fillColor:   color,
+          color:       'white',
+          weight:      esSeed ? 2 : 1,
+          fillOpacity: esSeed ? 0.95 : 0.75,
         }).bindTooltip(`<strong>${c.nombre}</strong><br>${c.municipio}`, {
           sticky: true,
           className: 'cv-tooltip',
@@ -95,10 +99,12 @@ export default function MapPage() {
         else layersRef.current.sin.push(circle)
       })
 
-      /* ── Comunidades seed con rutas: marcadores grandes + panel ── */
+      /* ── Comunidades seed: círculo invisible encima solo para capturar click → panel ── */
       comunidades.forEach(c => {
         const color = c.tieneTransporte ? GREEN : RED
-        const marker = L.marker([c.lat, c.lng], { icon: createIcon(color) })
+        const marker = L.circleMarker([c.lat, c.lng], {
+          radius: 10, fillOpacity: 0, color: 'transparent', weight: 0,
+        })
 
         const rutasComunidad = rutas.filter(
           r => r.origen === c.nombre || r.destino === c.nombre

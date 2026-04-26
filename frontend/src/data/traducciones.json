@@ -129,6 +129,29 @@
       "tot": "Katlaway niku pina"
     }
   },
+  "como_funciona": {
+    "paso1_titulo": { "es": "Busca tu ruta",         "nah": "Xiktemo mo-ohtli",              "tot": "Kaputza mintiji" },
+    "paso1_desc":   { "es": "Escribe de donde sales y a donde vas. Encontramos los transportistas disponibles cerca de ti.", "nah": "Xikihkuilo kampa tipehwas wan kampa tiyoh. Tikintemoah tepoztli in tlen kahki nepa.", "tot": "Katzokni niku pite chu niku pin. Iklakaputza tiji kachikin." },
+    "paso2_titulo": { "es": "Elige con confianza",   "nah": "Xiktlapehpena ika motemachilis", "tot": "Kalaksaka lakatzuku" },
+    "paso2_desc":   { "es": "Ve horarios, precios y calificaciones de transportistas verificados por tu propia comunidad.", "nah": "Xikitta tlahko tonalli, tlahkoli wan kuali tepozkameh tlen altepetl mokampa.", "tot": "Kaukxila kilhtamaku, tumin chu kachiwinalin nak kachikin." },
+    "paso3_titulo": { "es": "Confirma por WhatsApp", "nah": "Xikneltoka ika WhatsApp",        "tot": "Kamaklhti WhatsApp" },
+    "paso3_desc":   { "es": "Sin app que instalar. Solo WhatsApp. Funciona con cualquier telefono y conexion basica.", "nah": "Amo moneki app. San WhatsApp. Tekiti ika tepozkalli wan amo weyi internet.", "tot": "Nitulan app. Kaj WhatsApp. Lhtata 2G." }
+  },
+  "razones": {
+    "r1_titulo": { "es": "Transportistas verificados", "nah": "Tepozkameh neltokakeh",          "tot": "Takgalhchuku tapatzin" },
+    "r1_desc":   { "es": "INE confirmado, placa registrada y calificaciones reales de pasajeros.", "nah": "INE neltokak, placa tlahkuilolli wan kuali tlatoa in masehualmeh.", "tot": "INE takgalhchuku, placa chu staka kachikin." },
+    "r2_titulo": { "es": "Solo necesitas WhatsApp",    "nah": "San moneki WhatsApp",             "tot": "Kaj WhatsApp" },
+    "r2_desc":   { "es": "Funciona con 2G. Sin smartphone caro ni internet rapido.",             "nah": "Tekiti ika 2G. Amo moneki weyi smartphone niyan internet tlen ihsiwka.", "tot": "Lhtata 2G. Ni lanka smartphone ni internet." },
+    "r3_titulo": { "es": "Datos para el gobierno",     "nah": "Tlapowalli ika tekiwah",          "tot": "Tachuwin tekiwah" },
+    "r3_desc":   { "es": "Primera base de datos de movilidad rural de Puebla.",                  "nah": "Yachto tlapowalli tepozkameh masehualaltepetl in Puebla.", "tot": "Pulu tachuwin tiji nak Puebla." },
+    "r4_titulo": { "es": "Hecho para comunidades",     "nah": "Tlachihchiwalli ika altepemeh",   "tot": "Tlakan kachikin" },
+    "r4_desc":   { "es": "Para zonas donde el transporte formal no llega.",                       "nah": "Kampa amo ahsih in weyi tepozkameh.", "tot": "Niku ni chan lanka tiji." }
+  },
+  "estadisticas": {
+    "stat1": { "es": "Localidades rurales en Puebla",       "nah": "Masehualaltepemeh in Puebla",     "tot": "Kachikin nak Puebla" },
+    "stat2": { "es": "Municipios con alta marginacion",     "nah": "Altepemeh tlen monekih palehwili", "tot": "Kachikin nitulan tumin" },
+    "stat3": { "es": "Transporte informal en zonas rurales","nah": "Tepozkameh in altepemeh",          "tot": "Tiji nak kachikin" }
+  },
   "general": {
     "bienvenido": {
       "es": "Bienvenido",
