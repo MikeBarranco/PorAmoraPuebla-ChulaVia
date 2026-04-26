@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Search, MapPin, Clock, Star, Shield, ChevronDown, X, CheckCircle, MessageCircle, Users, Timer, ChevronUp } from 'lucide-react'
+import { Search, MapPin, Clock, Star, Shield, ChevronDown, X, CheckCircle, MessageCircle, Users, Timer, ChevronUp, Navigation } from 'lucide-react'
 import { comunidades, rutas } from '../data/comunidades'
 import { api } from '../data/api'
 import { useT } from '../context/LangContext.jsx'
+import TripSimulator from '../components/TripSimulator'
 
 const BLUE   = '#1B3A6B'
 const YELLOW = '#F4C430'
@@ -205,6 +206,7 @@ function BookingModal({ ruta, onClose }) {
   const [pax,   setPax]   = useState(1)
   const [done,  setDone]  = useState(false)
   const [folio, setFolio] = useState('')
+  const [simulando, setSimulando] = useState(false)
 
   function confirm() {
     if (!phone || !date) return
@@ -223,6 +225,7 @@ function BookingModal({ ruta, onClose }) {
   }
 
   return (
+    <>
     <div
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
       style={{
@@ -280,6 +283,18 @@ function BookingModal({ ruta, onClose }) {
               <p style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 700, color: BLUE }}>Total: ${ruta.precio * pax}</p>
               <p style={{ margin: 0, fontSize: 12, color: GRAY }}>Muestra este folio al transportista el día del viaje.</p>
             </div>
+            <button
+              onClick={() => setSimulando(true)}
+              style={{
+                width: '100%', backgroundColor: '#F4C430', color: BLUE,
+                padding: 12, borderRadius: 10, border: 'none',
+                fontWeight: 700, fontSize: 15, cursor: 'pointer',
+                marginBottom: 10,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              }}
+            >
+              <Navigation size={18} /> Simular el viaje en tiempo real
+            </button>
             <button onClick={onClose} style={{
               width: '100%', backgroundColor: BLUE, color: '#fff',
               padding: 12, borderRadius: 10, border: 'none',
@@ -374,6 +389,15 @@ function BookingModal({ ruta, onClose }) {
         )}
       </div>
     </div>
+
+    {simulando && (
+      <TripSimulator
+        ruta={ruta}
+        solicitudId={null}
+        onClose={() => setSimulando(false)}
+      />
+    )}
+    </>
   )
 }
 
@@ -497,8 +521,14 @@ export default function SearchPage() {
                 {resultados.length} ruta{resultados.length !== 1 ? 's' : ''} encontrada{resultados.length !== 1 ? 's' : ''}
                 {origen && destino ? ` · ${origen} → ${destino}` : ''}
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: GRAY }}>
-                <Users size={14} /> Capacidad disponible
+              <div style={{ 
+                display: 'flex', alignItems: 'center', gap: 8, 
+                fontSize: 14, fontWeight: 600, color: '#fff',
+                backgroundColor: 'rgba(255,255,255,0.12)',
+                padding: '6px 14px', borderRadius: 10,
+                backdropFilter: 'blur(4px)',
+              }}>
+                <Users size={16} color={YELLOW} /> Capacidad disponible
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

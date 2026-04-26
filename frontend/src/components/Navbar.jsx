@@ -18,7 +18,6 @@ export default function Navbar() {
 
   return (
     <nav
-      className="cv-cyber-bg"
       aria-label="Navegacion principal"
       style={{
         backgroundColor: '#1B3A6B',
@@ -27,8 +26,24 @@ export default function Navbar() {
         position: 'sticky',
         top: 0,
         zIndex: 50,
+        overflow: 'hidden',
       }}
     >
+      {/* ── Cyber-Talavera Background (Solo movimiento lateral) ── */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+        <svg width="200%" height="200%" style={{ position: 'absolute', opacity: 0.08, animation: 'cv-pan-nav-horizontal 40s linear infinite' }}>
+          <defs>
+            <pattern id="nav-talavera-exact" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+              <path d="M50 0 L100 50 L50 100 L0 50 Z" fill="none" stroke="#F4C430" strokeWidth="0.5" strokeDasharray="4 4" />
+              <path d="M50 15 L85 50 L50 85 L15 50 Z" fill="none" stroke="white" strokeWidth="1" />
+              <path d="M50 30 L70 50 L50 70 L30 50 Z" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="0.5" />
+              <circle cx="50" cy="50" r="3" fill="#F4C430" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#nav-talavera-exact)" />
+        </svg>
+      </div>
+
       <div
         className="cv-nav-inner"
         style={{
@@ -38,6 +53,8 @@ export default function Navbar() {
           alignItems: 'center',
           justifyContent: 'space-between',
           height: '80px',
+          position: 'relative',
+          zIndex: 2,
         }}
       >
         {/* Left: back + logo */}
@@ -153,6 +170,10 @@ export default function Navbar() {
       </div>
 
       <style>{`
+        @keyframes cv-pan-nav-horizontal {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-100px); }
+        }
         @media (max-width: 640px) {
           .nav-label { display: none; }
           .back-label { display: none; }
@@ -162,5 +183,6 @@ export default function Navbar() {
         }
       `}</style>
     </nav>
+
   )
 }

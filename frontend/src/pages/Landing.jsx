@@ -197,6 +197,7 @@ export default function Landing() {
   const [stepsRef, stepsOn] = useFade()
   const [whyRef,   whyOn]   = useFade()
   const heroRef = useRef(null)
+  const ctaRef = useRef(null)
 
   const STATS = [
     { to: 6082, suffix: '',  label: t('estadisticas','stat1'), icon: STATS_ICONS[0] },
@@ -220,6 +221,13 @@ export default function Landing() {
     const rect = heroRef.current.getBoundingClientRect()
     heroRef.current.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`)
     heroRef.current.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`)
+  }
+
+  const handleCTAMouseMove = (e) => {
+    if (!ctaRef.current) return
+    const rect = ctaRef.current.getBoundingClientRect()
+    ctaRef.current.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`)
+    ctaRef.current.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`)
   }
 
   return (
@@ -503,6 +511,118 @@ export default function Landing() {
 
       <hr className="gradient-divider" />
 
+      {/* ══ PED ALIGNMENT ══ */}
+      <section style={{ padding: '96px 24px', backgroundColor: '#1B3A6B', color: '#FAFAFA' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
+
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: 64 }}>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              backgroundColor: 'rgba(244,196,48,0.15)', border: '1px solid rgba(244,196,48,0.3)',
+              borderRadius: 100, padding: '5px 16px', marginBottom: 24,
+              fontSize: 11, fontWeight: 700, color: '#F4C430',
+              letterSpacing: '0.08em', textTransform: 'uppercase',
+            }}>
+              Plan Estatal de Desarrollo Puebla 2024–2030
+            </div>
+            <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, margin: '0 0 16px', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+              Alineado con la política pública del estado
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 16, maxWidth: 580, margin: '0 auto', lineHeight: 1.7 }}>
+              ChulaVía no es solo tecnología — implementa directamente las líneas de acción del PED que el gobierno de Puebla ya comprometió.
+            </p>
+          </div>
+
+          {/* ASF Quote */}
+          <div style={{
+            backgroundColor: 'rgba(244,196,48,0.08)', border: '1px solid rgba(244,196,48,0.25)',
+            borderRadius: 20, padding: '32px 36px', marginBottom: 48,
+            position: 'relative',
+          }}>
+            <div style={{ fontSize: 48, color: '#F4C430', lineHeight: 1, marginBottom: 12, opacity: 0.6 }}>"</div>
+            <p style={{ fontSize: 17, lineHeight: 1.75, color: 'rgba(255,255,255,0.88)', margin: '0 0 16px', fontStyle: 'italic' }}>
+              Las secretarías de Estado no pueden cuantificar cuántas localidades rurales están desconectadas del transporte
+              porque <strong style={{ color: '#F4C430' }}>no existe ningún censo.</strong> ChulaVía crea ese censo.
+            </p>
+            <p style={{ margin: 0, fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              Auditoría Superior de la Federación · Informe de Fiscalización
+            </p>
+          </div>
+
+          {/* PED Table */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 48 }}>
+            {[
+              {
+                linea: 'Objetivo 4.3.1',
+                ped: 'Impulsar la movilidad sostenible y accesible para todos los poblanos',
+                chulavia: 'Digitaliza el 90% del transporte rural que hoy es invisible para el sistema formal',
+              },
+              {
+                linea: 'Línea 4.3.1.1',
+                ped: 'Reordenamiento y modernización del transporte público',
+                chulavia: 'Registra y ordena rutas informales existentes sin eliminar los medios de vida de los transportistas',
+              },
+              {
+                linea: 'Línea 4.3.1.4',
+                ped: 'Instrumentos origen-destino para el Plan Maestro de Transporte',
+                chulavia: 'El buscador de ChulaVía ES ese instrumento. El dashboard alimenta el Plan Maestro con datos reales',
+              },
+              {
+                linea: 'Proyectos 16 y 17',
+                ped: 'Circuitos Mixteca y Sierra Nororiental',
+                chulavia: 'ChulaVía es la capa digital que activa esos circuitos para las comunidades en este momento',
+              },
+              {
+                linea: 'Eje Transversal',
+                ped: 'Atención a pueblos indígenas y grupos vulnerables',
+                chulavia: 'Bot en Náhuatl y Totonaco, funciona con 2G, sin smartphone caro',
+              },
+            ].map(({ linea, ped, chulavia }, i) => (
+              <div key={i} style={{
+                display: 'grid', gridTemplateColumns: '140px 1fr 1fr', gap: 0,
+                backgroundColor: i % 2 === 0 ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.02)',
+                borderRadius: i === 0 ? '12px 12px 0 0' : i === 4 ? '0 0 12px 12px' : 0,
+                border: '1px solid rgba(255,255,255,0.07)',
+                borderTop: i === 0 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+                overflow: 'hidden',
+              }}>
+                <div style={{ padding: '16px 20px', borderRight: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center' }}>
+                  <span style={{ fontSize: 11, fontWeight: 800, color: '#F4C430', letterSpacing: '0.03em' }}>{linea}</span>
+                </div>
+                <div style={{ padding: '16px 20px', borderRight: '1px solid rgba(255,255,255,0.07)' }}>
+                  <p style={{ margin: 0, fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.55 }}>{ped}</p>
+                </div>
+                <div style={{ padding: '16px 20px' }}>
+                  <p style={{ margin: 0, fontSize: 13, color: 'rgba(255,255,255,0.88)', lineHeight: 1.55 }}>{chulavia}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobility Index */}
+          <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', justifyContent: 'center' }}>
+            {[
+              { label: 'Índice de movilidad 2023', value: '88.32', sub: 'línea base estatal', color: '#F4C430' },
+              { label: 'Meta PED 2030', value: '91.32', sub: 'objetivo a superar', color: '#4ade80' },
+              { label: 'Localidades sin datos', value: '6,082', sub: 'ChulaVía las digitaliza', color: '#60a5fa' },
+            ].map(({ label, value, sub, color }) => (
+              <div key={label} style={{
+                backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: 16, padding: '24px 32px', textAlign: 'center', minWidth: 160,
+              }}>
+                <p style={{ margin: '0 0 8px', fontSize: 11, color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</p>
+                <p style={{ margin: '0 0 6px', fontSize: '2.2rem', fontWeight: 800, color, lineHeight: 1 }}>{value}</p>
+                <p style={{ margin: 0, fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>{sub}</p>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      <hr className="gradient-divider" style={{ backgroundColor: 'rgba(255,255,255,0.06)' }} />
+
       {/* ══ ROADMAP ══ */}
       <section className="cv-flowers-bg" style={{ padding: '96px 24px', backgroundColor: '#f0f3fa' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
@@ -609,12 +729,24 @@ export default function Landing() {
       </section>
 
       {/* ══ CTA FINAL ══ */}
-      <section style={{
-        padding: '100px 24px',
-        background: 'linear-gradient(135deg, #1B3A6B 0%, #12284C 100%)',
-        textAlign: 'center', color: '#FAFAFA',
-        position: 'relative', overflow: 'hidden',
-      }}>
+      <section 
+        ref={ctaRef}
+        onMouseMove={handleCTAMouseMove}
+        onMouseLeave={() => {
+          if (ctaRef.current) {
+            ctaRef.current.style.setProperty('--mouse-x', '-1000px')
+            ctaRef.current.style.setProperty('--mouse-y', '-1000px')
+          }
+        }}
+        style={{
+          padding: '100px 24px',
+          background: 'linear-gradient(135deg, #1B3A6B 0%, #12284C 100%)',
+          textAlign: 'center', color: '#FAFAFA',
+          position: 'relative', overflow: 'hidden',
+        }}
+      >
+        <CyberTalaveraBackground />
+        
         <div style={{ maxWidth: 520, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div style={{ width: 64, height: 64, borderRadius: 18, backgroundColor: '#F4C430', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 28px' }}>
             <Users size={28} color="#1B3A6B" aria-hidden="true" />
@@ -634,7 +766,7 @@ export default function Landing() {
               boxShadow: '0 4px 20px rgba(244,196,48,0.35)',
               transition: 'all 0.2s ease',
             }}
-            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-3px)' }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#F4C430'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
             {t('landing','cta_btn')} <ArrowRight size={17} />
