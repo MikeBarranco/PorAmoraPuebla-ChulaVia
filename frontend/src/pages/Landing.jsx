@@ -20,80 +20,37 @@ const CSS = `
   0%,100% { background-position: 0% 50%; }
   50%      { background-position: 100% 50%; }
 }
-@keyframes panGrid {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(-100px, -100px); }
-}
-@keyframes floatOrb {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(40px, 30px) scale(1.1); }
-}
 `
 
-/* ── Cyber-Talavera Spotlight Background ── */
-function CyberTalaveraBackground() {
+/* ── Talavera decorative corner (una sola pieza, esquina) ── */
+function TalavераCorner() {
   return (
-    <div style={{
-      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-      overflow: 'hidden', pointerEvents: 'none',
-      background: 'linear-gradient(135deg, #12284C 0%, #0d1e38 100%)',
-    }}>
-      {/* 1. Capa Base Oscura (siempre visible) */}
-      <svg width="200%" height="200%" style={{ position: 'absolute', opacity: 0.08, animation: 'panGrid 40s linear infinite' }}>
-        <defs>
-          <pattern id="cyber-talavera" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-            <path d="M50 0 L100 50 L50 100 L0 50 Z" fill="none" stroke="#F4C430" strokeWidth="0.5" strokeDasharray="4 4" />
-            <path d="M50 15 L85 50 L50 85 L15 50 Z" fill="none" stroke="white" strokeWidth="1" />
-            <path d="M50 30 L70 50 L50 70 L30 50 Z" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="0.5" />
-            <circle cx="50" cy="50" r="3" fill="#F4C430" />
-            <circle cx="0" cy="0" r="1.5" fill="white" />
-            <circle cx="100" cy="0" r="1.5" fill="white" />
-            <circle cx="0" cy="100" r="1.5" fill="white" />
-            <circle cx="100" cy="100" r="1.5" fill="white" />
-            <line x1="0" y1="50" x2="15" y2="50" stroke="white" strokeWidth="0.5" />
-            <line x1="100" y1="50" x2="85" y2="50" stroke="white" strokeWidth="0.5" />
-            <line x1="50" y1="0" x2="50" y2="15" stroke="white" strokeWidth="0.5" />
-            <line x1="50" y1="100" x2="50" y2="85" stroke="white" strokeWidth="0.5" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#cyber-talavera)" />
-      </svg>
-
-      {/* 2. Capa Brillante Interactiva (revelada por el mouse) */}
-      <svg className="cyber-spotlight" width="200%" height="200%" style={{
-        position: 'absolute', opacity: 0.7, animation: 'panGrid 40s linear infinite',
-        maskImage: 'radial-gradient(300px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px), black 0%, transparent 100%)',
-        WebkitMaskImage: 'radial-gradient(300px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px), black 0%, transparent 100%)',
-        transition: 'mask-image 0.2s ease',
-      }}>
-        <defs>
-          <pattern id="cyber-talavera-glow" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-            {/* Solo tonos blancos muy sutiles y elegantes */}
-            <path d="M50 0 L100 50 L50 100 L0 50 Z" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
-            <path d="M50 15 L85 50 L50 85 L15 50 Z" fill="none" stroke="white" strokeWidth="1.2" />
-            <path d="M50 30 L70 50 L50 70 L30 50 Z" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.7)" strokeWidth="0.8" />
-            <circle cx="50" cy="50" r="3" fill="white" />
-            <circle cx="0" cy="0" r="2" fill="white" />
-            <circle cx="100" cy="0" r="2" fill="white" />
-            <circle cx="0" cy="100" r="2" fill="white" />
-            <circle cx="100" cy="100" r="2" fill="white" />
-            <line x1="0" y1="50" x2="15" y2="50" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
-            <line x1="100" y1="50" x2="85" y2="50" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
-            <line x1="50" y1="0" x2="50" y2="15" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
-            <line x1="50" y1="100" x2="50" y2="85" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#cyber-talavera-glow)" />
-      </svg>
-      
-      {/* Esferas ambientales */}
-      <div style={{
-          position: 'absolute', top: '-10%', left: '10%',
-          width: '50vw', height: '50vw', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(244,196,48,0.06) 0%, rgba(0,0,0,0) 70%)',
-          animation: 'floatOrb 12s ease-in-out infinite alternate',
-      }} />
-    </div>
+    <svg
+      width="420" height="420"
+      viewBox="0 0 120 120"
+      fill="none"
+      style={{
+        position: 'absolute',
+        bottom: -40,
+        right: -40,
+        opacity: 0.08,
+        pointerEvents: 'none',
+      }}
+      aria-hidden="true"
+    >
+      {/* Talavera flower tile */}
+      <ellipse cx="60" cy="22" rx="11" ry="20" fill="white"/>
+      <ellipse cx="60" cy="98" rx="11" ry="20" fill="white"/>
+      <ellipse cx="22" cy="60" rx="20" ry="11" fill="white"/>
+      <ellipse cx="98" cy="60" rx="20" ry="11" fill="white"/>
+      <circle  cx="60" cy="60" r="13" fill="white"/>
+      <rect x="60" y="4" width="14" height="14" transform="rotate(45 60 11)" fill="white"/>
+      <rect x="60" y="95" width="14" height="14" transform="rotate(45 60 109)" fill="white"/>
+      <rect x="4" y="60" width="14" height="14" transform="rotate(45 11 60)" fill="white"/>
+      <rect x="95" y="60" width="14" height="14" transform="rotate(45 109 60)" fill="white"/>
+      <rect x="8" y="8" width="104" height="104" rx="6" stroke="white" strokeWidth="1.5" fill="none"/>
+      <rect x="18" y="18" width="84" height="84" rx="4" stroke="white" strokeWidth="0.8" fill="none"/>
+    </svg>
   )
 }
 
@@ -130,9 +87,9 @@ function Counter({ to, suffix = '' }) {
 
 /* ── Data ── */
 const STATS = [
-  { to: 15,  suffix: '',  label: 'Comunidades conectadas',  icon: MapPin  },
-  { to: 5,   suffix: '',  label: 'Transportistas verificados', icon: Shield },
-  { to: 234, suffix: '+', label: 'Viajes realizados',        icon: Route   },
+  { to: 6082, suffix: '',  label: 'Localidades rurales en Puebla',       icon: MapPin  },
+  { to: 86,   suffix: '',  label: 'Municipios con alta marginacion',      icon: Shield  },
+  { to: 90,   suffix: '%', label: 'Transporte informal en zonas rurales', icon: Route   },
 ]
 
 const STEPS = [
@@ -153,34 +110,34 @@ export default function Landing() {
   const [statsRef, statsOn] = useFade()
   const [stepsRef, stepsOn] = useFade()
   const [whyRef,   whyOn]   = useFade()
-  const heroRef = useRef(null)
-
-  const handleMouseMove = (e) => {
-    if (!heroRef.current) return
-    const rect = heroRef.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    heroRef.current.style.setProperty('--mouse-x', `${x}px`)
-    heroRef.current.style.setProperty('--mouse-y', `${y}px`)
-  }
 
   return (
     <main style={{ fontFamily: "'Inter', sans-serif" }}>
       <style>{CSS}</style>
 
       {/* ══ HERO ══ */}
-      <section 
-        ref={heroRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={() => { if(heroRef.current) { heroRef.current.style.setProperty('--mouse-x', '-1000px'); heroRef.current.style.setProperty('--mouse-y', '-1000px'); } }}
-        style={{
+      <section className="cv-hero" style={{
         position: 'relative',
         overflow: 'hidden',
         backgroundColor: '#1B3A6B',
         color: '#FAFAFA',
         padding: '100px 24px 120px',
       }}>
-        <CyberTalaveraBackground />
+        <TalavераCorner />
+
+        {/* Segundo adorno arriba-izquierda, muy sutil */}
+        <div style={{
+          position: 'absolute', top: -60, left: -60,
+          width: 280, height: 280, borderRadius: '50%',
+          border: '1px solid rgba(255,255,255,0.06)',
+          pointerEvents: 'none',
+        }} />
+        <div style={{
+          position: 'absolute', top: -20, left: -20,
+          width: 180, height: 180, borderRadius: '50%',
+          border: '1px solid rgba(255,255,255,0.04)',
+          pointerEvents: 'none',
+        }} />
 
         <div style={{ maxWidth: '72rem', margin: '0 auto', position: 'relative', zIndex: 1 }}>
 
@@ -226,7 +183,7 @@ export default function Landing() {
           </p>
 
           {/* CTAs */}
-          <div style={{
+          <div className="cv-hero-ctas" style={{
             display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center',
             animation: 'fadeUp 0.7s ease 0.3s both',
           }}>
@@ -267,6 +224,7 @@ export default function Landing() {
       <section style={{ backgroundColor: '#FAFAFA', padding: '0 24px' }}>
         <div
           ref={statsRef}
+          className="cv-stats-grid"
           style={{
             maxWidth: '72rem', margin: '0 auto',
             display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
@@ -298,6 +256,9 @@ export default function Landing() {
             </div>
           ))}
         </div>
+        <p style={{ textAlign: 'center', fontSize: 11, color: '#9ca3af', marginTop: 16 }}>
+          Fuente: INEGI Censo 2020 · CONAPO Indices de Marginacion 2020 · Instituto Mexicano del Transporte
+        </p>
       </section>
 
       {/* ══ COMO FUNCIONA ══ */}
@@ -312,7 +273,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 24 }}>
+          <div className="cv-steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 24 }}>
             {STEPS.map(({ n, icon: Icon, title, desc }, i) => (
               <div key={n}
                 style={{
@@ -363,7 +324,7 @@ export default function Landing() {
         }}
       >
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
+          <div className="cv-why-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
 
             <div style={{
               opacity: whyOn ? 1 : 0,
@@ -395,7 +356,7 @@ export default function Landing() {
               </Link>
             </div>
 
-            <div style={{
+            <div className="cv-why-cards" style={{
               display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14,
               opacity: whyOn ? 1 : 0,
               transform: whyOn ? 'translateX(0)' : 'translateX(24px)',
@@ -423,6 +384,138 @@ export default function Landing() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ ROADMAP ══ */}
+      <section style={{ padding: '96px 24px', backgroundColor: '#fff' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
+              Hacia donde vamos
+            </h2>
+            <p style={{ color: '#6b7280', fontSize: 16, maxWidth: 440, margin: '0 auto', lineHeight: 1.65 }}>
+              ChulaVia es el primer paso de una plataforma de movilidad que puede escalar a todo Puebla.
+            </p>
+          </div>
+
+          <div className="cv-roadmap-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24, position: 'relative' }}>
+            {[
+              {
+                fase: '01',
+                badge: 'En curso',
+                badgeColor: '#F4C430',
+                badgeText: '#1B3A6B',
+                title: 'MVP — Hoy',
+                items: ['Plataforma web + mapa interactivo', 'Bot de WhatsApp para reservas', 'Dashboard de datos para el gobierno', '15 comunidades de la Mixteca'],
+              },
+              {
+                fase: '02',
+                badge: 'Proximo',
+                badgeColor: '#e8edf5',
+                badgeText: '#6b7280',
+                title: '3 meses',
+                items: ['PWA instalable sin app store', 'Sistema de reportes de infraestructura', 'Paradas intermedias en rutas', 'SMS fallback para sin WhatsApp'],
+              },
+              {
+                fase: '03',
+                badge: 'Futuro',
+                badgeColor: '#e8edf5',
+                badgeText: '#6b7280',
+                title: '6 meses',
+                items: ['217 municipios de Puebla', 'Alianza con SMOT para datos oficiales', 'Comision por viaje confirmado', 'API publica para investigadores'],
+              },
+            ].map(({ fase, badge, badgeColor, badgeText, title, items }) => (
+              <div key={fase} style={{
+                backgroundColor: '#FAFAFA', border: '1.5px solid #e0e7f0',
+                borderRadius: 20, padding: '32px 28px',
+                position: 'relative',
+                transition: 'box-shadow 0.2s, transform 0.2s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(27,58,107,0.1)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                  <div style={{
+                    width: 48, height: 48, borderRadius: '50%',
+                    backgroundColor: '#1B3A6B',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 16, fontWeight: 800, color: '#F4C430',
+                  }}>{fase}</div>
+                  <span style={{
+                    padding: '4px 12px', borderRadius: 100,
+                    backgroundColor: badgeColor, color: badgeText,
+                    fontSize: 11, fontWeight: 700,
+                  }}>{badge}</span>
+                </div>
+                <h3 style={{ fontSize: 18, fontWeight: 800, color: '#1B3A6B', margin: '0 0 16px' }}>{title}</h3>
+                <ul style={{ margin: 0, paddingLeft: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {items.map(item => (
+                    <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14, color: '#4b5563', lineHeight: 1.5 }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#1B3A6B', marginTop: 7, flexShrink: 0 }} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ EQUIPO ══ */}
+      <section style={{ padding: '96px 24px', backgroundColor: '#FAFAFA' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.4rem)', fontWeight: 800, color: '#1B3A6B', margin: '0 0 12px', letterSpacing: '-0.02em' }}>
+              El equipo
+            </h2>
+            <p style={{ color: '#6b7280', fontSize: 16, maxWidth: 380, margin: '0 auto', lineHeight: 1.65 }}>
+              Cuatro especialidades, un solo objetivo: conectar a las comunidades rurales de Puebla.
+            </p>
+          </div>
+
+          <div className="cv-team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 24, marginBottom: 40 }}>
+            {[
+              { nombre: 'Miguel Barranco', rol: 'Frontend & UX', tech: 'React · Leaflet · Vite', iniciales: 'MB' },
+              { nombre: 'Isabel', rol: 'Backend & API', tech: 'Django · Railway · Supabase', iniciales: 'IS' },
+              { nombre: 'Monica', rol: 'Investigacion & Datos', tech: 'INEGI · CONAPO · Canva', iniciales: 'MO' },
+              { nombre: 'Sumayra', rol: 'Pitch & Estrategia', tech: 'PED 2024-2030 · Impacto Social', iniciales: 'SU' },
+            ].map(({ nombre, rol, tech, iniciales }) => (
+              <div key={nombre} style={{
+                backgroundColor: '#fff', border: '1.5px solid #e0e7f0',
+                borderRadius: 20, padding: '32px 24px', textAlign: 'center',
+                transition: 'box-shadow 0.2s, transform 0.2s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 28px rgba(27,58,107,0.1)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                <div style={{
+                  width: 72, height: 72, borderRadius: '50%',
+                  backgroundColor: '#1B3A6B',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  margin: '0 auto 20px',
+                  fontSize: 22, fontWeight: 800, color: '#F4C430',
+                  letterSpacing: '0.05em',
+                }}>{iniciales}</div>
+                <h3 style={{ fontSize: 16, fontWeight: 800, color: '#1B3A6B', margin: '0 0 6px' }}>{nombre}</h3>
+                <p style={{ fontSize: 13, fontWeight: 600, color: '#2A6049', margin: '0 0 10px' }}>{rol}</p>
+                <p style={{ fontSize: 12, color: '#9ca3af', margin: 0, lineHeight: 1.5 }}>{tech}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center' }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '8px 20px', borderRadius: 100,
+              backgroundColor: '#f0f4ff', border: '1px solid #dde3f0',
+              fontSize: 12, fontWeight: 600, color: '#1B3A6B',
+              letterSpacing: '0.03em',
+            }}>
+              Metodologia Scrum &bull; Sprint de 24 horas &bull; Backlog priorizado
+            </span>
           </div>
         </div>
       </section>

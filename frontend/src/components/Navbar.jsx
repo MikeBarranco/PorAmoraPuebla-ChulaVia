@@ -23,6 +23,7 @@ export default function Navbar() {
       }}
     >
       <div
+        className="cv-nav-inner"
         style={{
           maxWidth: '72rem',
           margin: '0 auto',
@@ -45,7 +46,7 @@ export default function Navbar() {
           />
         </Link>
 
-        <ul style={{ display: 'flex', alignItems: 'center', gap: '4px', listStyle: 'none', margin: 0, padding: 0 }}>
+        <ul className="cv-nav-links" style={{ display: 'flex', alignItems: 'center', gap: '4px', listStyle: 'none', margin: 0, padding: 0 }}>
           {links.map(({ to, label, icon: Icon }) => {
             const active = pathname === to
             return (
@@ -130,6 +131,8 @@ export default function Navbar() {
       <style>{`
         @media (max-width: 640px) {
           .nav-label { display: none; }
+          .cv-nav-links { gap: 2px !important; }
+          .cv-nav-links a { padding: 8px 10px !important; }
         }
       `}</style>
     </nav>

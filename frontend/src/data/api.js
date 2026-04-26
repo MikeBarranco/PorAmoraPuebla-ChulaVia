@@ -27,4 +27,9 @@ export const api = {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   }).then(r => r.json()),
+  subirFoto: (file) => {
+    const form = new FormData()
+    form.append('foto', file)
+    return fetch(BASE + '/api/subir-foto-transportista/', { method: 'POST', body: form }).then(r => r.json())
+  },
 }
