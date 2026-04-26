@@ -112,113 +112,109 @@ CONVERSACIONES = {}
 
 @csrf_exempt
 def whatsapp_webhook(request):
-    mensaje = request.POST.get('Body', '').lower().strip()
+    mensaje = request.POST.get('Body', '').strip()
     numero = request.POST.get('From', '')
     resp = MessagingResponse()
-    msg = resp.message()
+    
+    # 1. Obtener o crear conversación persistente
+    from .models import WhatsAppConversation
+    conve, _ = WhatsAppConversation.objects.get_or_create(wa_id=numero)
+    
+    # 2. Comando de reinicio
+    if mensaje.lower() in ['hola', 'inicio', 'menu', 'menú', 'hi']:
+        conve.paso = 'elegir_idioma'
+        conve.save()
+        resp.message(MENSAJES['bienvenido']['es'])
+        return HttpResponse(str(resp), content_type='text/xml')
 
-    # Obtener el estado actual del usuario
-    estado = CONVERSACIONES.get(numero, {'paso': 'inicio'})
-
-    # Flujo post-viaje: calificación
-    if estado.get('paso') == 'esperando_calificacion':
+    # 3. Flujo de Calificación (ya existente pero adaptado)
+    if conve.paso == 'esperando_calificacion':
         if mensaje in ['1', '2', '3', '4', '5']:
             puntuacion = int(mensaje)
-            solicitud_id = estado.get('solicitud_id')
-            ruta_id = estado.get('ruta_id')
-
-            # Guardar calificación
             try:
-                solicitud = Solicitud.objects.get(id=solicitud_id)
-                Calificacion.objects.create(
-                    ruta_id=ruta_id,
-                    solicitud=solicitud,
-                    puntuacion=puntuacion,
-                    comentario=''
-                )
-
-                # Recalcular promedio del transportista
-                if ruta_id:
-                    from django.db.models import Avg
-                    ruta = Ruta.objects.get(id=ruta_id)
-                    nuevo_promedio = Calificacion.objects.filter(
-                        ruta__transportista=ruta.transportista
-                    ).aggregate(Avg('puntuacion'))['puntuacion__avg']
-                    ruta.transportista.calificacion = round(nuevo_promedio, 2)
-                    ruta.transportista.total_viajes += 1
-                    ruta.transportista.save()
-            except Exception:
-                pass
-
-            CONVERSACIONES[numero] = {'paso': 'esperando_comentario', 'solicitud_id': solicitud_id, 'ruta_id': ruta_id, 'puntuacion': puntuacion}
-            estrellas = '⭐' * puntuacion
-            msg.body(f"¡Gracias! Registramos {estrellas}\n\n¿Quieres dejar un comentario? Escríbelo ahora (en español, náhuatl o totonaco), o escribe 'no' para terminar.")
+                # Usamos el ruta_id_temp para guardar la calificación
+                if conve.ruta_id_temp:
+                    Calificacion.objects.create(
+                        ruta_id=conve.ruta_id_temp,
+                        solicitud_id=conve.destino_temp, # Reutilizamos campo temporalmente si no hay ID
+                        puntuacion=puntuacion
+                    )
+            except: pass
+            conve.paso = 'inicio'
+            conve.save()
+            resp.message("¡Gracias! Registramos tu calificación. ⭐\nEscribe 'hola' para iniciar de nuevo.")
         else:
-            msg.body("Por favor responde con un número del 1 al 5 para calificar tu viaje.")
+            resp.message("Por favor responde con un número del 1 al 5.")
         return HttpResponse(str(resp), content_type='text/xml')
 
-    if estado.get('paso') == 'esperando_comentario':
-        solicitud_id = estado.get('solicitud_id')
-        ruta_id = estado.get('ruta_id')
-        puntuacion = estado.get('puntuacion', 5)
-
-        if mensaje.lower() != 'no' and len(mensaje) > 1:
-            try:
-                cal = Calificacion.objects.filter(solicitud_id=solicitud_id).last()
-                if cal:
-                    cal.comentario = mensaje
-                    cal.save()
-            except Exception:
-                pass
-
-        CONVERSACIONES[numero] = {'paso': 'inicio'}
-        msg.body("¡Gracias por tu opinión! Nos ayuda a mejorar el servicio para toda la comunidad. 🙏\n\nEscribe 'hola' para hacer otra búsqueda.")
-        return HttpResponse(str(resp), content_type='text/xml')
-
-    # 1. Inicio / Reiniciar
-    if mensaje in ['hola', 'hola!', 'hi', 'inicio', 'menu', 'menú']:
-        CONVERSACIONES[numero] = {'paso': 'elegir_idioma'}
-        msg.body(MENSAJES['bienvenido']['es'])
-
-    # 2. Elegir Idioma
-    elif estado['paso'] == 'elegir_idioma':
+    # 4. Flujo Principal del Bot
+    paso = conve.paso
+    
+    if paso == 'elegir_idioma':
         idioma_map = {'1': 'es', '2': 'nah', '3': 'tot'}
         idioma = idioma_map.get(mensaje, 'es')
-        CONVERSACIONES[numero] = {'paso': 'pedir_origen', 'idioma': idioma}
-        msg.body(MENSAJES['pedir_origen'][idioma])
+        conve.paso = 'buscando_origen'
+        conve.origen_temp = idioma # Guardamos idioma temporalmente aquí
+        conve.save()
+        resp.message(MENSAJES['pedir_origen'][idioma])
 
-    # 3. Pedir Origen
-    elif estado['paso'] == 'pedir_origen':
-        idioma = estado.get('idioma', 'es')
-        CONVERSACIONES[numero] = {
-            'paso': 'pedir_destino',
-            'origen': mensaje,
-            'idioma': idioma
-        }
-        msg.body(MENSAJES['pedir_destino'][idioma].format(origen=mensaje))
+    elif paso == 'buscando_origen':
+        idioma = conve.origen_temp or 'es'
+        conve.origen_temp = mensaje
+        conve.paso = 'buscando_destino'
+        conve.save()
+        resp.message(MENSAJES['pedir_destino'][idioma].format(origen=mensaje))
 
-    # 4. Pedir Destino y Simular Búsqueda
-    elif estado['paso'] == 'pedir_destino':
-        idioma = estado.get('idioma', 'es')
-        origen = estado.get('origen', '')
-        destino = mensaje
-
-        if 'puebla' in destino or 'izucar' in destino:
-            msg.body(MENSAJES['confirmado'][idioma].format(
-                nombre='Ernesto García',
-                hora='17:00',
-                tel='222-123-4567',
-                precio='35'
-            ))
-            CONVERSACIONES[numero] = {'paso': 'inicio'}
+    elif paso == 'buscando_destino':
+        idioma = 'es' # Por simplicidad en este paso
+        origen_txt = conve.origen_temp
+        destino_txt = mensaje
+        
+        # Buscar comunidades que coincidan
+        comu_origen = Comunidad.objects.filter(nombre__icontains=origen_txt).first()
+        comu_destino = Comunidad.objects.filter(nombre__icontains=destino_txt).first()
+        
+        if comu_origen and comu_destino:
+            # Buscar rutas reales
+            rutas = Ruta.objects.filter(origen=comu_origen, destino=comu_destino, activa=True)
+            if rutas.exists():
+                ruta = rutas.first()
+                import random
+                folio = f"CVA-2026-{random.randint(1000, 9999)}"
+                
+                # Crear reservación real
+                from datetime import date
+                Solicitud.objects.create(
+                    origen_texto=comu_origen.nombre,
+                    destino_texto=comu_destino.nombre,
+                    ruta=ruta,
+                    telefono_whatsapp=numero,
+                    fecha_viaje=date.today(), # Por ahora hoy
+                    estado='confirmada'
+                )
+                
+                msg = MENSAJES['confirmado'][idioma].format(
+                    nombre=ruta.transportista.nombre,
+                    hora=ruta.horarios[0] if ruta.horarios else "10:00",
+                    tel=ruta.transportista.telefono,
+                    precio=ruta.precio
+                )
+                resp.message(f"{msg}\n\n📋 Folio: {folio}")
+                conve.paso = 'inicio'
+                conve.save()
+            else:
+                resp.message(MENSAJES['no_ruta'][idioma].format(origen=origen_txt, destino=destino_txt))
+                conve.paso = 'inicio'
+                conve.save()
         else:
-            msg.body(MENSAJES['no_ruta'][idioma].format(origen=origen, destino=destino))
-            CONVERSACIONES[numero] = {'paso': 'inicio'}
+            resp.message(f"🤔 No encontré alguna de esas comunidades. Asegúrate de escribir bien el nombre (ej: Tehuitzingo).\n\nEscribe 'hola' para intentar de nuevo.")
+            conve.paso = 'inicio'
+            conve.save()
 
-    # 5. Fallback
     else:
-        msg.body("Lo siento, no entendí bien eso. 🤔\n\nEscribe *Hola* para iniciar.")
-        CONVERSACIONES[numero] = {'paso': 'inicio'}
+        resp.message("Lo siento, no entendí bien eso. 🤔\n\nEscribe *Hola* para iniciar.")
+        conve.paso = 'inicio'
+        conve.save()
 
     return HttpResponse(str(resp), content_type='text/xml')
 
