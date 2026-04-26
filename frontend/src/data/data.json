@@ -1,0 +1,82 @@
+{
+  "proyecto": {
+    "nombre": "ChulaVía",
+    "descripcion": "Plataforma de movilidad rural conectada para comunidades de alta marginación en Puebla",
+    "hackathon": "Hackatón Por Amor a Puebla 2026",
+    "eje": "Movilidad",
+    "fecha_evento": "25-26 de abril 2026",
+    "equipo": "Miguel Barranco",
+    "alineacion_ped": {
+      "eje_principal": "Eje 4. Desarrollo Urbano y Crecimiento Sostenible",
+      "tematica": "Movilidad y Transporte",
+      "objetivo": "4.3.1 Impulsar la movilidad sostenible y accesible en el estado",
+      "estrategias_relacionadas": [
+        "4.3.1.1 Reordenamiento y modernización del Transporte Público",
+        "4.3.1.4 Impulso a la movilidad activa",
+        "4.3.1.4.1 Impulsar la movilidad con instrumentos que permitan trazar rutas de origen destino",
+        "4.3.1.4.2 Desarrollar el Plan Maestro de Transporte y Movilidad en el estado"
+      ],
+      "indicador_base": {
+        "nombre": "Índice de movilidad estatal",
+        "valor_2023": 88.32,
+        "meta_2030": 91.32,
+        "fuente": "Secretaría de Movilidad y Transporte; INEGI"
+      }
+    }
+  },
+  "comunidades_rurales": {
+    "descripcion": "Comunidades de la región Mixteca y Tehuacán-Sierra Negra de Puebla sin transporte público formal",
+    "fuente": "INEGI, Censo de Población y Vivienda 2020",
+    "datos": [
+      { "id": 1, "nombre": "San Pablo Anicano", "municipio": "Tehuitzingo", "region": "Mixteca", "lat": 18.3453, "lng": -98.3012, "poblacion": 420, "marginacion": "Alta", "distancia_cabecera_km": 14, "transporte_formal": false },
+      { "id": 2, "nombre": "San Marcos Tlacoyalco", "municipio": "Tlacotepec de Benito Juárez", "region": "Tehuacán-Sierra Negra", "lat": 18.1987, "lng": -97.6241, "poblacion": 680, "marginacion": "Muy Alta", "distancia_cabecera_km": 22, "transporte_formal": false },
+      { "id": 3, "nombre": "San Juan Ixcaquixtla", "municipio": "Ixcaquixtla", "region": "Mixteca", "lat": 18.3312, "lng": -97.9871, "poblacion": 1200, "marginacion": "Alta", "distancia_cabecera_km": 8, "transporte_formal": false },
+      { "id": 4, "nombre": "San Jerónimo Xayacatlán", "municipio": "Xayacatlán de Bravo", "region": "Mixteca", "lat": 18.2654, "lng": -98.1543, "poblacion": 340, "marginacion": "Alta", "distancia_cabecera_km": 18, "transporte_formal": false },
+      { "id": 5, "nombre": "San Pedro Yeloixtlahuaca", "municipio": "Teotlalco", "region": "Mixteca", "lat": 18.4112, "lng": -98.4325, "poblacion": 510, "marginacion": "Muy Alta", "distancia_cabecera_km": 26, "transporte_formal": false },
+      { "id": 6, "nombre": "Magdalena Yodocono", "municipio": "Chinantla", "region": "Mixteca", "lat": 18.1876, "lng": -98.2543, "poblacion": 290, "marginacion": "Muy Alta", "distancia_cabecera_km": 31, "transporte_formal": false },
+      { "id": 7, "nombre": "San Simón Atzitzintla", "municipio": "Atzitzintla", "region": "Tehuacán-Sierra Negra", "lat": 18.5632, "lng": -97.3421, "poblacion": 890, "marginacion": "Alta", "distancia_cabecera_km": 12, "transporte_formal": false },
+      { "id": 8, "nombre": "San Antonio Texcala", "municipio": "Coxcatlán", "region": "Tehuacán-Sierra Negra", "lat": 18.2341, "lng": -97.1987, "poblacion": 560, "marginacion": "Alta", "distancia_cabecera_km": 19, "transporte_formal": false },
+      { "id": 9, "nombre": "San Gabriel Chilac", "municipio": "San Gabriel Chilac", "region": "Tehuacán-Sierra Negra", "lat": 18.3198, "lng": -97.3654, "poblacion": 1850, "marginacion": "Alta", "distancia_cabecera_km": 9, "transporte_formal": false },
+      { "id": 10, "nombre": "San Juan Atzompa", "municipio": "Atzompa", "region": "Mixteca", "lat": 18.3765, "lng": -98.0432, "poblacion": 410, "marginacion": "Muy Alta", "distancia_cabecera_km": 24, "transporte_formal": false },
+      { "id": 11, "nombre": "Santa María Ixcatepec", "municipio": "Ixcatepec", "region": "Tehuacán-Sierra Negra", "lat": 18.4876, "lng": -97.2143, "poblacion": 720, "marginacion": "Muy Alta", "distancia_cabecera_km": 28, "transporte_formal": false },
+      { "id": 12, "nombre": "San Lucas Teteletitlán", "municipio": "Teteles de Ávila Castillo", "region": "Tehuacán-Sierra Negra", "lat": 18.5012, "lng": -97.1654, "poblacion": 480, "marginacion": "Alta", "distancia_cabecera_km": 15, "transporte_formal": false },
+      { "id": 13, "nombre": "San Sebastián Zinacatepec", "municipio": "Zinacatepec", "region": "Tehuacán-Sierra Negra", "lat": 18.3543, "lng": -97.1876, "poblacion": 1320, "marginacion": "Alta", "distancia_cabecera_km": 11, "transporte_formal": false },
+      { "id": 14, "nombre": "San Francisco Altepexi", "municipio": "Altepexi", "region": "Tehuacán-Sierra Negra", "lat": 18.3654, "lng": -97.3012, "poblacion": 2100, "marginacion": "Media", "distancia_cabecera_km": 7, "transporte_formal": false },
+      { "id": 15, "nombre": "San Cristóbal Tepatlaxco", "municipio": "Tepatlaxco", "region": "Tehuacán-Sierra Negra", "lat": 18.4321, "lng": -97.4321, "poblacion": 650, "marginacion": "Alta", "distancia_cabecera_km": 20, "transporte_formal": false },
+      { "id": 16, "nombre": "San Isidro Gallinero", "municipio": "Tehuitzingo", "region": "Mixteca", "lat": 18.3876, "lng": -98.3543, "poblacion": 230, "marginacion": "Muy Alta", "distancia_cabecera_km": 35, "transporte_formal": false },
+      { "id": 17, "nombre": "Santiago Nopala", "municipio": "Nopala", "region": "Mixteca", "lat": 18.2234, "lng": -98.1987, "poblacion": 380, "marginacion": "Muy Alta", "distancia_cabecera_km": 29, "transporte_formal": false },
+      { "id": 18, "nombre": "San Baltazar Loxicha", "municipio": "Piaxtla", "region": "Mixteca", "lat": 18.1654, "lng": -98.0765, "poblacion": 460, "marginacion": "Alta", "distancia_cabecera_km": 17, "transporte_formal": false },
+      { "id": 19, "nombre": "Rancho Viejo", "municipio": "Chinantla", "region": "Mixteca", "lat": 18.1432, "lng": -98.2876, "poblacion": 190, "marginacion": "Muy Alta", "distancia_cabecera_km": 38, "transporte_formal": false },
+      { "id": 20, "nombre": "San Agustín Oapan", "municipio": "Petlalcingo", "region": "Mixteca", "lat": 18.2987, "lng": -98.0321, "poblacion": 310, "marginacion": "Alta", "distancia_cabecera_km": 21, "transporte_formal": false }
+    ]
+  },
+  "estadisticas_pitch": {
+    "puebla_rural": {
+      "fuente": "INEGI, Censo de Población y Vivienda 2020",
+      "localidades_rurales_puebla": 6082,
+      "porcentaje_localidades_rurales": 95.8,
+      "poblacion_rural_puebla": 1582425,
+      "porcentaje_poblacion_rural": 28.2
+    },
+    "marginacion_puebla": {
+      "fuente": "CONAPO, Índices de Marginación 2020",
+      "total_municipios": 217,
+      "municipios_alta_marginacion": 75,
+      "municipios_muy_alta_marginacion": 11,
+      "municipios_alta_y_muy_alta_total": 86,
+      "porcentaje_municipios_alta_marginacion": 39.6
+    },
+    "transporte_informal": {
+      "fuente": "INEGI, ¿Qué hay en las localidades rurales de México? 2024",
+      "localidades_sin_transporte_regular_mexico": 4561,
+      "costo_promedio_viaje_informal_pesos_min": 30,
+      "costo_promedio_viaje_informal_pesos_max": 80,
+      "tiempo_espera_promedio_min": 45
+    },
+    "movilidad_ped": {
+      "fuente": "Plan Estatal de Desarrollo Puebla 2024-2030",
+      "indice_movilidad_2023": 88.32,
+      "meta_2030": 91.32
+    }
+  }
+}
