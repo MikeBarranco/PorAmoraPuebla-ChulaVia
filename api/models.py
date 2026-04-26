@@ -28,7 +28,7 @@ class Transportista(models.Model):
     capacidad = models.IntegerField(default=8)
     placa = models.CharField(max_length=10)
     ine_ultimos_4 = models.CharField(max_length=4)
-    foto_vehiculo_url = models.URLField(blank=True)
+    foto_vehiculo_base64 = models.TextField(blank=True, help_text="Imagen comprimida en Base64")
     calificacion = models.DecimalField(max_digits=3, decimal_places=2, default=5.00)
     total_viajes = models.IntegerField(default=0)
     verificado = models.BooleanField(default=False)

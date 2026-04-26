@@ -1,3 +1,6 @@
+import base64
+from io import BytesIO
+from PIL import Image
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -58,6 +61,47 @@ def analytics_rutas_populares(request):
     ).order_by('-num_solicitudes')[:5]
     return Response(RutaSerializer(rutas, many=True).data)
 
+from twilio.twiml.messaging_response import MessagingResponse
+
 @csrf_exempt
 def whatsapp_webhook(request):
-    return HttpResponse("<Response><Message>Hola desde ChulaVia</Message></Response>", content_type='text/xml')
+    incoming_msg = request.POST.get('Body', '').lower()
+    resp = MessagingResponse()
+    msg = resp.message()
+
+    if 'hola' in incoming_msg or 'menú' in incoming_msg or 'menu' in incoming_msg:
+        msg.body("¡Hola! Soy el bot de *ChulaVía* 🚐.\n\nEscribe el número de tu opción:\n1️⃣ Buscar viaje\n2️⃣ Ver rutas populares\n3️⃣ Pedir ayuda")
+    elif '1' in incoming_msg:
+        msg.body("Perfecto. Dime de dónde sales y a dónde vas.\n*(Ejemplo: De Tehuitzingo a Acatlán)*")
+    elif 'tehuitzingo' in incoming_msg and 'acatl' in incoming_msg:
+        msg.body("🔍 *Buscando rutas de Tehuitzingo a Acatlán...*\n\n✅ Encontré a *Ernesto García*\n🚐 Combi (PBL-123)\n⭐ 4.8 / 5.0\n🕒 Próxima salida: 17:00\n💵 Costo: $35 MXN\n\nResponde *CONFIRMAR* para apartar tu lugar.")
+    elif 'confirmar' in incoming_msg:
+        msg.body("🎉 ¡Tu lugar está apartado! Ernesto te espera en la base principal.\n\n*Folio de viaje:* CHV-9824\n¡Gracias por viajar seguro con ChulaVía! 💚")
+    elif '2' in incoming_msg:
+        msg.body("📍 *Rutas Populares hoy:*\n- Chiautla -> Izúcar ($45)\n- Coatzingo -> Acatlán ($20)\n\nEscribe *1* para buscar un viaje.")
+    else:
+        msg.body("Lo siento, no entendí eso. Escribe *Hola* para ver el menú principal.")
+
+    return HttpResponse(str(resp), content_type='text/xml')
+
+@api_view(['POST'])
+def comprimir_foto(request):
+    foto = request.FILES.get('foto')
+    if not foto:
+        return Response({'error': 'No se envió ninguna foto'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        img = Image.open(foto)
+        img = img.convert('RGB')
+        img.thumbnail((800, 800))
+        
+        buffer = BytesIO()
+        img.save(buffer, format='JPEG', quality=60, optimize=True)
+        buffer.seek(0)
+        
+        img_str = base64.b64encode(buffer.read()).decode('utf-8')
+        base64_url = f"data:image/jpeg;base64,{img_str}"
+        
+        return Response({'foto_vehiculo_base64': base64_url})
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
