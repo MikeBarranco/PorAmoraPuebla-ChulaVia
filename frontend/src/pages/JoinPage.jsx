@@ -203,7 +203,7 @@ export default function JoinPage() {
         </svg>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <h1 style={{ color: '#fff', fontSize: 'clamp(1.6rem,3.5vw,2.2rem)', fontWeight: 800, margin: '0 0 8px', letterSpacing: '-0.02em' }}>
-            Registrate como transportista
+            Eres transportista? Registrate gratis
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 15, margin: 0 }}>
             Gratis &bull; Verificacion en 24 horas &bull; Mas pasajeros para ti

@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
 } from 'recharts'
 import { MapPin, Shield, Route, Users, AlertTriangle, TrendingUp, Download } from 'lucide-react'
 import { comunidades, rutas } from '../data/comunidades'
+import { api } from '../data/api'
 
 const BLUE   = '#1B3A6B'
 const YELLOW = '#F4C430'
@@ -87,7 +88,14 @@ const CUSTOM_TOOLTIP = ({ active, payload, label }) => {
 }
 
 export default function GovDashboard() {
-  const [tab, setTab] = useState('resumen')
+  const [tab, setTab]         = useState('resumen')
+  const [resumen, setResumen] = useState(null)
+
+  useEffect(() => {
+    api.resumen()
+      .then(setResumen)
+      .catch(() => setResumen(null))
+  }, [])
 
   const tabs = [
     { id: 'resumen',      label: 'Resumen general' },
@@ -169,12 +177,12 @@ export default function GovDashboard() {
 
             {/* KPIs */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px,1fr))', gap: 16 }}>
-              <KpiCard icon={MapPin}       value={comunidades.length} label="Comunidades registradas"    sub={`${sinCobertura.length} sin cobertura`} color={BLUE}   />
-              <KpiCard icon={Shield}       value="5"                  label="Transportistas activos"      sub="100% verificados"                       color={GREEN}  />
-              <KpiCard icon={Route}        value={rutas.length}       label="Rutas activas"               sub="Region Mixteca"                         color={BLUE}   />
-              <KpiCard icon={TrendingUp}   value="234"                label="Viajes realizados"           sub="Acumulado 2026"                         color={GREEN}  />
-              <KpiCard icon={AlertTriangle} value={sinCobertura.length} label="Comunidades sin cobertura" sub="Demanda sin satisfacer"                 color={RED}    />
-              <KpiCard icon={Users}        value="34"                 label="Solicitudes registradas"     sub="Demanda documentada"                    color={YELLOW} />
+              <KpiCard icon={MapPin}        value={resumen?.total_comunidades      ?? comunidades.length}   label="Comunidades registradas"    sub={`${sinCobertura.length} sin cobertura`} color={BLUE}   />
+              <KpiCard icon={Shield}        value={resumen?.total_transportistas  ?? 5}                    label="Transportistas activos"     sub="Verificados por ChulaVia"               color={GREEN}  />
+              <KpiCard icon={Route}         value={resumen?.total_rutas           ?? rutas.length}         label="Rutas activas"              sub="Region Mixteca"                         color={BLUE}   />
+              <KpiCard icon={TrendingUp}    value={resumen?.total_solicitudes     ?? 34}                   label="Solicitudes registradas"    sub="Demanda documentada"                    color={GREEN}  />
+              <KpiCard icon={AlertTriangle} value={sinCobertura.length}                                    label="Comunidades sin cobertura"  sub="Demanda sin satisfacer"                 color={RED}    />
+              <KpiCard icon={Users}         value={resumen?.viajes_completados    ?? 0}                    label="Viajes completados"         sub="Acumulado 2026"                         color={YELLOW} />
             </div>
 
             {/* Graficas fila 1 */}
