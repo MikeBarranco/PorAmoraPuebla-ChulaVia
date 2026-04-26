@@ -620,7 +620,7 @@ export default function Landing() {
             <Users size={28} color="#1B3A6B" aria-hidden="true" />
           </div>
           <h2 style={{ fontSize: 'clamp(1.7rem,3vw,2.3rem)', fontWeight: 800, margin: '0 0 16px', letterSpacing: '-0.02em' }}>
-            {t('navegacion','soy_transportista')} · {t('general','gratis')}
+            {t('navegacion','soy_transportista')}
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.68)', fontSize: 16, lineHeight: 1.72, margin: '0 0 40px' }}>
             Llega a mas pasajeros, optimiza tus rutas y forma parte de la primera
