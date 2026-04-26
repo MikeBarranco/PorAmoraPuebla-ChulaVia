@@ -75,7 +75,7 @@ class Solicitud(models.Model):
     destino_texto = models.CharField(max_length=200)
     ruta = models.ForeignKey(Ruta, on_delete=models.SET_NULL, null=True, blank=True, related_name='solicitudes')
     pasajeros = models.IntegerField(default=1)
-    telefono_whatsapp = models.CharField(max_length=20)
+    telefono_whatsapp = models.CharField(max_length=30)
     fecha_viaje = models.DateField()
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
