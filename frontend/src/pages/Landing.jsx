@@ -429,31 +429,9 @@ export default function Landing() {
               <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.78, margin: '0 0 16px' }}>
                 Sin descargar ninguna app. Funciona con <strong style={{ color: '#1B3A6B' }}>2G</strong> y en cualquier teléfono con WhatsApp instalado — incluyendo los más básicos.
               </p>
-              <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.78, margin: '0 0 32px' }}>
-                Ideal para comunidades rurales donde el internet es limitado. Prueba la conversación del bot aquí mismo.
+              <p style={{ color: '#6b7280', fontSize: 15, lineHeight: 1.78, margin: 0 }}>
+                Ideal para comunidades rurales donde el internet es limitado. Prueba la conversación interactiva a la derecha.
               </p>
-
-              <a
-                href="https://wa.me/14155238886?text=hola"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 10,
-                  backgroundColor: '#25D366', color: '#fff',
-                  padding: '13px 26px', borderRadius: 10,
-                  fontWeight: 700, fontSize: 15, textDecoration: 'none',
-                  boxShadow: '0 4px 16px rgba(37,211,102,0.3)',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#1fbe59'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#25D366'; e.currentTarget.style.transform = 'translateY(0)' }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.11.549 4.09 1.504 5.8L0 24l6.334-1.487A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.007-1.374l-.36-.214-3.727.875.908-3.63-.235-.373A9.818 9.818 0 1 1 12 21.818z"/>
-                </svg>
-                Probar el bot en WhatsApp
-              </a>
             </div>
 
             {/* Right: phone simulator */}
@@ -477,7 +455,7 @@ export default function Landing() {
           </div>
 
           <div className="cv-roadmap-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
-            [
+            {[
               {
                 fase: '01', badge: 'En curso', badgeColor: '#F4C430', badgeText: '#1B3A6B',
                 title: 'Hoy — Hackathon',
@@ -578,7 +556,7 @@ export default function Landing() {
             <Users size={28} color="#1B3A6B" aria-hidden="true" />
           </div>
           <h2 style={{ fontSize: 'clamp(1.7rem,3vw,2.3rem)', fontWeight: 800, margin: '0 0 16px', letterSpacing: '-0.02em' }}>
-            Eres transportista? Registrate gratis
+            ¿Eres Transportista? Regístrate gratis
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.68)', fontSize: 16, lineHeight: 1.72, margin: '0 0 40px' }}>
             Llega a mas pasajeros, optimiza tus rutas y forma parte de la primera

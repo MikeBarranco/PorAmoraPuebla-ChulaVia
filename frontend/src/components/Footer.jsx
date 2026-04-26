@@ -61,7 +61,7 @@ export default function Footer() {
               { to: '/buscar',   icon: Search,          label: 'Buscar transporte' },
               { to: '/mapa',     icon: MapPin,           label: 'Mapa de rutas'     },
               { to: '/gobierno', icon: LayoutDashboard,  label: 'Panel Gobierno'    },
-              { to: '/unirse',   icon: UserPlus,         label: 'Soy transportista' },
+              { to: '/unirse',   icon: UserPlus,         label: '¿Eres Transportista?' },
             ].map(({ to, icon: Icon, label }) => (
               <Link key={to} to={to} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -129,7 +129,7 @@ export default function Footer() {
             © 2026 ChulaVía · Puebla, México
           </p>
           <p style={{ margin: 0, fontSize: 12, color: 'rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', gap: 4 }}>
-            Hecho con <Heart size={11} style={{ color: '#F4C430' }} /> por el equipo ChulaVía
+            Hecho con <Heart size={11} style={{ color: '#F4C430' }} /> por el equipo CuboLobos
           </p>
         </div>
 
