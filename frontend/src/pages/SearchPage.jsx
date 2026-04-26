@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Search, MapPin, Clock, Star, Shield, ChevronDown, X, CheckCircle, MessageCircle, Users } from 'lucide-react'
+import { Search, MapPin, Clock, Star, Shield, ChevronDown, X, CheckCircle, MessageCircle, Users, Timer, ChevronUp } from 'lucide-react'
 import { comunidades, rutas } from '../data/comunidades'
 import { api } from '../data/api'
 
@@ -52,6 +52,7 @@ function Select({ value, onChange, options, placeholder }) {
 }
 
 function RouteCard({ ruta, onBook }) {
+  const [showResenas, setShowResenas] = useState(false)
   return (
     <div style={{
       backgroundColor: '#fff', border: '1.5px solid #e8edf5',
@@ -81,6 +82,16 @@ function RouteCard({ ruta, onBook }) {
         <Badge color={BLUE}>{ruta.tipo}</Badge>
         <Badge color={GREEN}>{ruta.capacidad} lugares</Badge>
         {ruta.verificado && <Badge color={GREEN}>Verificado</Badge>}
+        {ruta.eta && (
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+            padding: '3px 10px', borderRadius: 100,
+            fontSize: 11, fontWeight: 600,
+            backgroundColor: '#fef9c3', color: '#854d0e',
+          }}>
+            <Timer size={11} /> ETA {ruta.eta}
+          </span>
+        )}
       </div>
 
       <div style={{ marginBottom: 16 }}>
@@ -122,12 +133,23 @@ function RouteCard({ ruta, onBook }) {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 16, borderTop: '1px solid #f0f2f5' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <button
+          onClick={() => setShowResenas(v => !v)}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+          }}
+        >
           <Star size={15} color={YELLOW} fill={YELLOW} />
           <span style={{ fontSize: 14, fontWeight: 700, color: BLUE }}>{ruta.calificacion}</span>
           <span style={{ fontSize: 13, color: GRAY }}>({ruta.totalViajes} viajes)</span>
           {ruta.verificado && <Shield size={14} color={GREEN} style={{ marginLeft: 4 }} />}
-        </div>
+          {ruta.resenas?.length > 0 && (
+            showResenas
+              ? <ChevronUp size={14} color={GRAY} />
+              : <ChevronDown size={14} color={GRAY} />
+          )}
+        </button>
         <button
           onClick={() => onBook(ruta)}
           style={{
@@ -141,11 +163,37 @@ function RouteCard({ ruta, onBook }) {
           onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#e8b800'; e.currentTarget.style.transform = 'translateY(-1px)' }}
           onMouseLeave={e => { e.currentTarget.style.backgroundColor = YELLOW; e.currentTarget.style.transform = 'translateY(0)' }}
         >
-          <MessageCircle size={15} /> Reservar por WhatsApp
+          <MessageCircle size={15} /> Reservar
         </button>
       </div>
+
+      {showResenas && ruta.resenas?.length > 0 && (
+        <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #f0f2f5', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <p style={{ margin: '0 0 4px', fontSize: 12, fontWeight: 600, color: GRAY, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            Reseñas de pasajeros
+          </p>
+          {ruta.resenas.map((r, i) => (
+            <div key={i} style={{ backgroundColor: '#f8fafc', borderRadius: 10, padding: '10px 14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: BLUE }}>{r.autor}</span>
+                <span style={{ display: 'flex', gap: 2 }}>
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <Star key={j} size={10} color={YELLOW} fill={j < r.estrellas ? YELLOW : 'none'} />
+                  ))}
+                </span>
+              </div>
+              <p style={{ margin: 0, fontSize: 13, color: '#4b5563', lineHeight: 1.5 }}>{r.texto}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
+}
+
+function makeFolio() {
+  const n = Math.floor(Math.random() * 9000) + 1000
+  return `CVA-2026-${n}`
 }
 
 function BookingModal({ ruta, onClose }) {
@@ -153,9 +201,12 @@ function BookingModal({ ruta, onClose }) {
   const [date,  setDate]  = useState('')
   const [pax,   setPax]   = useState(1)
   const [done,  setDone]  = useState(false)
+  const [folio, setFolio] = useState('')
 
   function confirm() {
     if (!phone || !date) return
+    const newFolio = makeFolio()
+    setFolio(newFolio)
     api.crearSolicitud({
       origen_texto: ruta.origen,
       destino_texto: ruta.destino,
@@ -204,6 +255,13 @@ function BookingModal({ ruta, onClose }) {
             <h2 style={{ margin: '0 0 10px', fontSize: 20, fontWeight: 800, color: BLUE }}>
               Reservacion confirmada
             </h2>
+            <div style={{
+              display: 'inline-block', backgroundColor: '#1B3A6B', color: '#F4C430',
+              padding: '4px 14px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+              letterSpacing: '0.08em', marginBottom: 14,
+            }}>
+              Folio: {folio}
+            </div>
             <p style={{ margin: '0 0 6px', fontSize: 14, color: GRAY }}>
               {ruta.origen} → {ruta.destino}
             </p>
@@ -212,10 +270,12 @@ function BookingModal({ ruta, onClose }) {
             </p>
             <div style={{ backgroundColor: '#f4f6fb', borderRadius: 12, padding: 16, marginBottom: 24, textAlign: 'left' }}>
               <p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: BLUE }}>Resumen</p>
+              <p style={{ margin: '0 0 3px', fontSize: 13, color: GRAY }}>Folio: <strong style={{ color: BLUE }}>{folio}</strong></p>
               <p style={{ margin: '0 0 3px', fontSize: 13, color: GRAY }}>Transportista: {ruta.transportista}</p>
               <p style={{ margin: '0 0 3px', fontSize: 13, color: GRAY }}>Fecha: {date}</p>
               <p style={{ margin: '0 0 3px', fontSize: 13, color: GRAY }}>Pasajeros: {pax}</p>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: BLUE }}>Total: ${ruta.precio * pax}</p>
+              <p style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 700, color: BLUE }}>Total: ${ruta.precio * pax}</p>
+              <p style={{ margin: 0, fontSize: 12, color: GRAY }}>Muestra este folio al transportista el día del viaje.</p>
             </div>
             <button onClick={onClose} style={{
               width: '100%', backgroundColor: BLUE, color: '#fff',
